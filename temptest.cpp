@@ -26,7 +26,7 @@ void MatchingMethod(int, void*);
 /**
 * @function main
 */
-int main(int argc, char** argv)
+int main1(int argc, char** argv)
 {
 	if (argc < 3)
 	{
