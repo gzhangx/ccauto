@@ -1,3 +1,9 @@
 temptest.VC.VC.opendb
 temptest.VC.db
 x64
+.vs
+Debug
+ipch/
+*.exe
+*.user
+*.dll
