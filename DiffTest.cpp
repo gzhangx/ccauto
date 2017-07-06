@@ -26,9 +26,87 @@ Mat getGrayScale(Mat color) {
 /**
 * @function main
 */
+
+
+std::vector<Mat> breakImagesHor(Mat original) {
+	int xstart = -1;
+	int topy = -1;
+	int bottomy = original.rows;
+	std::vector<Mat> imgs;
+	for (int x = 0; x < original.cols; x++) {
+		if (xstart == -1) {
+			for (int j = 0; j < original.rows; ++j)
+			{
+				if (original.ptr<uchar>(j)[x] > 0) {
+					xstart = x;
+					if (topy < 0) topy = j;
+					bottomy = j;
+				}
+			}
+		}
+		else {
+			bool ended = true;
+			for (int j = 0; j < original.rows; ++j)
+			{
+				if (original.ptr<uchar>(j)[x] > 0) {
+					if (topy > j) topy = j;
+					if (bottomy < j) bottomy = j;
+					ended = false;
+				}
+			}
+			if (ended) {
+				int besth = bottomy - topy;
+				Mat digit(besth, x - xstart, original.type());
+				original(Rect(xstart, topy, x - xstart, besth)).copyTo(digit);
+				imgs.push_back(digit);
+				xstart = -1;
+			}
+		}
+	}
+
+	return imgs;
+}
+
+void doTopNumbers() {
+	int yStart = 90;
+	int yEnd = 150;
+	int xStart = 1450;
+	
+	Mat img = getGrayScale(imread("data\\cctxt\\lib1.jpg", IMREAD_COLOR));
+
+	Mat numBlock;
+	numBlock.create( yEnd - yStart, img.size().width - xStart, img.type());
+
+	for (int j = 0; j < numBlock.rows; ++j)
+	{
+		const uchar* current = img.ptr<uchar>(j + yStart);
+
+		uchar* output = numBlock.ptr<uchar>(j);
+
+		for (int i = 0; i < (numBlock.cols); i++)
+		{
+			*output = current[i + xStart];
+			*output = 0;
+			if (current[i + xStart] > 230) {
+				*output = 255;
+			}
+			output++;
+		}
+	}
+
+
+	namedWindow("test", WINDOW_NORMAL);	
+	imshow("test", numBlock);
+	std::vector<Mat> digits = breakImagesHor(numBlock);
+	for (int i = 0; i < digits.size(); i++) {
+		char buf[512];
+		sprintf_s(buf, "test_%i.jpg", i);
+		imwrite(buf, digits[i]);
+	}
+}
 int main(int argc, char** argv)
 {	
-
+	doTopNumbers(); waitKey(0);return 0;
 	//! [load_image]
 	/// Load image and template
 	Mat dOrigImg = getGrayScale(imread("data\\cctxt\\lib1.jpg", IMREAD_COLOR));
