@@ -7,3 +7,6 @@ ipch/
 *.exe
 *.user
 *.dll
+Thumbs.db
+tstimgs/
+data/cctxt/Thumbs.db
