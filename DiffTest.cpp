@@ -8,7 +8,7 @@
 
 using namespace std;
 using namespace cv;
-
+Mat windowToMat(LPTSTR name);
 //! [declare]
 
 const char* image_windowName = "Source Image";
@@ -257,6 +257,9 @@ void DoReco(RecoList list, Mat img) {
 }
 int main(int argc, char** argv)
 {	
+
+	Mat screen = windowToMat(L"cctest [Running] - Oracle VM VirtualBox");
+	imwrite("tstimgs\\full.jpg", screen);
 	RecoList checkList = LoadDataInfo("data\\check\\bottom");
 	int thd = 200;
 	doTopNumbers(BlockInfo(Rect(780, 70,-1, 40), thd, "gld"));
