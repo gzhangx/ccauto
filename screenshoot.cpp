@@ -26,8 +26,8 @@ Mat hwnd2mat(HWND hwnd) {
 
 	srcheight = windowsize.bottom;
 	srcwidth = windowsize.right;
-	height = windowsize.bottom / 2;  //change this to whatever size you want to resize to
-	width = windowsize.right / 2;
+	height = windowsize.bottom;  //change this to whatever size you want to resize to
+	width = windowsize.right;
 
 	src.create(height, width, CV_8UC4);
 
