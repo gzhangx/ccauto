@@ -257,7 +257,7 @@ ImageFindLoc CheckImageMatch(Mat img, char * fileName) {
 	double minVal; double maxVal; Point minLoc; Point maxLoc;
 	Point matchLoc;
 	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
-	printf("find min at %i %i val %f\n", minLoc.x, minLoc.y, minVal);
+	//printf("find min at %i %i val %f\n", minLoc.x, minLoc.y, minVal);
 	return ImageFindLoc(minLoc, minVal, minVal < 200000);
 }
 
@@ -405,7 +405,7 @@ Mat doChecks() {
 int main(int argc, char** argv)
 {	
 	for (int i = 1; i < argc; i++) {
-		if (strcmp(argv[i], "-check")) {
+		if (strcmp(argv[i], "-check") == 0) {
 			doChecks();
 			return 0;
 		}

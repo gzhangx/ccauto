@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -10,8 +11,35 @@ namespace ConsoleApplication1
 {
     class Program
     {
+
+        static string runApp()
+        {
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.Arguments = "-check";
+            start.FileName = "D:\\gang\\rctest\\x64\\test\\temptest.exe";
+            start.WorkingDirectory = "D:\\gang\\rctest";
+            // Do you want to show a console window?
+            start.WindowStyle = ProcessWindowStyle.Normal;
+            start.CreateNoWindow = true;
+            start.RedirectStandardOutput = true;
+            start.UseShellExecute = false;
+            int exitCode;
+
+
+            // Run the external process & wait for it to finish
+            using (Process proc = Process.Start(start))
+            {
+                var result = proc.StandardOutput.ReadToEnd();
+                proc.WaitForExit();                
+                // Retrieve the app's exit code
+                exitCode = proc.ExitCode;
+                return result;
+            }           
+        }
         static void Main(string[] args)
         {
+            Console.WriteLine(runApp());
+            return;
             var vbox = new VirtualBox.VirtualBox();
             VirtualBox.IMachine machine = vbox.FindMachine("cctest");
             VirtualBoxClient vboxclient = new VirtualBoxClient();
