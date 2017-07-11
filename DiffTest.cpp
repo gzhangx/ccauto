@@ -217,7 +217,7 @@ public:
 		c = chr;
 		val = v;
 	}
-	bool operator<(const ImageDiffVal &rhs) const { return val < rhs.val; }
+	bool operator<(const ImageRecoRes &rhs) const { return val < rhs.val; }
 };
 
 
@@ -310,7 +310,7 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 				//printf("xrrtop %c at %i %i has %f t%i xp%i\n", recInfo.chr, cur.x, cur.y, cur.val, existing.trimedX, xspace.trimedX);
 				if (existing.trimedX == xspace.trimedX) {
 					found = true;
-					if (existing.val > cur.val)
+					if (checkIfFirstRecoBetter(cur.val, existing.val) )
 					{						
 						it->val = cur.val;	
 						it->c = recInfo.chr;
@@ -331,8 +331,8 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 		//break;
 	}
 
-	sort(res.begin(), res.end(), SortImageRecoResByX);
-
+	//sort(res.begin(), res.end(), SortImageRecoResByX);
+	sort(res.begin(), res.end());
 	vector<ImageRecoRes> ret;
 	for (int i = 0; i < res.size(); i++) {
 		ImageRecoRes cur = res[i];
@@ -348,6 +348,7 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 			}
 		}
 		else ret.push_back(cur);
+		break;
 	}
 	return ret;
 }
