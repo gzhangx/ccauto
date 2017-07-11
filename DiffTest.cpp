@@ -224,16 +224,49 @@ public:
 bool SortImageRecoResByX(ImageRecoRes i, ImageRecoRes j) { return (i.x<j.x); }
 int ImageRecoRes::xspacing = 10;
 int gmatch_method = CV_TM_SQDIFF;
-bool CheckAttackedDialog(Mat img) {
+
+struct ImageFindLoc {
+public:
+	Point loc;
+	double val;
+	bool found = false;
+	ImageFindLoc(Point p, double v, bool good) {
+		loc = p;
+		val = v;
+		found = good;
+	}
+};
+ImageFindLoc CheckAttackedDialog(Mat img) {
 	Mat result;
 	Mat templ = getGrayScale(imread("data\\check\\ememyattacked.png", IMREAD_COLOR));
 	Mat mask = (imread("data\\check\\ememyattacked.mask.bmp", IMREAD_GRAYSCALE));
+	matchTemplate(img, templ, result, gmatch_method, mask);
+	double minVal; double maxVal; Point minLoc; Point maxLoc;
+	Point matchLoc;
+	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
+	printf("attaced dialog find min at %i %i val %f\n", minLoc.x, minLoc.y, minVal);
+	return ImageFindLoc(minLoc, minVal, minVal < 200000);
+}
+
+
+
+ImageFindLoc CheckImageMatch(Mat img, char * fileName) {
+	Mat result;
+	Mat templ = getGrayScale(imread(fileName, IMREAD_COLOR));
 	matchTemplate(img, templ, result, gmatch_method);
 	double minVal; double maxVal; Point minLoc; Point maxLoc;
 	Point matchLoc;
 	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
-	printf("find min at %i %i val %f", minLoc.x, minLoc.y, minVal);
-	return minVal < 200000;
+	printf("find min at %i %i val %f\n", minLoc.x, minLoc.y, minVal);
+	return ImageFindLoc(minLoc, minVal, minVal < 200000);
+}
+
+ImageFindLoc CheckDialogLoadVilege(Mat img) {
+	return CheckImageMatch(img, "data\\check\\loadVillage.png");
+}
+
+ImageFindLoc CheckDialogConfirmLoadVilege(Mat img) {
+	return CheckImageMatch(img, "data\\check\\confirm.bmp");
 }
 
 //return true if a is better
@@ -356,10 +389,10 @@ int main(int argc, char** argv)
 {	
 	int PAD = 2;
 	Mat screen = windowToMat(L"cctest [Running] - Oracle VM VirtualBox");
-	imwrite("tstimgs\\full.jpg", screen);
+	imwrite("tstimgs\\full.png", screen);
 	RecoList checkList = LoadDataInfo("data\\check\\bottom");
 	int thd = 220;
-	Mat img = getGrayScale(imread("tstimgs\\full.jpg", IMREAD_COLOR));
+	Mat img = getGrayScale(imread("tstimgs\\full.png", IMREAD_COLOR));
 	doTopNumbers(img, BlockInfo(Rect(780,  42,-1, 30), thd, "gld"));
 	doTopNumbers(img, BlockInfo(Rect(780, 105,-1, 30), thd,"elis"));
 	vector<Mat> blocks = doTopNumbers(img, BlockInfo(Rect(280, 605, -1,45 + PAD), thd, "bottom"), 5);
@@ -378,6 +411,9 @@ int main(int argc, char** argv)
 		printf("\n");
 	}
 	CheckAttackedDialog(img);
+	const bool isLoadVil = CheckDialogLoadVilege(img).found;
+	printf("loading vilieg %i\n", isLoadVil);
+	printf("Confirm dialog %i\n", CheckDialogConfirmLoadVilege(img).found);
 	waitKey(0);
 	return 0;
 	//! [load_image]
