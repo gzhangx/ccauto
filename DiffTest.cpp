@@ -217,13 +217,25 @@ public:
 	bool operator<(const ImageDiffVal &rhs) const { return val < rhs.val; }
 };
 
+int gmatch_method = CV_TM_SQDIFF;
+bool CheckAttackedDialog(Mat img) {
+	Mat result;
+	Mat templ = getGrayScale(imread("data\\check\\ememyattacked.png", IMREAD_COLOR));
+	Mat mask = getGrayScale(imread("data\\check\\ememyattacked.mask.bmp", IMREAD_COLOR));
+	matchTemplate(img, templ, result, gmatch_method);
+	double minVal; double maxVal; Point minLoc; Point maxLoc;
+	Point matchLoc;
+	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
+	printf("find min at %i %i val %f", minLoc.x, minLoc.y, minVal);
+	return minVal < 200000;
+}
 vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 
 	vector<ImageRecoRes> res;
 	int xspacing = 20;
 	float VALMAX = 1000000;
 	for (int i = 0; i < list.recoInfo.size(); i++) {
-		int match_method = CV_TM_SQDIFF;
+		
 		Mat result;
 		RecoInfo recInfo = list.recoInfo[i];
 		Mat templ = recInfo.img;
@@ -237,7 +249,7 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 		}
 		
 		result.create(result_rows, result_cols, CV_32FC1);
-		matchTemplate(img, templ, result, match_method);
+		matchTemplate(img, templ, result, gmatch_method);
 		
 		//normalize(result, result, 1,0, NORM_MINMAX, -1, Mat());
 		double minVal; double maxVal; Point minLoc; Point maxLoc;
@@ -329,6 +341,7 @@ int main(int argc, char** argv)
 		}
 		printf("\n");
 	}
+	CheckAttackedDialog(img);
 	waitKey(0);
 	return 0;
 	//! [load_image]
