@@ -323,9 +323,11 @@ int main(int argc, char** argv)
 		printf("doing at next img\n");
 		vector<ImageRecoRes> stepres = DoReco(checkList, blocks[imgblk], imgblk);
 		res.insert(res.end(), stepres.begin(), stepres.end());
+		printf("Reco Result:");
 		for (vector<ImageRecoRes>::iterator it = res.begin(); it != res.end(); it++) {
-			printf("current res %c\n", it->c);
+			printf("%c", it->c);
 		}
+		printf("\n");
 	}
 	waitKey(0);
 	return 0;
