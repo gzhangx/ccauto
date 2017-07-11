@@ -358,7 +358,7 @@ int main(int argc, char** argv)
 	Mat screen = windowToMat(L"cctest [Running] - Oracle VM VirtualBox");
 	imwrite("tstimgs\\full.jpg", screen);
 	RecoList checkList = LoadDataInfo("data\\check\\bottom");
-	int thd = 200;
+	int thd = 220;
 	Mat img = getGrayScale(imread("tstimgs\\full.jpg", IMREAD_COLOR));
 	doTopNumbers(img, BlockInfo(Rect(780,  42,-1, 30), thd, "gld"));
 	doTopNumbers(img, BlockInfo(Rect(780, 105,-1, 30), thd,"elis"));
