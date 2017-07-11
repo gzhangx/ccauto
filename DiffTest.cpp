@@ -219,18 +219,26 @@ public:
 	}
 	bool operator<(const ImageDiffVal &rhs) const { return val < rhs.val; }
 };
+
+
+bool SortImageRecoResByX(ImageRecoRes i, ImageRecoRes j) { return (i.x<j.x); }
 int ImageRecoRes::xspacing = 10;
 int gmatch_method = CV_TM_SQDIFF;
 bool CheckAttackedDialog(Mat img) {
 	Mat result;
 	Mat templ = getGrayScale(imread("data\\check\\ememyattacked.png", IMREAD_COLOR));
-	Mat mask = getGrayScale(imread("data\\check\\ememyattacked.mask.bmp", IMREAD_COLOR));
+	Mat mask = (imread("data\\check\\ememyattacked.mask.bmp", IMREAD_GRAYSCALE));
 	matchTemplate(img, templ, result, gmatch_method);
 	double minVal; double maxVal; Point minLoc; Point maxLoc;
 	Point matchLoc;
 	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
 	printf("find min at %i %i val %f", minLoc.x, minLoc.y, minVal);
 	return minVal < 200000;
+}
+
+//return true if a is better
+bool checkIfFirstRecoBetter(float a, float b) {
+	return a < b;
 }
 bool debug = false;
 vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
@@ -322,7 +330,26 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 		//imshow(result_windowName, result);
 		//break;
 	}
-	return res;
+
+	sort(res.begin(), res.end(), SortImageRecoResByX);
+
+	vector<ImageRecoRes> ret;
+	for (int i = 0; i < res.size(); i++) {
+		ImageRecoRes cur = res[i];
+		if (i > 0) {			
+			ImageRecoRes prev = res[i - 1];
+			if (cur.x  - prev.x < ImageRecoRes::xspacing) {
+				if (checkIfFirstRecoBetter(cur.val, prev.val)) {
+					res[i - 1] = cur;
+				}
+			}
+			else {
+				ret.push_back(cur);
+			}
+		}
+		else ret.push_back(cur);
+	}
+	return ret;
 }
 int main(int argc, char** argv)
 {	
