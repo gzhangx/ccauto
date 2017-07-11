@@ -385,10 +385,33 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 	}
 	return ret;
 }
+
+Mat LoadCCScreen() {
+	return windowToMat(L"cctest [Running] - Oracle VM VirtualBox");
+}
+
+void printCheckLocation(ImageFindLoc where, const char * who) {
+	if (where.found) {
+		printf("%s %i %i %f\n", who, where.loc.x, where.loc.y, where.val);
+	}
+}
+Mat doChecks() {
+	Mat img = getGrayScale(LoadCCScreen());
+	printCheckLocation(CheckAttackedDialog(img), "VillageAttached");	
+	printCheckLocation(CheckDialogLoadVilege(img), "LoadingVillage");
+	printCheckLocation(CheckDialogConfirmLoadVilege(img), "ConfirmLoadVillage");
+	return img;
+}
 int main(int argc, char** argv)
 {	
+	for (int i = 1; i < argc; i++) {
+		if (strcmp(argv[i], "-check")) {
+			doChecks();
+			return 0;
+		}
+	}
 	int PAD = 2;
-	Mat screen = windowToMat(L"cctest [Running] - Oracle VM VirtualBox");
+	Mat screen = LoadCCScreen();
 	imwrite("tstimgs\\full.png", screen);
 	RecoList checkList = LoadDataInfo("data\\check\\bottom");
 	int thd = 220;
@@ -410,10 +433,8 @@ int main(int argc, char** argv)
 		}
 		printf("\n");
 	}
-	CheckAttackedDialog(img);
-	const bool isLoadVil = CheckDialogLoadVilege(img).found;
-	printf("loading vilieg %i\n", isLoadVil);
-	printf("Confirm dialog %i\n", CheckDialogConfirmLoadVilege(img).found);
+	
+	doChecks();
 	waitKey(0);
 	return 0;
 	//! [load_image]
