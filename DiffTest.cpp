@@ -390,16 +390,16 @@ Mat LoadCCScreen() {
 	return windowToMat(L"cctest [Running] - Oracle VM VirtualBox");
 }
 
-void printCheckLocation(ImageFindLoc where, const char * who) {
+void printCheckLocation(ImageFindLoc where, const char * who, Point move) {
 	if (where.found) {
-		printf("%s %i %i %f\n", who, where.loc.x, where.loc.y, where.val);
+		printf("%s %i %i %f\n", who, where.loc.x + move.x, where.loc.y + move.y, where.val);
 	}
 }
 Mat doChecks() {
 	Mat img = getGrayScale(LoadCCScreen());
-	printCheckLocation(CheckAttackedDialog(img), "VillageAttacked");	
-	printCheckLocation(CheckDialogLoadVilege(img), "LoadingVillage");
-	printCheckLocation(CheckDialogConfirmLoadVilege(img), "ConfirmLoadVillage");
+	printCheckLocation(CheckAttackedDialog(img), "VillageAttacked", Point(345,440));	
+	printCheckLocation(CheckDialogLoadVilege(img), "LoadingVillage", Point(298,44));
+	printCheckLocation(CheckDialogConfirmLoadVilege(img), "ConfirmLoadVillage", Point(310,22));
 	return img;
 }
 int main(int argc, char** argv)
