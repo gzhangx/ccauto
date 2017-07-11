@@ -266,8 +266,8 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 		//	printf("at %i has %i\n", y, steps[y]);
 		//}
 		char buf[512];
-		sprintf_s(buf, "tstimgs\\blk%i_check%c_%i.png", blkNumber, recInfo.chr, i);
-		imwrite(buf, result);
+		//sprintf_s(buf, "tstimgs\\blk%i_check%c_%i.png", blkNumber, recInfo.chr, i);
+		//imwrite(buf, result);
 		sprintf_s(buf, "tstimgs\\blk%i.png", blkNumber);
 		imwrite(buf, img);
 		vector<ImageDiffVal> topvals = GetTopXGoodones(result, 5);
