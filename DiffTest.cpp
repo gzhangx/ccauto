@@ -28,7 +28,7 @@ Mat getGrayScale(Mat color) {
 */
 
 
-std::vector<Mat> breakImagesHor(Mat original) {
+std::vector<Mat> breakImagesHor(Mat original, int PAD=2) {
 	int xstart = -1;
 	int topy = -1;
 	int bottomy = original.rows;
@@ -60,7 +60,7 @@ std::vector<Mat> breakImagesHor(Mat original) {
 				int besth = bottomy - topy + 1;
 				int iw = x - xstart;
 				if (besth > 1 && iw > 1) {
-					Mat digit(besth+2, iw+2, original.type(), Scalar(0));				
+					Mat digit(besth+ PAD, iw+ PAD, original.type(), Scalar(0));
 					original(Rect(xstart, topy, iw, besth)).copyTo(digit(Rect(1,1,iw,besth)));
 					imgs.push_back(digit);
 				}
@@ -113,20 +113,21 @@ Mat loadImageRect(Mat img, BlockInfo blk) {
 
 	return numBlock;
 }
-void doTopNumbers(BlockInfo blk) {
+std::vector<Mat> doTopNumbers(Mat img, BlockInfo blk, int PAD=2) {
 	
-	Mat img = getGrayScale(imread("data\\cctxt\\archerl1.JPG", IMREAD_COLOR));
+	//Mat img = getGrayScale(imread("data\\cctxt\\archerl1.JPG", IMREAD_COLOR));
 	Mat numBlock =loadImageRect(img, blk);
 	
 
 	char buf[512];
 	sprintf_s(buf, "tstimgs\\test%s_%i.png", blk.info, -1);
 	imwrite(buf, numBlock);
-	std::vector<Mat> digits = breakImagesHor(numBlock);
+	std::vector<Mat> digits = breakImagesHor(numBlock, PAD);
 	for (int i = 0; i < digits.size(); i++) {		
 		sprintf_s(buf, "tstimgs\\test%s_%i.png", blk.info, i);
 		imwrite(buf, digits[i]);
 	}
+	return digits;
 }
 
 struct RecoInfo{
@@ -202,73 +203,130 @@ vector<ImageDiffVal> GetTopXGoodones(Mat result, int max) {
 	}
 	return vals;
 }
-void DoReco(RecoList list, Mat img) {
+
+struct ImageRecoRes {
+public:
+	int x;
+	char c;
+	float val;
+	ImageRecoRes(int xx, char chr, float v) {
+		x = xx;
+		c = chr;
+		val = v;
+	}
+	bool operator<(const ImageDiffVal &rhs) const { return val < rhs.val; }
+};
+
+vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
+
+	vector<ImageRecoRes> res;
+	int xspacing = 20;
+	float VALMAX = 1000000;
 	for (int i = 0; i < list.recoInfo.size(); i++) {
 		int match_method = CV_TM_SQDIFF;
 		Mat result;
 		RecoInfo recInfo = list.recoInfo[i];
 		Mat templ = recInfo.img;
-		printf("checking %c\n", recInfo.chr);
+		printf("checking %c at blk %i\n", recInfo.chr, blkNumber);
 		int result_cols = img.cols - templ.cols + 1;
 		int result_rows = img.rows - templ.rows + 1;
+
+		if (result_cols <= 0 || result_rows <= 0) {
+			printf("image not matching\n");
+			continue;
+		}
+		
 		result.create(result_rows, result_cols, CV_32FC1);
 		matchTemplate(img, templ, result, match_method);
-
-
+		
+		//normalize(result, result, 1,0, NORM_MINMAX, -1, Mat());
 		double minVal; double maxVal; Point minLoc; Point maxLoc;
 		Point matchLoc;
-		minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());		
-		normalize(result, result, 1,0, NORM_MINMAX, -1, Mat());
+		minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
 
 		
-		minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
-		char buf[512];
-		sprintf_s(buf, "tstimgs\\a_check%c_%i.png", recInfo.chr, i);
-		imwrite(buf, result);
+		//minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());		
 
-		int steps[10];		
-		for (int y = 0; y < 10; y++) steps[y] = 0;
-		for (int y = 0; y < result.rows; y++) {
-			float* current = result.ptr<float>(y);
-			for (int x = 0; x < result.cols; x++) {
-				int pt = (current[x] * 10);
-				if (pt >= 10) pt = 9;
-				if (pt < 0) {
-					pt = 0; 
-				}
-				if (pt >1) current[x] = 255;
-				else printf("found low at %i %i %f\n", x, y, current[x]);
-				steps[pt]++;
-			}
-		}
-		for (int y = 0; y < 10; y++) {
-			printf("at %i has %i\n", y, steps[y]);
-		}
+		//int steps[10];		
+		//for (int y = 0; y < 10; y++) steps[y] = 0;
+		//for (int y = 0; y < result.rows; y++) {
+		//	float* current = result.ptr<float>(y);
+		//	for (int x = 0; x < result.cols; x++) {
+		//		int pt = (current[x] * 10);
+		//		if (pt >= 10) pt = 9;
+		//		if (pt < 0) {
+		//			pt = 0; 
+		//		}
+		//		if (pt >1) current[x] = 255;
+		//		//else printf("found low at %i %i %f\n", x, y, current[x]);
+		//		steps[pt]++;
+		//	}
+		//}
+		//for (int y = 0; y <5; y++) {
+		//	printf("at %i has %i\n", y, steps[y]);
+		//}
+		char buf[512];
+		sprintf_s(buf, "tstimgs\\blk%i_check%c_%i.png", blkNumber, recInfo.chr, i);
+		imwrite(buf, result);
+		sprintf_s(buf, "tstimgs\\blk%i.png", blkNumber);
+		imwrite(buf, img);
 		vector<ImageDiffVal> topvals = GetTopXGoodones(result, 5);
+
 		for (int y = 0; y < topvals.size(); y++) {
-			printf("top at %i %i has %f\n", topvals[y].x, topvals[i].y, topvals[y].val);
+			ImageDiffVal cur = topvals[y];
+			if (cur.val > VALMAX) continue;
+			int xspace = cur.x / xspacing;
+
+			bool found = false;
+			for (vector<ImageRecoRes>::iterator it = res.begin(); it != res.end(); it++) {
+				ImageRecoRes existing = *it;
+				if (existing.x == xspace) {
+					found = true;
+					if (existing.val > cur.val)
+					{						
+						it->val = cur.val;	
+						it->c = recInfo.chr;
+						printf("rrtop %c at %i %i has %f\n", recInfo.chr, cur.x, cur.y, cur.val);
+					}
+					break;
+				}
+			}
+			if (!found) {
+				res.push_back(ImageRecoRes(xspace, recInfo.chr, cur.val));
+				printf("top %c at %i %i has %f\n", recInfo.chr, cur.x, cur.y, cur.val);
+			}			
 		}
-		namedWindow(result_windowName, WINDOW_NORMAL);
-		namedWindow(image_windowName, WINDOW_NORMAL);
-		imshow(image_windowName, img);
-		imshow(result_windowName, result);
-		break;
+		//namedWindow(result_windowName, WINDOW_NORMAL);
+		//namedWindow(image_windowName, WINDOW_NORMAL);
+		//imshow(image_windowName, img);
+		//imshow(result_windowName, result);
+		//break;
 	}
+	return res;
 }
 int main(int argc, char** argv)
 {	
-
+	int PAD = 2;
 	Mat screen = windowToMat(L"cctest [Running] - Oracle VM VirtualBox");
 	imwrite("tstimgs\\full.jpg", screen);
 	RecoList checkList = LoadDataInfo("data\\check\\bottom");
 	int thd = 200;
-	doTopNumbers(BlockInfo(Rect(780, 70,-1, 40), thd, "gld"));
-	doTopNumbers(BlockInfo(Rect(780, 135,-1, 30), thd,"elis"));
-	doTopNumbers(BlockInfo(Rect(280, 635, -1,45), thd, "bottom"));
+	Mat img = getGrayScale(imread("tstimgs\\full.jpg", IMREAD_COLOR));
+	doTopNumbers(img, BlockInfo(Rect(780,  42,-1, 30), thd, "gld"));
+	doTopNumbers(img, BlockInfo(Rect(780, 105,-1, 30), thd,"elis"));
+	vector<Mat> blocks = doTopNumbers(img, BlockInfo(Rect(280, 605, -1,45 + PAD), thd, "bottom"), 5);
 
-	Mat img = getGrayScale(imread("data\\cctxt\\archerl1.JPG", IMREAD_COLOR));
-	Mat numBlock = loadImageRect(img, BlockInfo(Rect(280, 635, -1, 45)));
-	DoReco(checkList, numBlock);
+	//Mat img = getGrayScale(imread("data\\cctxt\\archerl1.JPG", IMREAD_COLOR));	
+	//Mat numBlock = loadImageRect(img, BlockInfo(Rect(280, 605, -1, 45)));
+	vector<ImageRecoRes> res;
+	for (int imgblk = 0; imgblk < blocks.size(); imgblk++) {
+		printf("doing at next img\n");
+		vector<ImageRecoRes> stepres = DoReco(checkList, blocks[imgblk], imgblk);
+		res.insert(res.end(), stepres.begin(), stepres.end());
+		for (vector<ImageRecoRes>::iterator it = res.begin(); it != res.end(); it++) {
+			printf("current res %c\n", it->c);
+		}
+	}
 	waitKey(0);
 	return 0;
 	//! [load_image]
