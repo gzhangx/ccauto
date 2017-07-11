@@ -206,17 +206,20 @@ vector<ImageDiffVal> GetTopXGoodones(Mat result, int max) {
 
 struct ImageRecoRes {
 public:
+	static int xspacing;
 	int x;
+	int trimedX;
 	char c;
 	float val;
 	ImageRecoRes(int xx, char chr, float v) {
 		x = xx;
+		trimedX = xx / xspacing;
 		c = chr;
 		val = v;
 	}
 	bool operator<(const ImageDiffVal &rhs) const { return val < rhs.val; }
 };
-
+int ImageRecoRes::xspacing = 10;
 int gmatch_method = CV_TM_SQDIFF;
 bool CheckAttackedDialog(Mat img) {
 	Mat result;
@@ -229,22 +232,25 @@ bool CheckAttackedDialog(Mat img) {
 	printf("find min at %i %i val %f", minLoc.x, minLoc.y, minVal);
 	return minVal < 200000;
 }
+bool debug = false;
 vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
-
+	
 	vector<ImageRecoRes> res;
-	int xspacing = 20;
-	float VALMAX = 1000000;
+	if (debug && blkNumber != 1) return res;
+	
+	float VALMAX = 6551750;
 	for (int i = 0; i < list.recoInfo.size(); i++) {
 		
 		Mat result;
 		RecoInfo recInfo = list.recoInfo[i];
+		if (debug && (recInfo.chr != 'l' && recInfo.chr != 'E')) continue;
 		Mat templ = recInfo.img;
 		printf("checking %c at blk %i\n", recInfo.chr, blkNumber);
 		int result_cols = img.cols - templ.cols + 1;
 		int result_rows = img.rows - templ.rows + 1;
 
 		if (result_cols <= 0 || result_rows <= 0) {
-			printf("image not matching\n");
+			printf("image not matching %i %i\n", result_cols, result_rows);
 			continue;
 		}
 		
@@ -287,12 +293,14 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 		for (int y = 0; y < topvals.size(); y++) {
 			ImageDiffVal cur = topvals[y];
 			if (cur.val > VALMAX) continue;
-			int xspace = cur.x / xspacing;
+			//int xspace = cur.x / ImageRecoRes::xspacing;
+			ImageRecoRes xspace = ImageRecoRes(cur.x, recInfo.chr, cur.val);
 
 			bool found = false;
 			for (vector<ImageRecoRes>::iterator it = res.begin(); it != res.end(); it++) {
 				ImageRecoRes existing = *it;
-				if (existing.x == xspace) {
+				//printf("xrrtop %c at %i %i has %f t%i xp%i\n", recInfo.chr, cur.x, cur.y, cur.val, existing.trimedX, xspace.trimedX);
+				if (existing.trimedX == xspace.trimedX) {
 					found = true;
 					if (existing.val > cur.val)
 					{						
@@ -304,7 +312,7 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 				}
 			}
 			if (!found) {
-				res.push_back(ImageRecoRes(xspace, recInfo.chr, cur.val));
+				res.push_back(xspace);
 				printf("top %c at %i %i has %f\n", recInfo.chr, cur.x, cur.y, cur.val);
 			}			
 		}
