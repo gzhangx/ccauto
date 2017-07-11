@@ -397,7 +397,7 @@ void printCheckLocation(ImageFindLoc where, const char * who) {
 }
 Mat doChecks() {
 	Mat img = getGrayScale(LoadCCScreen());
-	printCheckLocation(CheckAttackedDialog(img), "VillageAttached");	
+	printCheckLocation(CheckAttackedDialog(img), "VillageAttacked");	
 	printCheckLocation(CheckDialogLoadVilege(img), "LoadingVillage");
 	printCheckLocation(CheckDialogConfirmLoadVilege(img), "ConfirmLoadVillage");
 	return img;
