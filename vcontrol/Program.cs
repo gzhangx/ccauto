@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,10 @@ namespace ConsoleApplication1
 {
     class Program
     {
+        [DllImport("user32.dll")]
+        static extern uint MapVirtualKeyEx(uint uCode, uint uMapType, IntPtr dwhkl);
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        static extern short VkKeyScanEx(char ch, IntPtr dwhkl);
 
         static string runApp()
         {
@@ -64,7 +69,14 @@ namespace ConsoleApplication1
             Thread.Sleep(100);
             mouse.PutMouseEvent(0, 0, 0, 0, 0);
         }
-        static void checkLoop(IMouse mouse)
+
+        static uint GetScanCode(char c)
+        {
+            //MAPVK_VK_TO_VSC = 0x00;            
+            short cd = VkKeyScanEx(c, IntPtr.Zero);
+            return MapVirtualKeyEx(((uint)cd&0xff),0, IntPtr.Zero);
+        }
+        static void checkLoop(IMouse mouse, IKeyboard keyboard)
         {
             while (true)
             {
@@ -81,11 +93,39 @@ namespace ConsoleApplication1
                         var y = Convert.ToInt32(cmds[2]);                        
                         MouseMouseTo(mouse, x, y);
                         MouseClick(mouse);
+                        if (confirm)
+                        {
+                            //MouseMouseTo(mouse, x - 200, y);
+                            //MouseClick(mouse);
+                            //                            keyboard.PutScancodes(codes);
+                            mouse.PutMouseEvent(-200, 0, 0, 0, 0);
+                            MouseClick(mouse);
+
+                            SendString(keyboard, "CONFIRM");
+                        }
                     }
                 }
                 Thread.Sleep(1000);
             }
         }
+
+        private static void SendString(IKeyboard keyboard, string str)
+        {
+            var codes = new short[str.Length];
+            Console.WriteLine("writiting");
+            Thread.Sleep(1000);
+            //keyboard.PutScancode(0x2A); //shift
+            for (int i = 0; i < str.Length; i++)
+            {
+                codes[i] = (short)GetScanCode(str[i]);
+                Console.WriteLine("code for " + str[i] + " is " + codes[i].ToString("X"));
+                keyboard.PutScancode((int)codes[i]);
+                Thread.Sleep(200);
+                keyboard.PutScancode((int)codes[i] | 0x80);
+                Thread.Sleep(300);
+            }
+        }
+
         static void Main(string[] args)
         {                       
             var vbox = new VirtualBox.VirtualBox();
@@ -114,11 +154,12 @@ namespace ConsoleApplication1
                     //display.TakeScreenShot(0, ref buf[0], sw, sh, BitmapFormat.BitmapFormat_PNG);
 
                     var mouse = session.Console.Mouse;
+                    var keyboard = session.Console.Keyboard;
                     MouseMouseTo(mouse, 515, 660);
                     MouseClick(mouse);
                     MouseMouseTo(mouse, 360, 156);
                     MouseClick(mouse);
-                    checkLoop(mouse);
+                    checkLoop(mouse, keyboard);
                     
 
                     //mouse.PutEventMultiTouch(2,)
