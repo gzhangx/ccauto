@@ -245,7 +245,7 @@ ImageFindLoc CheckAttackedDialog(Mat img) {
 	Point matchLoc;
 	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
 	printf("attaced dialog find min at %i %i val %f %f\n", minLoc.x, minLoc.y, minVal, maxVal);
-	return ImageFindLoc(minLoc, minVal, (minVal < 20000));
+	return ImageFindLoc(minLoc, minVal, (minVal < 2000));
 }
 
 
