@@ -114,19 +114,21 @@ Mat loadImageRect(Mat img, BlockInfo blk) {
 
 	return numBlock;
 }
-std::vector<Mat> doTopNumbers(Mat img, BlockInfo blk, int PAD=2) {
-	
-	//Mat img = getGrayScale(imread("data\\cctxt\\archerl1.JPG", IMREAD_COLOR));
-	Mat numBlock =loadImageRect(img, blk);
-	
+std::vector<Mat> doTopNumbers(Mat img, BlockInfo blk, int PAD = 2) {
 
-	char buf[512];
-	sprintf_s(buf, "tstimgs\\test%s_%i.png", blk.info, -1);
-	imwrite(buf, numBlock);
+	//Mat img = getGrayScale(imread("data\\cctxt\\archerl1.JPG", IMREAD_COLOR));
+	Mat numBlock = loadImageRect(img, blk);
+
 	std::vector<Mat> digits = breakImagesHor(numBlock, PAD);
-	for (int i = 0; i < digits.size(); i++) {		
-		sprintf_s(buf, "tstimgs\\test%s_%i.png", blk.info, i);
-		imwrite(buf, digits[i]);
+	if (debugprint) {
+		char buf[512];
+		sprintf_s(buf, "tstimgs\\test%s_%i.png", blk.info, -1);
+		imwrite(buf, numBlock);
+
+		for (int i = 0; i < digits.size(); i++) {
+			sprintf_s(buf, "tstimgs\\test%s_%i.png", blk.info, i);
+			imwrite(buf, digits[i]);
+		}
 	}
 	return digits;
 }
@@ -164,7 +166,7 @@ RecoList LoadDataInfo(const char * dir) {
 	RecoList res;
 	while (de = readdir(d)) {
 		if (StrEndsWith(de->d_name, ".png")) {
-			printf("%s %c\n", de->d_name, de->d_name[2]);
+			if (debugprint) printf("%s %c\n", de->d_name, de->d_name[2]);
 			char buf[512];
 			sprintf_s(buf, "%s\\%s", dir, de->d_name);
 			Mat img = getGrayScale(imread(buf));
