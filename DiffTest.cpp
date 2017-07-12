@@ -432,6 +432,7 @@ void DoRecoOnBlock(Mat img, RecoList checkList, BlockInfo blk) {
 }
 
 RecoList topCheckList = LoadDataInfo("data\\check\\top");
+RecoList bottomCheckList = LoadDataInfo("data\\check\\bottom");
 Mat doChecks() {
 	Mat img = getGrayScale(LoadCCScreen());
 	printCheckLocation(CheckAttackedDialog(img), "STDCLICK_VillageAttacked", Point(345, 440));
@@ -452,13 +453,18 @@ Mat doChecks() {
 	}
 
 	int thd = 220;
+	int PAD = 2;
 	vector<BlockInfo> chkBlocks = {
 		BlockInfo(Rect(780,  42,-1, 30), thd, "Gold"),
-		BlockInfo(Rect(780, 105,-1, 30), thd,"Elixir")
+		BlockInfo(Rect(780, 105,-1, 30), thd,"Elixir"),
+		BlockInfo(Rect(280, 605, -1,45 + PAD), thd, "Bottom")
 	};
 
 	for (vector<BlockInfo>::iterator it = chkBlocks.begin(); it != chkBlocks.end(); it++) {
-		DoRecoOnBlock(img, topCheckList, *it);
+		if (!strcmp(it->info, "Bottom"))
+			DoRecoOnBlock(img, bottomCheckList, *it);
+		else
+			DoRecoOnBlock(img, topCheckList, *it);
 	}
 	return img;
 }
@@ -479,7 +485,7 @@ int main(int argc, char** argv)
 	int PAD = 2;
 	Mat screen = LoadCCScreen();
 	imwrite("tstimgs\\full.png", screen);
-	RecoList checkList = LoadDataInfo("data\\check\\bottom");
+	
 	
 	Mat img = getGrayScale(imread("tstimgs\\full.png", IMREAD_COLOR));
 	doTopNumbers(img, BlockInfo(Rect(780,  42,-1, 30), thd, "gld"));
@@ -491,7 +497,7 @@ int main(int argc, char** argv)
 	vector<ImageRecoRes> res;
 	for (int imgblk = 0; imgblk < blocks.size(); imgblk++) {
 		printf("doing at next img\n");
-		vector<ImageRecoRes> stepres = DoReco(checkList, blocks[imgblk], imgblk);
+		vector<ImageRecoRes> stepres = DoReco(bottomCheckList, blocks[imgblk], imgblk);
 		res.insert(res.end(), stepres.begin(), stepres.end());
 		printf("Reco Result:");
 		for (vector<ImageRecoRes>::iterator it = res.begin(); it != res.end(); it++) {
