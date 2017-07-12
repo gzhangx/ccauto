@@ -36,10 +36,58 @@ namespace ConsoleApplication1
                 return result;
             }           
         }
-        static void Main(string[] args)
+
+        static void MouseMouseTo(IMouse mouse, int x, int y)
         {
-            Console.WriteLine(runApp());
-            return;
+            for (int i = 0; i < 5; i++)
+            {
+                mouse.PutMouseEvent(-200, -200, 0, 0, 0);
+                Thread.Sleep(100);
+            }
+
+            const int MAX = 200;
+            while(x > MAX || y > MAX)
+            {
+                int mx = x > MAX ? MAX : x;
+                x -= mx;
+                int my = y > MAX ? MAX : y;
+                y -= my;
+                mouse.PutMouseEvent(mx, my, 0, 0, 0);
+                Thread.Sleep(100);
+            }
+            mouse.PutMouseEvent(x, y, 0, 0, 0);
+        }
+        static void MouseClick(IMouse mouse)
+        {
+            Thread.Sleep(100);
+            mouse.PutMouseEvent(0, 0, 0, 0, 1);
+            Thread.Sleep(100);
+            mouse.PutMouseEvent(0, 0, 0, 0, 0);
+        }
+        static void checkLoop(IMouse mouse)
+        {
+            while (true)
+            {
+                foreach (var cmd in runApp().Split('\n'))
+                {
+                    bool attacked = cmd.StartsWith("VillageAttacked");
+                    bool loadv = cmd.StartsWith("LoadingVillage");
+                    bool confirm = cmd.StartsWith("ConfirmLoadVillage");                    
+                    if (attacked || loadv || confirm)
+                    {
+                        Console.WriteLine(cmd);
+                        var cmds = cmd.Split(' ');
+                        var x = Convert.ToInt32(cmds[1]);
+                        var y = Convert.ToInt32(cmds[2]);                        
+                        MouseMouseTo(mouse, x, y);
+                        MouseClick(mouse);
+                    }
+                }
+                Thread.Sleep(1000);
+            }
+        }
+        static void Main(string[] args)
+        {                       
             var vbox = new VirtualBox.VirtualBox();
             VirtualBox.IMachine machine = vbox.FindMachine("cctest");
             VirtualBoxClient vboxclient = new VirtualBoxClient();
@@ -66,30 +114,12 @@ namespace ConsoleApplication1
                     //display.TakeScreenShot(0, ref buf[0], sw, sh, BitmapFormat.BitmapFormat_PNG);
 
                     var mouse = session.Console.Mouse;
-                    Console.WriteLine("multi support" + mouse.MultiTouchSupported);
-                    for (int i = 0; i < 5; i++)
-                    {
-                        mouse.PutMouseEvent(-200, -200, 0, 0, 0);
-                        Thread.Sleep(100);
-                    }
+                    MouseMouseTo(mouse, 515, 660);
+                    MouseClick(mouse);
+                    MouseMouseTo(mouse, 360, 156);
+                    MouseClick(mouse);
+                    checkLoop(mouse);
                     
-                    mouse.PutMouseEvent(200, 200, 0, 0, 0);
-                    Thread.Sleep(100);
-                    mouse.PutMouseEvent(200, 200, 0, 0, 0);
-                    Thread.Sleep(100);
-                    mouse.PutMouseEvent(115, 200, 0, 0, 0);
-                    Thread.Sleep(100);
-                    mouse.PutMouseEvent(0, 60, 0, 0, 1);
-                    for (int i = 0; i < 5; i++)
-                    {
-                        mouse.PutMouseEvent(-200, -200, 0, 0, 0);
-                        Thread.Sleep(100);
-                    }
-                    Thread.Sleep(100);
-                    mouse.PutMouseEvent(200, 150, 0, 0, 0);
-                    Thread.Sleep(100);
-                    mouse.PutMouseEvent(160, 0, 0, 0, 1);
-                    mouse.PutMouseEvent(160, 0, 0, 0, 0);
 
                     //mouse.PutEventMultiTouch(2,)
                     return;
