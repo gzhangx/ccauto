@@ -5,7 +5,8 @@
 */
 
 #include "stdafx.h"
-
+bool debug = false;
+bool debugprint = false;
 using namespace std;
 using namespace cv;
 Mat windowToMat(LPTSTR name);
@@ -244,7 +245,7 @@ ImageFindLoc CheckAttackedDialog(Mat img) {
 	double minVal; double maxVal; Point minLoc; Point maxLoc;
 	Point matchLoc;
 	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
-	printf("attaced dialog find min at %i %i val %f %f\n", minLoc.x, minLoc.y, minVal, maxVal);
+	if (debugprint) printf("attacked dialog find min at %i %i val %f %f\n", minLoc.x, minLoc.y, minVal, maxVal);
 	return ImageFindLoc(minLoc, minVal, (minVal < 2000));
 }
 
@@ -255,7 +256,7 @@ ImageFindLoc CheckAttackedDialog(Mat img) {
 bool checkIfFirstRecoBetter(float a, float b) {
 	return a < b;
 }
-bool debug = false;
+
 vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 	
 	vector<ImageRecoRes> res;
@@ -268,12 +269,12 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 		RecoInfo recInfo = list.recoInfo[i];
 		if (debug && (recInfo.chr != 'l' && recInfo.chr != 'E')) continue;
 		Mat templ = recInfo.img;
-		printf("checking %c at blk %i\n", recInfo.chr, blkNumber);
+		if (debugprint) printf("checking %c at blk %i\n", recInfo.chr, blkNumber);
 		int result_cols = img.cols - templ.cols + 1;
 		int result_rows = img.rows - templ.rows + 1;
 
 		if (result_cols <= 0 || result_rows <= 0) {
-			printf("image not matching %i %i\n", result_cols, result_rows);
+			if (debugprint) printf("image not matching %i %i\n", result_cols, result_rows);
 			continue;
 		}
 		
@@ -306,11 +307,13 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 		//for (int y = 0; y <5; y++) {
 		//	printf("at %i has %i\n", y, steps[y]);
 		//}
-		char buf[512];
-		//sprintf_s(buf, "tstimgs\\blk%i_check%c_%i.png", blkNumber, recInfo.chr, i);
-		//imwrite(buf, result);
-		sprintf_s(buf, "tstimgs\\blk%i.png", blkNumber);
-		imwrite(buf, img);
+		if (debugprint) {
+			char buf[512];
+			//sprintf_s(buf, "tstimgs\\blk%i_check%c_%i.png", blkNumber, recInfo.chr, i);
+			//imwrite(buf, result);
+			sprintf_s(buf, "tstimgs\\blk%i.png", blkNumber);
+			imwrite(buf, img);
+		}
 		vector<ImageDiffVal> topvals = GetTopXGoodones(result, 5);
 
 		for (int y = 0; y < topvals.size(); y++) {
@@ -329,14 +332,14 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 					{						
 						it->val = cur.val;	
 						it->c = recInfo.chr;
-						printf("rrtop %c at %i %i has %f\n", recInfo.chr, cur.x, cur.y, cur.val);
+						if (debugprint) printf("rrtop %c at %i %i has %f\n", recInfo.chr, cur.x, cur.y, cur.val);
 					}
 					break;
 				}
 			}
 			if (!found) {
 				res.push_back(xspace);
-				printf("top %c at %i %i has %f\n", recInfo.chr, cur.x, cur.y, cur.val);
+				if (debugprint) printf("top %c at %i %i has %f\n", recInfo.chr, cur.x, cur.y, cur.val);
 			}			
 		}
 		//namedWindow(result_windowName, WINDOW_NORMAL);
@@ -403,10 +406,34 @@ public:
 	}
 };
 
+void DoRecoOnBlock(Mat img, RecoList checkList, BlockInfo blk) {
+	vector<Mat> blocks = doTopNumbers(img, blk, 5);
+	vector<ImageRecoRes> res;
+	for (int imgblk = 0; imgblk < blocks.size(); imgblk++) {
+		if (debugprint) printf("doing at next img\n");
+		vector<ImageRecoRes> stepres = DoReco(checkList, blocks[imgblk], imgblk);
+		res.insert(res.end(), stepres.begin(), stepres.end());
+		if (debugprint) {
+			printf("Reco Result:");
+			for (vector<ImageRecoRes>::iterator it = res.begin(); it != res.end(); it++) {
+				printf("%c", it->c);
+			}
+			printf("\n");
+		}
+	}
+
+	printf("RecoResult_%s ", blk.info);
+	for (vector<ImageRecoRes>::iterator it = res.begin(); it != res.end(); it++) {
+		printf("%c", it->c);
+	}
+	printf("\n");
+}
+
+RecoList topCheckList = LoadDataInfo("data\\check\\top");
 Mat doChecks() {
 	Mat img = getGrayScale(LoadCCScreen());
-	printCheckLocation(CheckAttackedDialog(img), "STDCLICK_VillageAttacked", Point(345,440));		
-	vector<ImgChecksAndTags> itms = {		
+	printCheckLocation(CheckAttackedDialog(img), "STDCLICK_VillageAttacked", Point(345, 440));
+	vector<ImgChecksAndTags> itms = {
 		ImgChecksAndTags("loadVillage.png", "STDCLICK_LoadingVillage", Point(298,44)),
 		ImgChecksAndTags("confirm.bmp", "STDCLICK_ConfirmLoadVillage", Point(310, 22)),
 		ImgChecksAndTags("confirmready.png", "STDCLICK_ConfirmLoadVillageReady", Point(310, 22)),
@@ -421,21 +448,37 @@ Mat doChecks() {
 		strcat_s(fname, itm.imageFileName);
 		printCheckLocation(CheckImageMatch(img, fname), itm.Tag, itm.point);
 	}
+
+	int thd = 220;
+	vector<BlockInfo> chkBlocks = {
+		BlockInfo(Rect(780,  42,-1, 30), thd, "Gold"),
+		BlockInfo(Rect(780, 105,-1, 30), thd,"Elixir")
+	};
+
+	for (vector<BlockInfo>::iterator it = chkBlocks.begin(); it != chkBlocks.end(); it++) {
+		DoRecoOnBlock(img, topCheckList, *it);
+	}
 	return img;
 }
+
 int main(int argc, char** argv)
 {	
+	
+	int thd = 220;
+
 	for (int i = 1; i < argc; i++) {
 		if (strcmp(argv[i], "-check") == 0) {
 			doChecks();
 			return 0;
 		}
 	}
+	doChecks();
+	return 0;
 	int PAD = 2;
 	Mat screen = LoadCCScreen();
 	imwrite("tstimgs\\full.png", screen);
 	RecoList checkList = LoadDataInfo("data\\check\\bottom");
-	int thd = 220;
+	
 	Mat img = getGrayScale(imread("tstimgs\\full.png", IMREAD_COLOR));
 	doTopNumbers(img, BlockInfo(Rect(780,  42,-1, 30), thd, "gld"));
 	doTopNumbers(img, BlockInfo(Rect(780, 105,-1, 30), thd,"elis"));
@@ -455,7 +498,7 @@ int main(int argc, char** argv)
 		printf("\n");
 	}
 	
-	doChecks();
+	
 	waitKey(0);
 	return 0;
 	//! [load_image]
