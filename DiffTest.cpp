@@ -245,29 +245,11 @@ ImageFindLoc CheckAttackedDialog(Mat img) {
 	Point matchLoc;
 	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
 	printf("attaced dialog find min at %i %i val %f %f\n", minLoc.x, minLoc.y, minVal, maxVal);
-	return ImageFindLoc(minLoc, minVal, (minVal < 200000) && (maxVal > 200000));
+	return ImageFindLoc(minLoc, minVal, (minVal < 20000));
 }
 
 
 
-ImageFindLoc CheckImageMatch(Mat img, char * fileName) {
-	Mat result;
-	Mat templ = getGrayScale(imread(fileName, IMREAD_COLOR));
-	matchTemplate(img, templ, result, gmatch_method);
-	double minVal; double maxVal; Point minLoc; Point maxLoc;
-	Point matchLoc;
-	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
-	//printf("find min at %i %i val %f\n", minLoc.x, minLoc.y, minVal);
-	return ImageFindLoc(minLoc, minVal, minVal < 200000);
-}
-
-ImageFindLoc CheckDialogLoadVilege(Mat img) {
-	return CheckImageMatch(img, "data\\check\\loadVillage.png");
-}
-
-ImageFindLoc CheckDialogConfirmLoadVilege(Mat img) {
-	return CheckImageMatch(img, "data\\check\\confirm.bmp");
-}
 
 //return true if a is better
 bool checkIfFirstRecoBetter(float a, float b) {
@@ -395,11 +377,50 @@ void printCheckLocation(ImageFindLoc where, const char * who, Point move) {
 		printf("%s %i %i %f\n", who, where.loc.x + move.x, where.loc.y + move.y, where.val);
 	}
 }
+
+
+ImageFindLoc CheckImageMatch(Mat img, char * fileName) {
+	Mat result;
+	Mat templ = getGrayScale(imread(fileName, IMREAD_COLOR));
+	matchTemplate(img, templ, result, gmatch_method);
+	double minVal; double maxVal; Point minLoc; Point maxLoc;
+	Point matchLoc;
+	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
+	//printf("find min at %i %i val %f\n", minLoc.x, minLoc.y, minVal);
+	return ImageFindLoc(minLoc, minVal, minVal < 200000);
+}
+
+
+struct ImgChecksAndTags {
+public:
+	char imageFileName[512];
+	char Tag[512];
+	Point point;
+	ImgChecksAndTags(const char * fname, const char *tag, Point pt) {
+		strcpy_s(imageFileName, fname);
+		strcpy_s(Tag, tag);
+		point = pt;
+	}
+};
+
 Mat doChecks() {
 	Mat img = getGrayScale(LoadCCScreen());
-	printCheckLocation(CheckAttackedDialog(img), "VillageAttacked", Point(345,440));	
-	printCheckLocation(CheckDialogLoadVilege(img), "LoadingVillage", Point(298,44));
-	printCheckLocation(CheckDialogConfirmLoadVilege(img), "ConfirmLoadVillage", Point(310,22));
+	printCheckLocation(CheckAttackedDialog(img), "STDCLICK_VillageAttacked", Point(345,440));		
+	vector<ImgChecksAndTags> itms = {		
+		ImgChecksAndTags("loadVillage.png", "STDCLICK_LoadingVillage", Point(298,44)),
+		ImgChecksAndTags("confirm.bmp", "STDCLICK_ConfirmLoadVillage", Point(310, 22)),
+		ImgChecksAndTags("confirmready.png", "STDCLICK_ConfirmLoadVillageReady", Point(310, 22)),
+		ImgChecksAndTags("justbootup.png", "STDCLICK_CheckJustBootedUp", Point(52,70)),
+		ImgChecksAndTags("clashofclanicon.png", "STDCLICK_StartGame", Point(44,44))
+	};
+
+	char fname[512];
+	for (int i = 0; i < itms.size(); i++) {
+		ImgChecksAndTags itm = itms[i];
+		strcpy_s(fname, "data\\check\\");
+		strcat_s(fname, itm.imageFileName);
+		printCheckLocation(CheckImageMatch(img, fname), itm.Tag, itm.point);
+	}
 	return img;
 }
 int main(int argc, char** argv)

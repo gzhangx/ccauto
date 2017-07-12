@@ -21,7 +21,7 @@ namespace ConsoleApplication1
         {
             ProcessStartInfo start = new ProcessStartInfo();
             start.Arguments = "-check";
-            start.FileName = "D:\\gang\\rctest\\x64\\test\\temptest.exe";
+            start.FileName = "D:\\gang\\rctest\\x64\\Debug\\temptest.exe";
             start.WorkingDirectory = "D:\\gang\\rctest";
             // Do you want to show a console window?
             start.WindowStyle = ProcessWindowStyle.Normal;
@@ -82,10 +82,14 @@ namespace ConsoleApplication1
             {
                 foreach (var cmd in runApp().Split('\n'))
                 {
-                    bool attacked = cmd.StartsWith("VillageAttacked");
-                    bool loadv = cmd.StartsWith("LoadingVillage");
-                    bool confirm = cmd.StartsWith("ConfirmLoadVillage");                    
-                    if (attacked || loadv || confirm)
+                    bool stdClick = cmd.StartsWith("STDCLICK_");
+                    //bool attacked = cmd.StartsWith("VillageAttacked");
+                    //bool loadv = cmd.StartsWith("LoadingVillage");
+                    bool confirm = cmd.StartsWith("STDCLICK_ConfirmLoadVillage");
+                    //bool confirmReady = cmd.StartsWith("ConfirmLoadVillageReady");
+                    //bool CheckJustBootedUp = cmd.StartsWith("CheckJustBootedUp");
+                    //bool startGame = cmd.StartsWith("StartGame");
+                    if (stdClick)
                     {
                         Console.WriteLine(cmd);
                         var cmds = cmd.Split(' ');
@@ -100,8 +104,9 @@ namespace ConsoleApplication1
                             //                            keyboard.PutScancodes(codes);
                             mouse.PutMouseEvent(-200, 0, 0, 0, 0);
                             MouseClick(mouse);
-
                             SendString(keyboard, "CONFIRM");
+
+                            Thread.Sleep(2000);
                         }
                     }
                 }
@@ -155,10 +160,10 @@ namespace ConsoleApplication1
 
                     var mouse = session.Console.Mouse;
                     var keyboard = session.Console.Keyboard;
-                    MouseMouseTo(mouse, 515, 660);
-                    MouseClick(mouse);
-                    MouseMouseTo(mouse, 360, 156);
-                    MouseClick(mouse);
+                    //MouseMouseTo(mouse, 515, 660);
+                    //MouseClick(mouse);
+                    //MouseMouseTo(mouse, 360, 156);
+                    //MouseClick(mouse);
                     checkLoop(mouse, keyboard);
                     
 
