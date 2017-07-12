@@ -78,6 +78,10 @@ namespace ConsoleApplication1
         }
         static void checkLoop(IMouse mouse, IKeyboard keyboard)
         {
+            keyboard.ReleaseKeys();
+            Thread.Sleep(100);
+            keyboard.PutScancode(0x2A);
+            Thread.Sleep(100);
             while (true)
             {
                 foreach (var cmd in runApp().Split('\n'))
