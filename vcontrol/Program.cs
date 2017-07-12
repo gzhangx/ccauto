@@ -77,11 +77,7 @@ namespace ConsoleApplication1
             return MapVirtualKeyEx(((uint)cd&0xff),0, IntPtr.Zero);
         }
         static void checkLoop(IMouse mouse, IKeyboard keyboard)
-        {
-            keyboard.ReleaseKeys();
-            Thread.Sleep(100);
-            keyboard.PutScancode(0x2A);
-            Thread.Sleep(100);
+        {            
             while (true)
             {
                 foreach (var cmd in runApp().Split('\n'))
@@ -93,6 +89,13 @@ namespace ConsoleApplication1
                     //bool confirmReady = cmd.StartsWith("ConfirmLoadVillageReady");
                     //bool CheckJustBootedUp = cmd.StartsWith("CheckJustBootedUp");
                     //bool startGame = cmd.StartsWith("StartGame");
+                    if (cmd.Contains("CheckJustBootedUp"))
+                    {
+                        keyboard.ReleaseKeys();
+                        Thread.Sleep(100);
+                        keyboard.PutScancode(0x2A);
+                        Thread.Sleep(100);
+                    }
                     if (stdClick)
                     {
                         Console.WriteLine(cmd);
