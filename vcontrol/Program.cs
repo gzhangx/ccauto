@@ -79,9 +79,10 @@ namespace ConsoleApplication1
         static void checkLoop(IMouse mouse, IKeyboard keyboard)
         {            
             while (true)
-            {
+            {                
                 foreach (var cmd in runApp().Split('\n'))
                 {
+                    Console.Write(".");
                     bool stdClick = cmd.StartsWith("STDCLICK_");
                     //bool attacked = cmd.StartsWith("VillageAttacked");
                     //bool loadv = cmd.StartsWith("LoadingVillage");
@@ -113,11 +114,14 @@ namespace ConsoleApplication1
                             MouseClick(mouse);
                             SendString(keyboard, "CONFIRM");
 
+                            Thread.Sleep(1000);
+                            mouse.PutMouseEvent(200, 0, 0, 0, 0);
+                            MouseClick(mouse);
                             Thread.Sleep(2000);
                         }
                     }
                 }
-                Thread.Sleep(1000);
+                Thread.Sleep(100);
             }
         }
 
