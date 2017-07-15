@@ -480,11 +480,12 @@ int main(int argc, char** argv)
 			return 0;
 		}
 	}
+	Mat screen = LoadCCScreen();
+	imwrite("tstimgs\\full.png", screen);
 	doChecks();
 	return 0;
 	int PAD = 2;
-	Mat screen = LoadCCScreen();
-	imwrite("tstimgs\\full.png", screen);
+	
 	
 	
 	Mat img = getGrayScale(imread("tstimgs\\full.png", IMREAD_COLOR));
