@@ -467,6 +467,7 @@ Mat doChecks() {
 		ImgChecksAndTags("clashofclanicon.png", "STDCLICK_StartGame", Point(44,44)),
 		ImgChecksAndTags("leftexpand.png", "STDCLICK_LeftExpand", Point(20,66)),
 		ImgChecksAndTags("donatebutton.png", "INFO_DonateButtonFound", Point(51,19)),
+		ImgChecksAndTags("donatebutton1.png", "INFO_DonateButtonFound", Point(51,19)),
 		ImgChecksAndTags("donate_archer.png", "INFO_DonateArchier", Point(40,40)),
 		ImgChecksAndTags("donate_wizard.png", "INFO_DonateWizard", Point(40,40)),
 		ImgChecksAndTags("chacha.png", "INFO_Close", Point(12,14)),
