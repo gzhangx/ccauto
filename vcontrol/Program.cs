@@ -14,30 +14,7 @@ namespace ccVcontrol
     
     class Program
     {
-        static string runApp()
-        {
-            ProcessStartInfo start = new ProcessStartInfo();
-            start.Arguments = "-check";
-            start.FileName = "D:\\gang\\rctest\\x64\\Debug\\temptest.exe";
-            start.WorkingDirectory = "D:\\gang\\rctest";
-            // Do you want to show a console window?
-            start.WindowStyle = ProcessWindowStyle.Normal;
-            start.CreateNoWindow = true;
-            start.RedirectStandardOutput = true;
-            start.UseShellExecute = false;
-            int exitCode;
-
-
-            // Run the external process & wait for it to finish
-            using (Process proc = Process.Start(start))
-            {
-                var result = proc.StandardOutput.ReadToEnd();
-                proc.WaitForExit();                
-                // Retrieve the app's exit code
-                exitCode = proc.ExitCode;
-                return result;
-            }           
-        }
+        
 
         static void checkLoop(IMouse mouse, IKeyboard keyboard)
         {
@@ -47,7 +24,7 @@ namespace ccVcontrol
             };
             while (true)
             {                
-                foreach (var cmd in runApp().Split('\n'))
+                foreach (var cmd in Utils.runApp().Split('\n'))
                 {
                     Console.Write(".");
                     bool stdClick = cmd.StartsWith("STDCLICK_");

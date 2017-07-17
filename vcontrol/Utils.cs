@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -44,6 +45,12 @@ namespace ccVcontrol
             mouse.PutMouseEvent(0, 0, 0, 0, 0);
         }
 
+        public static void MouseMouseAndClick(IMouse mouse, int x, int y)
+        {
+            MouseMouseTo(mouse, x, y);
+            MouseClick(mouse);
+        }
+
         public static uint GetScanCode(char c)
         {
             //MAPVK_VK_TO_VSC = 0x00;            
@@ -66,6 +73,55 @@ namespace ccVcontrol
                 keyboard.PutScancode((int)codes[i] | 0x80);
                 Thread.Sleep(300);
             }
+        }
+
+        public static string runApp()
+        {
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.Arguments = "-check";
+            start.FileName = "D:\\gang\\rctest\\x64\\Debug\\temptest.exe";
+            start.WorkingDirectory = "D:\\gang\\rctest";
+            // Do you want to show a console window?
+            start.WindowStyle = ProcessWindowStyle.Normal;
+            start.CreateNoWindow = true;
+            start.RedirectStandardOutput = true;
+            start.UseShellExecute = false;
+            int exitCode;
+
+
+            // Run the external process & wait for it to finish
+            using (Process proc = Process.Start(start))
+            {
+                var result = proc.StandardOutput.ReadToEnd();
+                proc.WaitForExit();
+                // Retrieve the app's exit code
+                exitCode = proc.ExitCode;
+                return result;
+            }
+        }
+
+        public static List<CommandInfo> GetAppInfo()
+        {
+            var res = new List<CommandInfo>();
+            foreach (var cmd in Utils.runApp().Split('\n'))
+            {
+                if (cmd.Length < 2) continue;
+                if (cmd.StartsWith("***** VIDEOINPUT LIBRARY")) continue;
+                var cmds = cmd.Split(' ');
+                var command = cmds[0];
+                int x = 0, y = 0;
+                decimal cmpRes = decimal.MaxValue;
+                if (cmds.Length > 2)
+                {
+                    x = Convert.ToInt32(cmds[1]);
+                    y = Convert.ToInt32(cmds[2]);
+                }
+                if (cmds.Length > 3)
+                    cmpRes = Convert.ToDecimal(cmds[3]);
+                res.Add(new CommandInfo { command = command, cmpRes = cmpRes, x = x,y=y });
+                
+            }
+            return res;
         }
     }
 }
