@@ -70,6 +70,7 @@ namespace ccVcontrol
                             found = true;
                         }
                     }
+                    if (found) break;
                 }
                 if (found)
                 {
