@@ -49,26 +49,32 @@ namespace ccVcontrol
             if (found)
             {
                 found = false;
+                var results = Utils.GetAppInfo();
                 for (int i = 0; i < 100; i++)
                 {
                     Thread.Sleep(2000);
                     Console.WriteLine("DEBUGPRINTINFO trying to find archier or wizard");
-                    var results = Utils.GetAppInfo();
+                    
 
-                    var donationFormat = results.FirstOrDefault(r => r.command == "INFO_DonateWizard");
-                    if (donationFormat != null)
-                    {
-                        found = true;
-                        Utils.MouseMouseAndClick(context.mouse, donationFormat.x, donationFormat.y);
-                        for (int j = 0; j < 5; j++)
+                    foreach (var donationName in new String[] { "INFO_DonateWizard", "INFO_DonateArchier" }) {
+                        var donationFormat = results.FirstOrDefault(r => r.command == donationName);
+                        if (donationFormat != null)
                         {
-                            Utils.MouseClick(context.mouse);
-                        }
+                            found = true;
+                            Utils.MouseMouseAndClick(context.mouse, donationFormat.x, donationFormat.y);
+                            for (int j = 0; j < 5; j++)
+                            {
+                                Utils.MouseClick(context.mouse);
+                            }
 
-                        var close = results.FirstOrDefault(r => r.command == "INFO_Close");
-                        Utils.MouseMouseAndClick(context.mouse, close.x, close.y);
-                        break;
+                            found = true;
+                        }
                     }
+                }
+                if (found)
+                {
+                    var close = results.FirstOrDefault(r => r.command == "INFO_Close");
+                    Utils.MouseMouseAndClick(context.mouse, close.x, close.y);
                 }
             }
             
