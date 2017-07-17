@@ -387,7 +387,30 @@ void printCheckLocation(ImageFindLoc where, const char * who, Point move) {
 ImageFindLoc CheckImageMatch(Mat img, char * fileName) {
 	Mat result;
 	Mat templ = getGrayScale(imread(fileName, IMREAD_COLOR));
-	matchTemplate(img, templ, result, gmatch_method);
+
+	char maskName[512];
+	strcpy_s(maskName, fileName);
+	bool foundMask = false;
+	for (int i = strnlen_s(fileName, 512) - 1; i >= 0; i--) {
+		if (maskName[i] == '.') {
+			maskName[i] = 0;
+			strcat_s(maskName, ".mask.bmp");
+			foundMask = true;
+			break;
+		}
+	}
+	Mat mask;
+	if (foundMask) {
+		mask = imread(maskName, IMREAD_COLOR);
+		if (mask.data) mask = getGrayScale(mask);
+	}
+
+	if (mask.data) {
+		matchTemplate(img, templ, result, gmatch_method, mask);
+	}
+	else {
+		matchTemplate(img, templ, result, gmatch_method);
+	}
 	double minVal; double maxVal; Point minLoc; Point maxLoc;
 	Point matchLoc;
 	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
@@ -441,7 +464,8 @@ Mat doChecks() {
 		ImgChecksAndTags("confirm.bmp", "STDCLICK_ConfirmLoadVillage", Point(310, 22)),
 		ImgChecksAndTags("confirmready.png", "STDCLICK_ConfirmLoadVillageReady", Point(310, 22)),
 		ImgChecksAndTags("justbootup.png", "STDCLICK_CheckJustBootedUp", Point(52,70)),
-		ImgChecksAndTags("clashofclanicon.png", "STDCLICK_StartGame", Point(44,44))
+		ImgChecksAndTags("clashofclanicon.png", "STDCLICK_StartGame", Point(44,44)),
+		ImgChecksAndTags("leftexpand.png", "INFO_LeftExpand", Point(20,66))
 	};
 
 	char fname[512];
@@ -455,9 +479,9 @@ Mat doChecks() {
 	int thd = 220;
 	int PAD = 2;
 	vector<BlockInfo> chkBlocks = {
-		BlockInfo(Rect(780,  42,-1, 30), thd, "Gold"),
-		BlockInfo(Rect(780, 105,-1, 30), thd,"Elixir"),
-		BlockInfo(Rect(280, 605, -1,45 + PAD), thd, "Bottom")
+		BlockInfo(Rect(780,  42,-1, 30), thd, "INFO_Gold"),
+		BlockInfo(Rect(780, 105,-1, 30), thd,"INFO_Elixir"),
+		BlockInfo(Rect(280, 605, -1,45 + PAD), thd, "INFO_Bottom")
 	};
 
 	for (vector<BlockInfo>::iterator it = chkBlocks.begin(); it != chkBlocks.end(); it++) {

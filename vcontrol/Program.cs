@@ -8,15 +8,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using VirtualBox;
 
-namespace ConsoleApplication1
+namespace ccVcontrol
 {
+    
+    
     class Program
     {
-        [DllImport("user32.dll")]
-        static extern uint MapVirtualKeyEx(uint uCode, uint uMapType, IntPtr dwhkl);
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        static extern short VkKeyScanEx(char ch, IntPtr dwhkl);
-
         static string runApp()
         {
             ProcessStartInfo start = new ProcessStartInfo();
@@ -42,42 +39,12 @@ namespace ConsoleApplication1
             }           
         }
 
-        static void MouseMouseTo(IMouse mouse, int x, int y)
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                mouse.PutMouseEvent(-200, -200, 0, 0, 0);
-                Thread.Sleep(100);
-            }
-
-            const int MAX = 200;
-            while(x > MAX || y > MAX)
-            {
-                int mx = x > MAX ? MAX : x;
-                x -= mx;
-                int my = y > MAX ? MAX : y;
-                y -= my;
-                mouse.PutMouseEvent(mx, my, 0, 0, 0);
-                Thread.Sleep(100);
-            }
-            mouse.PutMouseEvent(x, y, 0, 0, 0);
-        }
-        static void MouseClick(IMouse mouse)
-        {
-            Thread.Sleep(100);
-            mouse.PutMouseEvent(0, 0, 0, 0, 1);
-            Thread.Sleep(100);
-            mouse.PutMouseEvent(0, 0, 0, 0, 0);
-        }
-
-        static uint GetScanCode(char c)
-        {
-            //MAPVK_VK_TO_VSC = 0x00;            
-            short cd = VkKeyScanEx(c, IntPtr.Zero);
-            return MapVirtualKeyEx(((uint)cd&0xff),0, IntPtr.Zero);
-        }
         static void checkLoop(IMouse mouse, IKeyboard keyboard)
-        {            
+        {
+            ProcessingContext context = new ProcessingContext
+            {
+                mouse = mouse
+            };
             while (true)
             {                
                 foreach (var cmd in runApp().Split('\n'))
@@ -102,21 +69,24 @@ namespace ConsoleApplication1
                         Console.WriteLine(cmd);
                         var cmds = cmd.Split(' ');
                         var x = Convert.ToInt32(cmds[1]);
-                        var y = Convert.ToInt32(cmds[2]);                        
-                        MouseMouseTo(mouse, x, y);
-                        MouseClick(mouse);
+                        var y = Convert.ToInt32(cmds[2]);
+                        var cmpRes = Convert.ToDecimal(cmds[3]);
+                        var command = cmds[0];
+                        if (ProcessCommand(context, new CommandInfo { command = command, cmpRes = cmpRes, x = x, y= y })) continue;
+                        Utils.MouseMouseTo(mouse, x, y);
+                        Utils.MouseClick(mouse);
                         if (confirm)
                         {
                             //MouseMouseTo(mouse, x - 200, y);
                             //MouseClick(mouse);
                             //                            keyboard.PutScancodes(codes);
                             mouse.PutMouseEvent(-200, 0, 0, 0, 0);
-                            MouseClick(mouse);
-                            SendString(keyboard, "CONFIRM");
+                            Utils.MouseClick(mouse);
+                            Utils.SendString(keyboard, "CONFIRM");
 
                             Thread.Sleep(1000);
                             mouse.PutMouseEvent(200, 0, 0, 0, 0);
-                            MouseClick(mouse);
+                            Utils.MouseClick(mouse);
                             Thread.Sleep(2000);
                         }
                     }
@@ -125,22 +95,25 @@ namespace ConsoleApplication1
             }
         }
 
-        private static void SendString(IKeyboard keyboard, string str)
+        private static bool ProcessCommand(ProcessingContext context, CommandInfo cmd)
         {
-            var codes = new short[str.Length];
-            Console.WriteLine("writiting");
-            Thread.Sleep(1000);
-            //keyboard.PutScancode(0x2A); //shift
-            for (int i = 0; i < str.Length; i++)
+            switch(cmd.command)
             {
-                codes[i] = (short)GetScanCode(str[i]);
-                Console.WriteLine("code for " + str[i] + " is " + codes[i].ToString("X"));
-                keyboard.PutScancode((int)codes[i]);
-                Thread.Sleep(200);
-                keyboard.PutScancode((int)codes[i] | 0x80);
-                Thread.Sleep(300);
+                case "STDCLICK_LeftExpand":
+                    ProcessDonate(context, cmd);                    
+                    break;
+                default:return false;
             }
+            return true;
         }
+
+
+        private static void ProcessDonate(ProcessingContext context, CommandInfo cmd)
+        {
+            new ProcessorDonation(context).ProcessDonate(cmd);
+        }
+
+        
 
         static void Main(string[] args)
         {                       
