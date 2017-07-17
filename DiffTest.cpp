@@ -474,15 +474,20 @@ int main(int argc, char** argv)
 	
 	int thd = 220;
 
-	for (int i = 1; i < argc; i++) {
-		if (strcmp(argv[i], "-check") == 0) {
-			doChecks();
-			return 0;
+	try {
+		for (int i = 1; i < argc; i++) {
+			if (strcmp(argv[i], "-check") == 0) {
+				doChecks();
+				return 0;
+			}
 		}
+		Mat screen = LoadCCScreen();
+		imwrite("tstimgs\\full.png", screen);
+		doChecks();
 	}
-	Mat screen = LoadCCScreen();
-	imwrite("tstimgs\\full.png", screen);
-	doChecks();
+	catch (const char* str) {
+		printf("ERR: %s\n", str);
+	}
 	return 0;
 	int PAD = 2;
 	
