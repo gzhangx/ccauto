@@ -471,6 +471,7 @@ Mat doChecks() {
 		ImgChecksAndTags("donate_archer.png", "INFO_DonateArchier", Point(40,40)),
 		ImgChecksAndTags("donate_wizard.png", "INFO_DonateWizard", Point(40,40)),
 		ImgChecksAndTags("chacha.png", "INFO_Close", Point(12,14)),
+		ImgChecksAndTags("leftshrink.png", "STDCLICK_LeftShrink", Point(22,64)),
 	};
 
 	char fname[512];

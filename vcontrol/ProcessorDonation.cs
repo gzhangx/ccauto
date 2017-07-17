@@ -31,7 +31,7 @@ namespace ccVcontrol
             Utils.MouseClick(context.mouse);
 
             bool found = false;
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 2; i++)
             {
                 Thread.Sleep(2000);
                 Console.WriteLine("DEBUGPRINTINFO trying to find donation button");
@@ -50,7 +50,7 @@ namespace ccVcontrol
             {
                 found = false;
                 var results = Utils.GetAppInfo();
-                for (int i = 0; i < 100; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     Thread.Sleep(2000);
                     Console.WriteLine("DEBUGPRINTINFO trying to find archier or wizard");
@@ -72,10 +72,13 @@ namespace ccVcontrol
                     }
                     if (found) break;
                 }
-                if (found)
+                
                 {
                     var close = results.FirstOrDefault(r => r.command == "INFO_Close");
-                    Utils.MouseMouseAndClick(context.mouse, close.x, close.y);
+                    if (close != null)
+                    {
+                        Utils.MouseMouseAndClick(context.mouse, close.x, close.y);
+                    }
                 }
             }
             
