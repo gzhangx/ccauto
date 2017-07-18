@@ -31,13 +31,14 @@ namespace ccVcontrol
             
             for (int y = 0; y < height; y += step)
             {
-                Utils.MouseMouseTo(context.mouse, startx, starty + y);
+                context.MouseMouseTo(startx, starty + y);
                 for (int x = 0; x < width; x += step)
                 {
-                    Utils.MouseMouseRelative(context.mouse, step, 0);
-                    Utils.MouseClick(context.mouse);
+                    context.MouseMouseRelative( step, 0);
+                    context.MouseClick();
                     Thread.Sleep(1000);
                     var results = Utils.GetAppInfo();
+                    context.DoStdClicks(results);
                     var bottom = results.FirstOrDefault(r => r.command == "RecoResult_INFO_Bottom");
                     if (bottom != null)
                     {

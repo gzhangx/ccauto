@@ -11,7 +11,7 @@ namespace ccVcontrol
     {
         public IMouse mouse;
 
-        public int DoStdClicks(ProcessingContext context, List<CommandInfo> clicks)
+        public int DoStdClicks(List<CommandInfo> clicks)
         {
             int count = 0;
             foreach (var cmd in clicks)
@@ -19,7 +19,7 @@ namespace ccVcontrol
                 if (cmd.command.StartsWith("STDCLICK_"))
                 {
                     count++;
-                    Utils.MoveMouseAndClick(mouse, cmd.x, cmd.y);
+                    MoveMouseAndClick(cmd.x, cmd.y);
                 }
             }
             return count;
@@ -39,7 +39,7 @@ namespace ccVcontrol
             Utils.MouseClick(mouse);
         }
 
-        public void MoveMouseAndClick(IMouse mouse, int x, int y)
+        public void MoveMouseAndClick(int x, int y)
         {
             Utils.MoveMouseAndClick(mouse, x, y);
         }
