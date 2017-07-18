@@ -262,14 +262,14 @@ bool checkIfFirstRecoBetter(float a, float b) {
 vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 	
 	vector<ImageRecoRes> res;
-	if (debug && blkNumber != 1) return res;
+	//if (debug && blkNumber != 3) return res;
 	
 	float VALMAX = 6551750;
 	for (int i = 0; i < list.recoInfo.size(); i++) {
 		
 		Mat result;
 		RecoInfo recInfo = list.recoInfo[i];
-		if (debug && (recInfo.chr != 'l' && recInfo.chr != 'E')) continue;
+		//if (debug && (recInfo.chr != 'l' && recInfo.chr != 'E'&& recInfo.chr != 't' && recInfo.chr != 'l')) continue;
 		Mat templ = recInfo.img;
 		if (debugprint) printf("checking %c at blk %i\n", recInfo.chr, blkNumber);
 		int result_cols = img.cols - templ.cols + 1;
