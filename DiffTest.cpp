@@ -181,7 +181,7 @@ RecoList LoadDataInfo(const char * dir) {
 	RecoList res;
 	while (de = readdir(d)) {
 		if (StrEndsWith(de->d_name, ".png")) {
-			if (debugprint) printf("%s %c\n", de->d_name, de->d_name[2]);
+			//if (debugprint) printf("%s %c\n", de->d_name, de->d_name[2]);
 			char buf[512];
 			sprintf_s(buf, "%s\\%s", dir, de->d_name);
 			Mat img = getGrayScale(imread(buf));
@@ -240,7 +240,7 @@ public:
 
 
 bool SortImageRecoResByX(ImageRecoRes i, ImageRecoRes j) { return (i.x<j.x); }
-int ImageRecoRes::xspacing = 10;
+int ImageRecoRes::xspacing = 18;
 int gmatch_method = CV_TM_SQDIFF;
 
 struct ImageFindLoc {
@@ -286,12 +286,12 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 		RecoInfo recInfo = list.recoInfo[i];
 		//if (debug && (recInfo.chr != 'l' && recInfo.chr != 'E'&& recInfo.chr != 't' && recInfo.chr != 'l')) continue;
 		Mat templ = recInfo.img;
-		if (debugprint) printf("checking %c at blk %i\n", recInfo.chr, blkNumber);
+		//if (debugprint) printf("checking %c at blk %i\n", recInfo.chr, blkNumber);
 		int result_cols = img.cols - templ.cols + 1;
 		int result_rows = img.rows - templ.rows + 1;
 
 		if (result_cols <= 0 || result_rows <= 0) {
-			if (debugprint) printf("image not matching %i %i\n", result_cols, result_rows);
+			//if (debugprint) printf("image not matching %i %i\n", result_cols, result_rows);
 			continue;
 		}
 		
@@ -347,12 +347,12 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 				if (existing.trimedX == xspace.trimedX) {
 					found = true;
 					if (checkIfFirstRecoBetter(cur.val, existing.val) )
-					{						
+					{												
+						if (debugprint) printf("rrtop blk%i %c at %i %i has %f trimed to %i replaced %c\n", blkNumber, recInfo.chr, cur.x, cur.y, cur.val, xspace.trimedX, it->c);
 						it->val = cur.val;
 						it->c = recInfo.chr;
-						if (debugprint) printf("rrtop %c at %i %i has %f\n", recInfo.chr, cur.x, cur.y, cur.val);
 					}
-					break;
+					//break;
 				}
 			}
 			if (!found) {
@@ -367,14 +367,13 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 		//break;
 	}
 
-	//sort(res.begin(), res.end(), SortImageRecoResByX);
-	sort(res.begin(), res.end());
+	sort(res.begin(), res.end(), SortImageRecoResByX);	
 	vector<ImageRecoRes> ret;
 	for (int i = 0; i < res.size(); i++) {
 		ImageRecoRes cur = res[i];
 		if (i > 0) {			
 			ImageRecoRes prev = res[i - 1];
-			if (cur.x  - prev.x < ImageRecoRes::xspacing) {
+			if (cur.x  - prev.x < (ImageRecoRes::xspacing/2)) {
 				if (checkIfFirstRecoBetter(cur.val, prev.val)) {
 					res[i - 1] = cur;
 				}
@@ -384,7 +383,7 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 			}
 		}
 		else ret.push_back(cur);
-		break;
+		//break;
 	}
 	return ret;
 }
