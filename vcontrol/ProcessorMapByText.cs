@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ccVcontrol
 {
+
     public class ProcessorMapByText
     {
         const int startx = 127;
@@ -16,6 +17,10 @@ namespace ccVcontrol
         const int step = 40;
         private ProcessingContext context;
         DateTime lastProcessDate = DateTime.Now.AddMinutes(-2);
+
+        string[] tags = new string[] { "GoldMine(Level)", "ElixirCollector(level)" , "TownHall(level)", "GoldStorage(level)", "ElixirStorage(level)" };
+
+
         public ProcessorMapByText(ProcessingContext ctx)
         {
             context = ctx;
@@ -40,9 +45,24 @@ namespace ccVcontrol
                     var results = Utils.GetAppInfo();
                     context.DoStdClicks(results);
                     var bottom = results.FirstOrDefault(r => r.command == "RecoResult_INFO_Bottom");
+                    string best = "";
+                    string bestTag = "";
                     if (bottom != null)
                     {
                         Console.WriteLine("got " + bottom.command+ ":"+bottom.Text);
+                        foreach(var tag in tags)
+                        {
+                            var res = LCS.LongestCommonSubsequence(tag.ToLower(), bottom.Text.ToLower());
+                            if (res.Length > best.Length)
+                            {
+                                best = res;
+                                bestTag = tag;
+                            }
+                        }
+                        if (best.Length > 5)
+                        {
+                            Console.WriteLine("got " + tags + " " + best);
+                        }
                     }
                 }
             }
