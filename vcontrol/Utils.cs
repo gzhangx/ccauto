@@ -40,6 +40,13 @@ namespace ccVcontrol
             }
             mouse.PutMouseEvent(x, y, 0, 0, 0);
         }
+
+        public static void MouseMouseRelative(IMouse mouse, int x, int y)
+        {
+
+            mouse.PutMouseEvent(x, y, 0, 0, 0);
+            Thread.Sleep(100);
+        }
         public static void MouseClick(IMouse mouse)
         {
             Thread.Sleep(100);
