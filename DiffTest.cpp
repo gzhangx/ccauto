@@ -520,7 +520,10 @@ void test() {
 }
 int main(int argc, char** argv)
 {	
-	
+	if (debug) {
+		test();
+		return 0;
+	}
 	int thd = 220;
 
 	try {
