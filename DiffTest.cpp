@@ -500,7 +500,7 @@ Mat doChecks() {
 	};
 
 	for (vector<BlockInfo>::iterator it = chkBlocks.begin(); it != chkBlocks.end(); it++) {
-		if (!strcmp(it->info, "Bottom"))
+		if (!strcmp(it->info, "INFO_Bottom"))
 			DoRecoOnBlock(img, bottomCheckList, *it);
 		else
 			DoRecoOnBlock(img, topCheckList, *it);
