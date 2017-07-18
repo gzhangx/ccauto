@@ -470,13 +470,17 @@ Mat doChecks() {
 		ImgChecksAndTags("leftexpand.png", "STDCLICK_LeftExpand", Point(20,66), 10),
 		ImgChecksAndTags("donatebutton.png", "INFO_DonateButtonFound", Point(51,19)),
 		ImgChecksAndTags("donatebutton1.png", "INFO_DonateButtonFound", Point(51,19)),
-		ImgChecksAndTags("donate_archer.png", "INFO_DonateArchier", Point(40,40), 1000),
-		ImgChecksAndTags("donate_wizard.png", "INFO_DonateWizard", Point(40,40), 1000),
-		ImgChecksAndTags("chacha.png", "INFO_Close", Point(12,14)),
+		ImgChecksAndTags("donate_archer.png", "INFO_DonateArchier", Point(40,40), 10),
+		ImgChecksAndTags("donate_wizard.png", "INFO_DonateWizard", Point(40,40), 10),
+		ImgChecksAndTags("chacha.png", "STDCLICK_Close", Point(12,14)),
+		ImgChecksAndTags("chacha_closeTrain.png", "STDCLICK_Close", Point(22,22)),
 		ImgChecksAndTags("leftshrink.png", "STDCLICK_LeftShrink", Point(22,64), 10),
 
 		ImgChecksAndTags("upgrade.png", "INFO_UpgradeButton", Point(42,34), 5),
-		ImgChecksAndTags("traintroops.png", "INFO_TrainTroops", Point(45,45), 5),
+		ImgChecksAndTags("traintroops.png", "STDCLICK_TrainTroops", Point(45,45), 5),
+
+		ImgChecksAndTags("buildwizardbutton.png", "INFO_BuildWizard", Point(32,52), 10),
+		ImgChecksAndTags("buildArchierButton.png", "INFO_BuildArcher", Point(54,45), 10),
 	};
 
 	char fname[512];

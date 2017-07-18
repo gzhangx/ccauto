@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="CommandInfo.cs" />
     <Compile Include="ProcessingContext.cs" />
+    <Compile Include="ProcessorTrain.cs" />
     <Compile Include="ProcessorDonation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -75,13 +75,17 @@ namespace ccVcontrol
 
         private static bool ProcessCommand(ProcessingContext context, CommandInfo cmd)
         {
-            switch(cmd.command)
+            switch (cmd.command)
             {
                 case "STDCLICK_LeftExpand":
-                    ProcessDonate(context, cmd);                    
+                    //TODO: add back
+                    ProcessDonate(context, cmd);
                     break;
-                default:return false;
-            }
+                case "STDCLICK_TrainTroops":
+                    new ProcessorTrain(context).ProcessCommand(cmd);
+                    break;
+                default: return false;
+            }            
             return true;
         }
 

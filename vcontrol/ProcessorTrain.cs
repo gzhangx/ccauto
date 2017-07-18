@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace ccVcontrol
 {
-    public class ProcessorDonation
+    public class ProcessorTrain
     {
         private ProcessingContext context;
         DateTime lastProcessDate = DateTime.Now.AddMinutes(-2);
-        public ProcessorDonation(ProcessingContext ctx)
+        public ProcessorTrain(ProcessingContext ctx)
         {
             context = ctx;
         }
-        public void ProcessDonate( CommandInfo cmd)
+        public void ProcessCommand( CommandInfo cmd)
         {
             if (cmd.cmpRes > 2)
             {
@@ -31,46 +31,28 @@ namespace ccVcontrol
             Utils.MouseClick(context.mouse);
 
             bool found = false;
-            for (int i = 0; i < 2; i++)
-            {
-                Thread.Sleep(2000);
-                Console.WriteLine("DEBUGPRINTINFO trying to find donation button");
-                var results = Utils.GetAppInfo();
-
-                var donationFormat = results.FirstOrDefault(r=>r.command == "INFO_DonateButtonFound");
-                if (donationFormat != null)
-                {
-                    found = true;
-                    Utils.MouseMouseAndClick(context.mouse, donationFormat.x, donationFormat.y);
-                    break;
-                }
-            }
-
-            if (found)
             {
                 found = false;
                 var results = Utils.GetAppInfo();
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     Thread.Sleep(2000);
-                    Console.WriteLine("DEBUGPRINTINFO trying to find archier or wizard");
-                    
-
-                    foreach (var donationName in new String[] { "INFO_DonateWizard", "INFO_DonateArchier" }) {
+                    Console.WriteLine("DEBUGPRINTINFO trying to find archier or wizard to build");
+                                        
+                    foreach (var donationName in new String[] { "INFO_BuildWizard", "INFO_BuildArcher" }) {
                         var donationFormat = results.FirstOrDefault(r => r.command == donationName);
                         if (donationFormat != null)
                         {
+                            Console.WriteLine("Found " + donationName);
                             found = true;
                             Utils.MouseMouseAndClick(context.mouse, donationFormat.x, donationFormat.y);
-                            for (int j = 0; j < 5; j++)
-                            {
+                            if (donationName == "INFO_BuildWizard")
+                                for (int j = 0; j < 5; j++) Utils.MouseClick(context.mouse);
+                            else
                                 Utils.MouseClick(context.mouse);
-                            }
-
                             found = true;
                         }
                     }
-                    if (found) break;
                 }
                 
                 {
@@ -80,6 +62,7 @@ namespace ccVcontrol
                         Utils.MouseMouseAndClick(context.mouse, close.x, close.y);
                     }
                 }
+                if (found) Console.WriteLine("units build");
             }
             
         }
