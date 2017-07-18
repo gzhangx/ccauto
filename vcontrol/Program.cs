@@ -23,7 +23,8 @@ namespace ccVcontrol
                 mouse = mouse
             };
             while (true)
-            {                
+            {
+                new ProcessorMapByText(context).ProcessCommand();
                 foreach (var cmd in Utils.runApp().Split('\n'))
                 {
                     Console.Write(".");

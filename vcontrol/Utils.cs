@@ -117,6 +117,14 @@ namespace ccVcontrol
             {
                 if (cmd.Length < 2) continue;
                 if (cmd.StartsWith("***** VIDEOINPUT LIBRARY")) continue;
+                if (cmd.StartsWith("RecoResult_"))
+                {
+                    int sp = cmd.IndexOf(" ");
+                    res.Add(new CommandInfo {
+                        command = cmd.Substring(0, sp),
+                        Text = cmd.Substring(sp + 1)
+                    });
+                }
                 var cmds = cmd.Split(' ');
                 var command = cmds[0];
                 int x = 0, y = 0;

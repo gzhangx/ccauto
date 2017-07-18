@@ -20,7 +20,7 @@ namespace ccVcontrol
         {
             context = ctx;
         }
-        public void ProcessCommand( CommandInfo cmd)
+        public void ProcessCommand()
         {            
             if ((DateTime.Now - lastProcessDate).TotalMinutes > 1)
             {
@@ -28,8 +28,7 @@ namespace ccVcontrol
             }
             else return;
 
-            Utils.MouseMouseTo(context.mouse, cmd.x, cmd.y);
-            Utils.MouseClick(context.mouse);
+            
             for (int y = 0; y < height; y += step)
             {
                 Utils.MouseMouseTo(context.mouse, startx, starty + y);
@@ -39,6 +38,11 @@ namespace ccVcontrol
                     Utils.MouseClick(context.mouse);
                     Thread.Sleep(1000);
                     var results = Utils.GetAppInfo();
+                    var bottom = results.FirstOrDefault(r => r.command == "RecoResult_INFO_Bottom");
+                    if (bottom != null)
+                    {
+                        Console.WriteLine("got " + bottom.command+ ":"+bottom.Text);
+                    }
                 }
             }
             

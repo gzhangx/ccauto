@@ -12,5 +12,6 @@ namespace ccVcontrol
         public int x;
         public int y;
         public decimal cmpRes;
+        public string Text;
     }
 }

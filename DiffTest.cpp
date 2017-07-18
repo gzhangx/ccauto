@@ -460,6 +460,10 @@ RecoList topCheckList = LoadDataInfo("data\\check\\top");
 RecoList bottomCheckList = LoadDataInfo("data\\check\\bottom");
 Mat doChecks() {
 	Mat img = getGrayScale(LoadCCScreen());
+	if (img.rows == 0) {
+		printf("ERR: No image");
+		return img;
+	}
 	printCheckLocation(CheckAttackedDialog(img), "STDCLICK_VillageAttacked", Point(345, 440));
 	vector<ImgChecksAndTags> itms = {
 		ImgChecksAndTags("loadVillage.png", "STDCLICK_LoadingVillage", Point(298,44)),
