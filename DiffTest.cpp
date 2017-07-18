@@ -391,7 +391,7 @@ ImageFindLoc CheckImageMatch(Mat img, char * fileName, double threadshold = 2000
 	char maskName[512];
 	strcpy_s(maskName, fileName);
 	bool foundMask = false;
-	for (int i = strnlen_s(fileName, 512) - 1; i >= 0; i--) {
+	for (int i = (int)strnlen_s(fileName, 512) - 1; i >= 0; i--) {
 		if (maskName[i] == '.') {
 			maskName[i] = 0;
 			strcat_s(maskName, ".mask.bmp");
@@ -516,7 +516,7 @@ Mat doChecks() {
 
 void test() {
 	Mat img = getGrayScale(imread("tstimgs\\full.png", IMREAD_COLOR));	
-	vector<Mat> blocks = doTopNumbers(img, BlockInfo(Rect(280, 605, -1, 45 + 2), thd, "bottom"), 5);
+	vector<Mat> blocks = doTopNumbers(img, BlockInfo(Rect(280, 605, -1, 45 + 2), 220, "bottom"), 5);
 }
 int main(int argc, char** argv)
 {	
