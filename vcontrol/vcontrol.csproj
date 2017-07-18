@@ -7,8 +7,8 @@
     <ProjectGuid>{564E0BDE-C0E9-4EEF-AFDD-3B95740FD1FB}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConsoleApplication1</RootNamespace>
-    <AssemblyName>ConsoleApplication1</AssemblyName>
+    <RootNamespace>ccVcontrol</RootNamespace>
+    <AssemblyName>ccVcontrol</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandInfo.cs" />
+    <Compile Include="lcs.cs" />
     <Compile Include="ProcessingContext.cs" />
     <Compile Include="ProcessorMapByText.cs" />
     <Compile Include="ProcessorTrain.cs" />
