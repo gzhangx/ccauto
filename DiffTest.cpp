@@ -541,7 +541,7 @@ Mat doChecks() {
 		ImgChecksAndTags("leftshrink.png", "PRMXYCLICK_STD_LeftShrink", Point(22,64), 10),
 
 		ImgChecksAndTags("upgrade.png", "INFO_UpgradeButton", Point(42,34), 5),
-		ImgChecksAndTags("traintroops.png", "PRMXYCLICK_STD_TrainTroops", Point(45,45), 5),
+		ImgChecksAndTags("traintroops.png", "PRMXYCLICK_ACT_TrainTroops", Point(45,45), 5),
 
 		ImgChecksAndTags("buildwizardbutton.png", "INFO_BuildWizard", Point(32,52), 10),
 		ImgChecksAndTags("buildArchierButton.png", "INFO_BuildArcher", Point(54,45), 10),
