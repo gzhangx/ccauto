@@ -134,12 +134,27 @@ std::vector<Mat> doTopNumbers(Mat img, BlockInfo blk, int PAD = 2) {
 }
 
 struct RecoInfo{
+private:
+	int effectiveCount = 0;
 public:
 	Mat img;
-	char chr;
-	RecoInfo(Mat i, char ch) {
-		img = i;
+	char chr;	
+	int GetEffectiveCount() {
+		return effectiveCount;
+	}
+	RecoInfo(Mat im, char ch) {
+		img = im;
 		chr = ch;
+		for (int j = 0; j < im.rows; ++j)
+		{
+			const uchar* current = im.ptr<uchar>(j);
+			for (int i = 0; i < im.cols; i++)
+			{
+				if (current[i] > 10) {
+					effectiveCount++;
+				}
+			}
+		}
 	}
 };
 
@@ -320,6 +335,7 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 
 		for (int y = 0; y < topvals.size(); y++) {
 			ImageDiffVal cur = topvals[y];
+			cur.val /= (recInfo.GetEffectiveCount()+0.001);
 			if (cur.val > VALMAX) continue;
 			//int xspace = cur.x / ImageRecoRes::xspacing;
 			ImageRecoRes xspace = ImageRecoRes(cur.x, recInfo.chr, cur.val);
@@ -332,7 +348,7 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 					found = true;
 					if (checkIfFirstRecoBetter(cur.val, existing.val) )
 					{						
-						it->val = cur.val;	
+						it->val = cur.val;
 						it->c = recInfo.chr;
 						if (debugprint) printf("rrtop %c at %i %i has %f\n", recInfo.chr, cur.x, cur.y, cur.val);
 					}
