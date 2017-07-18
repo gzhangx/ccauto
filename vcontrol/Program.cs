@@ -47,7 +47,7 @@ namespace ccVcontrol
         {
             switch (cmd.command)
             {
-                case "ACTCLICK_LeftExpand":
+                case "PRMXYCLICK_ACT_LeftExpand":
                     //TODO: add back
                     ProcessDonate(context, cmd);
                     new ProcessorMapByText(context).ProcessCommand();

@@ -124,6 +124,7 @@ namespace ccVcontrol
                         command = cmd.Substring(0, sp),
                         Text = cmd.Substring(sp + 1).Trim()
                     });
+                    continue;
                 }
                 var cmds = cmd.Split(' ');
                 var command = cmds[0];
