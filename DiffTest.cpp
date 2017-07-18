@@ -295,7 +295,7 @@ vector<ImageRecoRes> DoReco(RecoList list, MatAndPos matAndPos, int blkNumber) {
 	vector<ImageRecoRes> res;
 	Mat img = matAndPos.mat;
 	//if (debug && blkNumber != 3) return res;
-	
+	if (debugprint) printf("do Reco on blk %i position %i\n", blkNumber, matAndPos.x);
 	float VALMAX = 6551750;
 	for (int i = 0; i < list.recoInfo.size(); i++) {
 		
@@ -478,10 +478,12 @@ void DoRecoOnBlock(Mat img, RecoList checkList, BlockInfo blk) {
 		res.insert(res.end(), stepres.begin(), stepres.end());
 		if (debugprint) {
 			printf("Reco Result:");
+			int lastW = -1;
 			for (vector<ImageRecoRes>::iterator it = res.begin(); it != res.end(); it++) {
 				printf("%c", it->c);
+				lastW = it->width;
 			}
-			printf("\n");
+			printf(" size %i\n", lastW);
 		}
 	}
 
@@ -496,7 +498,7 @@ void DoRecoOnBlock(Mat img, RecoList checkList, BlockInfo blk) {
 			prevend = it->x;
 		}
 		int diff = it->x - prevend;
-		if (diff > checkList.averageWidth) {
+		if (diff > checkList.averageWidth/2) {
 			int many = (int)((diff + (checkList.averageWidth / 2)) / checkList.averageWidth);
 			for (int i = 0; i < many; i++) {
 				buf[pos++] = ' ';
