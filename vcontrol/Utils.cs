@@ -17,8 +17,11 @@ namespace ccVcontrol
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         static extern short VkKeyScanEx(char ch, IntPtr dwhkl);
 
+        const int YOFF = 21;
+
         public static void MouseMouseTo(IMouse mouse, int x, int y)
         {
+            y -= YOFF;
             for (int i = 0; i < 5; i++)
             {
                 mouse.PutMouseEvent(-200, -200, 0, 0, 0);

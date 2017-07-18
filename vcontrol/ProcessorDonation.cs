@@ -53,7 +53,7 @@ namespace ccVcontrol
                 for (int i = 0; i < 10; i++)
                 {
                     Thread.Sleep(2000);
-                    Console.WriteLine("DEBUGPRINTINFO trying to find archier or wizard");
+                    Console.WriteLine("DEBUGPRINTINFO trying to find archier or wizard for donation");
                     
 
                     foreach (var donationName in new String[] { "INFO_DonateWizard", "INFO_DonateArchier" }) {
