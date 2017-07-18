@@ -50,6 +50,7 @@ namespace ccVcontrol
                         var cmpRes = Convert.ToDecimal(cmds[3]);
                         var command = cmds[0];
                         if (ProcessCommand(context, new CommandInfo { command = command, cmpRes = cmpRes, x = x, y= y })) continue;
+                        if (command == "STDCLICK_LeftExpand") continue;
                         Utils.MouseMouseTo(mouse, x, y);
                         Utils.MouseClick(mouse);
                         if (confirm)

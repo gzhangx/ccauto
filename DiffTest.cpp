@@ -379,12 +379,12 @@ Mat LoadCCScreen() {
 
 void printCheckLocation(ImageFindLoc where, const char * who, Point move) {
 	if (where.found) {
-		printf("%s %i %i %f\n", who, where.loc.x + move.x, where.loc.y + move.y, where.val);
+		printf("%s %i %i %f %s\n", who, where.loc.x + move.x, where.loc.y + move.y, where.val, where.found?"true":"false");
 	}
 }
 
 
-ImageFindLoc CheckImageMatch(Mat img, char * fileName) {
+ImageFindLoc CheckImageMatch(Mat img, char * fileName, double threadshold = 200000) {
 	Mat result;
 	Mat templ = getGrayScale(imread(fileName, IMREAD_COLOR));
 
@@ -415,7 +415,7 @@ ImageFindLoc CheckImageMatch(Mat img, char * fileName) {
 	Point matchLoc;
 	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
 	//printf("find min at %i %i val %f\n", minLoc.x, minLoc.y, minVal);
-	return ImageFindLoc(minLoc, minVal, minVal < 200000);
+	return ImageFindLoc(minLoc, minVal, minVal < threadshold);
 }
 
 
@@ -424,10 +424,12 @@ public:
 	char imageFileName[512];
 	char Tag[512];
 	Point point;
-	ImgChecksAndTags(const char * fname, const char *tag, Point pt) {
+	double ThreadShold = 200000;
+	ImgChecksAndTags(const char * fname, const char *tag, Point pt, double threadShold = 200000) {
 		strcpy_s(imageFileName, fname);
 		strcpy_s(Tag, tag);
 		point = pt;
+		ThreadShold = threadShold;
 	}
 };
 
@@ -472,6 +474,9 @@ Mat doChecks() {
 		ImgChecksAndTags("donate_wizard.png", "INFO_DonateWizard", Point(40,40)),
 		ImgChecksAndTags("chacha.png", "INFO_Close", Point(12,14)),
 		ImgChecksAndTags("leftshrink.png", "STDCLICK_LeftShrink", Point(22,64)),
+
+		ImgChecksAndTags("upgrade.png", "INFO_UpgradeButton", Point(42,34), 5),
+		ImgChecksAndTags("traintroops.png", "INFO_TrainTroops", Point(45,45), 5),
 	};
 
 	char fname[512];
@@ -479,7 +484,7 @@ Mat doChecks() {
 		ImgChecksAndTags itm = itms[i];
 		strcpy_s(fname, "data\\check\\");
 		strcat_s(fname, itm.imageFileName);
-		printCheckLocation(CheckImageMatch(img, fname), itm.Tag, itm.point);
+		printCheckLocation(CheckImageMatch(img, fname, itm.ThreadShold), itm.Tag, itm.point);
 	}
 
 	int thd = 220;
