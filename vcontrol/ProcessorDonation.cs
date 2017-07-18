@@ -74,7 +74,7 @@ namespace ccVcontrol
                 }
                 
                 {
-                    var close = results.FirstOrDefault(r => r.command == "STDCLICK_Close");
+                    var close = results.FirstOrDefault(r => r.command == "PRMXYCLICK_STD_Close");
                     if (close != null)
                     {
                         Utils.MoveMouseAndClick(context.mouse, close.x, close.y);

@@ -27,10 +27,10 @@ namespace ccVcontrol
                 foreach (var cmd in Utils.runApp().Split('\n'))
                 {
                     Console.Write(".");
-                    bool stdClick = cmd.StartsWith("STDCLICK_");
+                    bool stdClick = cmd.StartsWith("PRMXYCLICK_STD_");
                     //bool attacked = cmd.StartsWith("VillageAttacked");
                     //bool loadv = cmd.StartsWith("LoadingVillage");
-                    bool confirm = cmd.StartsWith("STDCLICK_ConfirmLoadVillage");
+                    bool confirm = cmd.StartsWith("PRMXYCLICK_STD_ConfirmLoadVillage");
                     //bool confirmReady = cmd.StartsWith("ConfirmLoadVillageReady");
                     //bool CheckJustBootedUp = cmd.StartsWith("CheckJustBootedUp");
                     //bool startGame = cmd.StartsWith("StartGame");
@@ -76,12 +76,12 @@ namespace ccVcontrol
         {
             switch (cmd.command)
             {
-                case "STDCLICK_LeftExpand":
+                case "ACTCLICK_LeftExpand":
                     //TODO: add back
                     ProcessDonate(context, cmd);
                     new ProcessorMapByText(context).ProcessCommand();
                     break;
-                case "STDCLICK_TrainTroops":
+                case "PRMXYCLICK_STD_TrainTroops":
                     new ProcessorTrain(context).ProcessCommand(cmd);
                     break;
                 default: return false;

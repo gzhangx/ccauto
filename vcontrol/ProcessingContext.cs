@@ -16,7 +16,7 @@ namespace ccVcontrol
             int count = 0;
             foreach (var cmd in clicks)
             {
-                if (cmd.command.StartsWith("STDCLICK_"))
+                if (cmd.command.StartsWith("PRMXYCLICK_STD_"))
                 {
                     count++;
                     MoveMouseAndClick(cmd.x, cmd.y);

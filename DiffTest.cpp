@@ -524,29 +524,29 @@ Mat doChecks() {
 		printf("ERR: No image");
 		return img;
 	}
-	printCheckLocation(CheckAttackedDialog(img), "STDCLICK_VillageAttacked", Point(345, 440));
+	printCheckLocation(CheckAttackedDialog(img), "PRMXYCLICK_STD_VillageAttacked", Point(345, 440));
 	vector<ImgChecksAndTags> itms = {
-		ImgChecksAndTags("loadVillage.png", "STDCLICK_LoadingVillage", Point(298,44)),
-		ImgChecksAndTags("confirm.bmp", "STDCLICK_ConfirmLoadVillage", Point(310, 22)),
-		ImgChecksAndTags("confirmready.png", "STDCLICK_ConfirmLoadVillageReady", Point(310, 22)),
-		ImgChecksAndTags("justbootup.png", "STDCLICK_CheckJustBootedUp", Point(52,70)),
-		ImgChecksAndTags("clashofclanicon.png", "STDCLICK_StartGame", Point(44,44)),
-		ImgChecksAndTags("leftexpand.png", "ACTCLICK_LeftExpand", Point(20,66), 10),
+		ImgChecksAndTags("loadVillage.png", "PRMXYCLICK_STD_LoadingVillage", Point(298,44)),
+		ImgChecksAndTags("confirm.bmp", "PRMXYCLICK_STD_ConfirmLoadVillage", Point(310, 22)),
+		ImgChecksAndTags("confirmready.png", "PRMXYCLICK_STD_ConfirmLoadVillageReady", Point(310, 22)),
+		ImgChecksAndTags("justbootup.png", "PRMXYCLICK_STD_CheckJustBootedUp", Point(52,70)),
+		ImgChecksAndTags("clashofclanicon.png", "PRMXYCLICK_STD_StartGame", Point(44,44)),
+		ImgChecksAndTags("leftexpand.png", "PRMXYCLICK_ACT_LeftExpand", Point(20,66), 10),
 		ImgChecksAndTags("donatebutton.png", "INFO_DonateButtonFound", Point(51,19)),
 		ImgChecksAndTags("donatebutton1.png", "INFO_DonateButtonFound", Point(51,19)),
 		ImgChecksAndTags("donate_archer.png", "INFO_DonateArchier", Point(40,40), 10),
 		ImgChecksAndTags("donate_wizard.png", "INFO_DonateWizard", Point(40,40), 10),
-		ImgChecksAndTags("chacha.png", "STDCLICK_Close", Point(12,14)),
-		ImgChecksAndTags("chacha_closeTrain.png", "STDCLICK_Close", Point(22,22)),
-		ImgChecksAndTags("leftshrink.png", "STDCLICK_LeftShrink", Point(22,64), 10),
+		ImgChecksAndTags("chacha.png", "PRMXYCLICK_STD_Close", Point(12,14)),
+		ImgChecksAndTags("chacha_closeTrain.png", "PRMXYCLICK_STD_Close", Point(22,22)),
+		ImgChecksAndTags("leftshrink.png", "PRMXYCLICK_STD_LeftShrink", Point(22,64), 10),
 
 		ImgChecksAndTags("upgrade.png", "INFO_UpgradeButton", Point(42,34), 5),
-		ImgChecksAndTags("traintroops.png", "STDCLICK_TrainTroops", Point(45,45), 5),
+		ImgChecksAndTags("traintroops.png", "PRMXYCLICK_STD_TrainTroops", Point(45,45), 5),
 
 		ImgChecksAndTags("buildwizardbutton.png", "INFO_BuildWizard", Point(32,52), 10),
 		ImgChecksAndTags("buildArchierButton.png", "INFO_BuildArcher", Point(54,45), 10),
 
-		ImgChecksAndTags("rearmall.png", "STDCLICK_RearmAll", Point(50,40), 10),
+		ImgChecksAndTags("rearmall.png", "PRMXYCLICK_STD_RearmAll", Point(50,40), 10),
 	};
 
 	char fname[512];
