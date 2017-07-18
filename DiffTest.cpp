@@ -531,7 +531,7 @@ Mat doChecks() {
 		ImgChecksAndTags("confirmready.png", "STDCLICK_ConfirmLoadVillageReady", Point(310, 22)),
 		ImgChecksAndTags("justbootup.png", "STDCLICK_CheckJustBootedUp", Point(52,70)),
 		ImgChecksAndTags("clashofclanicon.png", "STDCLICK_StartGame", Point(44,44)),
-		ImgChecksAndTags("leftexpand.png", "STDCLICK_LeftExpand", Point(20,66), 10),
+		ImgChecksAndTags("leftexpand.png", "ACTCLICK_LeftExpand", Point(20,66), 10),
 		ImgChecksAndTags("donatebutton.png", "INFO_DonateButtonFound", Point(51,19)),
 		ImgChecksAndTags("donatebutton1.png", "INFO_DonateButtonFound", Point(51,19)),
 		ImgChecksAndTags("donate_archer.png", "INFO_DonateArchier", Point(40,40), 10),
