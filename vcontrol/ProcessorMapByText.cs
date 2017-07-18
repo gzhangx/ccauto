@@ -61,7 +61,15 @@ namespace ccVcontrol
                         }
                         if (best.Length > 5)
                         {
-                            Console.WriteLine("got " + tags + " " + best);
+                            bool good = false;
+                            if (bestTag == "TownHall(level)")
+                            {
+                                if (best.Contains("T") || best.Contains("H")) good = true;
+                            }
+                            else good = true;
+
+                            if (good)
+                                Console.WriteLine("got " + bestTag + " " + best);
                         }
                     }
                 }
