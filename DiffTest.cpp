@@ -28,12 +28,20 @@ Mat getGrayScale(Mat color) {
 * @function main
 */
 
-
-std::vector<Mat> breakImagesHor(Mat original, int PAD=2) {
+struct MatAndPos {
+public:
+	Mat mat;
+	int x;
+	MatAndPos(Mat m, int xpos) {
+		mat = m;
+		x = xpos;
+	}
+};
+std::vector<MatAndPos> breakImagesHor(Mat original, int PAD=2) {
 	int xstart = -1;
 	int topy = -1;
 	int bottomy = original.rows;
-	std::vector<Mat> imgs;
+	std::vector<MatAndPos> imgs;
 	for (int x = 0; x < original.cols; x++) {
 		if (xstart == -1) {
 			for (int j = 0; j < original.rows; ++j)
@@ -63,7 +71,7 @@ std::vector<Mat> breakImagesHor(Mat original, int PAD=2) {
 				if (besth > 1 && iw > 1) {
 					Mat digit(besth+ PAD, iw+ PAD, original.type(), Scalar(0));
 					original(Rect(xstart, topy, iw, besth)).copyTo(digit(Rect(1,1,iw,besth)));
-					imgs.push_back(digit);
+					imgs.push_back(MatAndPos(digit, x));
 				}
 				xstart = -1;
 				bottomy = original.rows;
@@ -114,12 +122,12 @@ Mat loadImageRect(Mat img, BlockInfo blk) {
 
 	return numBlock;
 }
-std::vector<Mat> doTopNumbers(Mat img, BlockInfo blk, int PAD = 2) {
+std::vector<MatAndPos> doTopNumbers(Mat img, BlockInfo blk, int PAD = 2) {
 
 	//Mat img = getGrayScale(imread("data\\cctxt\\archerl1.JPG", IMREAD_COLOR));
 	Mat numBlock = loadImageRect(img, blk);
 
-	std::vector<Mat> digits = breakImagesHor(numBlock, PAD);
+	std::vector<MatAndPos> digits = breakImagesHor(numBlock, PAD);
 	if (debugprint) {
 		char buf[512];
 		sprintf_s(buf, "tstimgs\\test%s_%i.png", blk.info, -1);
@@ -127,7 +135,7 @@ std::vector<Mat> doTopNumbers(Mat img, BlockInfo blk, int PAD = 2) {
 
 		for (int i = 0; i < digits.size(); i++) {
 			sprintf_s(buf, "tstimgs\\test%s_%i.png", blk.info, i);
-			imwrite(buf, digits[i]);
+			imwrite(buf, digits[i].mat);
 		}
 	}
 	return digits;
@@ -141,6 +149,9 @@ public:
 	char chr;	
 	int GetEffectiveCount() {
 		return effectiveCount;
+	}
+	int GetWidth() {
+		return img.cols;
 	}
 	RecoInfo(Mat im, char ch) {
 		img = im;
@@ -160,6 +171,7 @@ public:
 
 struct RecoList {
 public:
+	int averageWidth = 0;
 	vector<RecoInfo> recoInfo;
 };
 
@@ -179,6 +191,7 @@ RecoList LoadDataInfo(const char * dir) {
 	DIR *d = opendir(dir);
 	dirent * de;
 	RecoList res;
+	res.averageWidth = 0;
 	while (de = readdir(d)) {
 		if (StrEndsWith(de->d_name, ".png")) {
 			//if (debugprint) printf("%s %c\n", de->d_name, de->d_name[2]);
@@ -186,9 +199,11 @@ RecoList LoadDataInfo(const char * dir) {
 			sprintf_s(buf, "%s\\%s", dir, de->d_name);
 			Mat img = getGrayScale(imread(buf));
 			res.recoInfo.push_back(RecoInfo(img, de->d_name[2]));
+			res.averageWidth += img.cols;
 		}
 	}
 	closedir(d);
+	res.averageWidth /= (int)res.recoInfo.size();
 	return res;
 }
 
@@ -226,11 +241,13 @@ struct ImageRecoRes {
 public:
 	static int xspacing;
 	int x;
+	int width;
 	int trimedX;
 	char c;
 	float val;
-	ImageRecoRes(int xx, char chr, float v) {
+	ImageRecoRes(int xx, int w, char chr, float v) {
 		x = xx;
+		width = w;
 		trimedX = xx / xspacing;
 		c = chr;
 		val = v;
@@ -274,9 +291,9 @@ bool checkIfFirstRecoBetter(float a, float b) {
 	return a < b;
 }
 
-vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
-	
+vector<ImageRecoRes> DoReco(RecoList list, MatAndPos matAndPos, int blkNumber) {		
 	vector<ImageRecoRes> res;
+	Mat img = matAndPos.mat;
 	//if (debug && blkNumber != 3) return res;
 	
 	float VALMAX = 6551750;
@@ -335,10 +352,10 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 
 		for (int y = 0; y < topvals.size(); y++) {
 			ImageDiffVal cur = topvals[y];
-			cur.val /= (recInfo.GetEffectiveCount()+0.001);
+			cur.val /= (float)(recInfo.GetEffectiveCount()+0.001);
 			if (cur.val > VALMAX) continue;
 			//int xspace = cur.x / ImageRecoRes::xspacing;
-			ImageRecoRes xspace = ImageRecoRes(cur.x, recInfo.chr, cur.val);
+			ImageRecoRes xspace = ImageRecoRes(cur.x, templ.cols, recInfo.chr, cur.val);
 
 			bool found = false;
 			for (vector<ImageRecoRes>::iterator it = res.begin(); it != res.end(); it++) {
@@ -384,6 +401,10 @@ vector<ImageRecoRes> DoReco(RecoList list, Mat img, int blkNumber) {
 		}
 		else ret.push_back(cur);
 		//break;
+	}
+
+	for (int i = 0; i < ret.size(); i++) {
+		ret[i].x+= matAndPos.x;
 	}
 	return ret;
 }
@@ -449,7 +470,7 @@ public:
 };
 
 void DoRecoOnBlock(Mat img, RecoList checkList, BlockInfo blk) {
-	vector<Mat> blocks = doTopNumbers(img, blk, 5);
+	vector<MatAndPos> blocks = doTopNumbers(img, blk, 5);
 	vector<ImageRecoRes> res;
 	for (int imgblk = 0; imgblk < blocks.size(); imgblk++) {
 		if (debugprint) printf("doing at next img\n");
@@ -464,11 +485,30 @@ void DoRecoOnBlock(Mat img, RecoList checkList, BlockInfo blk) {
 		}
 	}
 
-	printf("RecoResult_%s ", blk.info);
+	char buf[1024];
+	strcpy_s(buf, "RecoResult_");
+	strcat_s(buf, blk.info);
+	strcat_s(buf, " ");
+	int prevend = -1;
+	int pos = strlen(buf);
 	for (vector<ImageRecoRes>::iterator it = res.begin(); it != res.end(); it++) {
-		printf("%c", it->c);
+		if (prevend == -1) {
+			prevend = it->x;
+		}
+		int diff = it->x - prevend;
+		if (diff > checkList.averageWidth) {
+			int many = (int)((diff + (checkList.averageWidth / 2)) / checkList.averageWidth);
+			for (int i = 0; i < many; i++) {
+				buf[pos++] = ' ';
+				buf[pos] = 0;
+			}
+		}
+		prevend = it->x + it->width;
+		buf[pos++] = it->c;
+		buf[pos] = 0;
+		if (pos > 1000) break;
 	}
-	printf("\n");
+	printf("%s\n", buf);
 }
 
 RecoList topCheckList = LoadDataInfo("data\\check\\top");
@@ -563,7 +603,7 @@ int main(int argc, char** argv)
 	Mat img = getGrayScale(imread("tstimgs\\full.png", IMREAD_COLOR));
 	doTopNumbers(img, BlockInfo(Rect(780,  42,-1, 30), thd, "gld"));
 	doTopNumbers(img, BlockInfo(Rect(780, 105,-1, 30), thd,"elis"));
-	vector<Mat> blocks = doTopNumbers(img, BlockInfo(Rect(280, 605, -1,45 + PAD), thd, "bottom"), 5);
+	vector<MatAndPos> blocks = doTopNumbers(img, BlockInfo(Rect(280, 605, -1,45 + PAD), thd, "bottom"), 5);
 
 	//Mat img = getGrayScale(imread("data\\cctxt\\archerl1.JPG", IMREAD_COLOR));	
 	//Mat numBlock = loadImageRect(img, BlockInfo(Rect(280, 605, -1, 45)));
