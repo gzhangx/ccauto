@@ -368,6 +368,8 @@ vector<ImageRecoRes> DoReco(RecoList list, MatAndPos matAndPos, int blkNumber) {
 						if (debugprint) printf("rrtop blk%i %c at %i %i has %f trimed to %i replaced %c\n", blkNumber, recInfo.chr, cur.x, cur.y, cur.val, xspace.trimedX, it->c);
 						it->val = cur.val;
 						it->c = recInfo.chr;
+						it->x = cur.x;
+						it->width = recInfo.GetWidth();
 					}
 					//break;
 				}
@@ -498,8 +500,9 @@ void DoRecoOnBlock(Mat img, RecoList checkList, BlockInfo blk) {
 			prevend = it->x;
 		}
 		int diff = it->x - prevend;
-		if (diff > checkList.averageWidth/2) {
+		if (diff >= (int)(checkList.averageWidth/2)) {
 			int many = (int)((diff + (checkList.averageWidth / 2)) / checkList.averageWidth);
+			if (many == 0) many = 1;
 			for (int i = 0; i < many; i++) {
 				buf[pos++] = ' ';
 				buf[pos] = 0;
