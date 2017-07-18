@@ -41,7 +41,7 @@ namespace ccVcontrol
                 if (donationFormat != null)
                 {
                     found = true;
-                    Utils.MouseMouseAndClick(context.mouse, donationFormat.x, donationFormat.y);
+                    Utils.MoveMouseAndClick(context.mouse, donationFormat.x, donationFormat.y);
                     break;
                 }
             }
@@ -61,7 +61,7 @@ namespace ccVcontrol
                         if (donationFormat != null)
                         {
                             found = true;
-                            Utils.MouseMouseAndClick(context.mouse, donationFormat.x, donationFormat.y);
+                            Utils.MoveMouseAndClick(context.mouse, donationFormat.x, donationFormat.y);
                             for (int j = 0; j < 5; j++)
                             {
                                 Utils.MouseClick(context.mouse);
@@ -77,7 +77,7 @@ namespace ccVcontrol
                     var close = results.FirstOrDefault(r => r.command == "STDCLICK_Close");
                     if (close != null)
                     {
-                        Utils.MouseMouseAndClick(context.mouse, close.x, close.y);
+                        Utils.MoveMouseAndClick(context.mouse, close.x, close.y);
                     }
                 }
             }

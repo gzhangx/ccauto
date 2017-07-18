@@ -55,7 +55,7 @@ namespace ccVcontrol
             mouse.PutMouseEvent(0, 0, 0, 0, 0);
         }
 
-        public static void MouseMouseAndClick(IMouse mouse, int x, int y)
+        public static void MoveMouseAndClick(IMouse mouse, int x, int y)
         {
             MouseMouseTo(mouse, x, y);
             MouseClick(mouse);
@@ -141,5 +141,7 @@ namespace ccVcontrol
             }
             return res;
         }
+
+        
     }
 }
