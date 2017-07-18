@@ -49,10 +49,10 @@ namespace ccVcontrol
             if (found)
             {
                 found = false;
+                Thread.Sleep(2000);
                 var results = Utils.GetAppInfo();
                 for (int i = 0; i < 10; i++)
-                {
-                    Thread.Sleep(2000);
+                {                                        
                     Console.WriteLine("DEBUGPRINTINFO trying to find archier or wizard for donation");
                     
 
@@ -73,13 +73,6 @@ namespace ccVcontrol
                     if (found) break;
                 }
                 
-                {
-                    var close = results.FirstOrDefault(r => r.command == "PRMXYCLICK_STD_Close");
-                    if (close != null)
-                    {
-                        Utils.MoveMouseAndClick(context.mouse, close.x, close.y);
-                    }
-                }
             }
             
         }
