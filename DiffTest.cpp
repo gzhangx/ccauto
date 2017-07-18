@@ -71,7 +71,7 @@ std::vector<MatAndPos> breakImagesHor(Mat original, int PAD=2) {
 				if (besth > 1 && iw > 1) {
 					Mat digit(besth+ PAD, iw+ PAD, original.type(), Scalar(0));
 					original(Rect(xstart, topy, iw, besth)).copyTo(digit(Rect(1,1,iw,besth)));
-					imgs.push_back(MatAndPos(digit, x));
+					imgs.push_back(MatAndPos(digit, xstart));
 				}
 				xstart = -1;
 				bottomy = original.rows;
