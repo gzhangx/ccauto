@@ -514,6 +514,10 @@ Mat doChecks() {
 	return img;
 }
 
+void test() {
+	Mat img = getGrayScale(imread("tstimgs\\full.png", IMREAD_COLOR));	
+	vector<Mat> blocks = doTopNumbers(img, BlockInfo(Rect(280, 605, -1, 45 + 2), thd, "bottom"), 5);
+}
 int main(int argc, char** argv)
 {	
 	
