@@ -10,6 +10,11 @@ namespace ccVcontrol
     public class ProcessingContext
     {
         public IMouse mouse;
+        public IKeyboard keyboard;
+        public void SendString(string str)
+        {
+            Utils.SendString(keyboard, str);
+        }
 
         public int DoStdClicks(List<CommandInfo> clicks)
         {
