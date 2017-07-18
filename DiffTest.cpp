@@ -494,7 +494,7 @@ void DoRecoOnBlock(Mat img, RecoList checkList, BlockInfo blk) {
 	strcat_s(buf, blk.info);
 	strcat_s(buf, " ");
 	int prevend = -1;
-	int pos = strlen(buf);
+	int pos = (int)strlen(buf);
 	for (vector<ImageRecoRes>::iterator it = res.begin(); it != res.end(); it++) {
 		if (prevend == -1) {
 			prevend = it->x;
