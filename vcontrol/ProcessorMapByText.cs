@@ -11,9 +11,9 @@ namespace ccVcontrol
     {
         const int startx = 127;
         const int starty = 100;
-        const int width = 680;
-        const int height = 516;
-        const int step = 30;
+        const int width = 600;
+        const int height = 480;
+        const int step = 40;
         private ProcessingContext context;
         DateTime lastProcessDate = DateTime.Now.AddMinutes(-2);
         public ProcessorMapByText(ProcessingContext ctx)

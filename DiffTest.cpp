@@ -485,6 +485,8 @@ Mat doChecks() {
 
 		ImgChecksAndTags("buildwizardbutton.png", "INFO_BuildWizard", Point(32,52), 10),
 		ImgChecksAndTags("buildArchierButton.png", "INFO_BuildArcher", Point(54,45), 10),
+
+		ImgChecksAndTags("rearmall.png", "STDCLICK_RearmAll", Point(50,40), 10),
 	};
 
 	char fname[512];

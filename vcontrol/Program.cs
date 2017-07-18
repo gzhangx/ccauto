@@ -23,8 +23,7 @@ namespace ccVcontrol
                 mouse = mouse
             };
             while (true)
-            {
-                new ProcessorMapByText(context).ProcessCommand();
+            {                
                 foreach (var cmd in Utils.runApp().Split('\n'))
                 {
                     Console.Write(".");
@@ -49,9 +48,8 @@ namespace ccVcontrol
                         var x = Convert.ToInt32(cmds[1]);
                         var y = Convert.ToInt32(cmds[2]);
                         var cmpRes = Convert.ToDecimal(cmds[3]);
-                        var command = cmds[0];
-                        if (ProcessCommand(context, new CommandInfo { command = command, cmpRes = cmpRes, x = x, y= y })) continue;
-                        if (command == "STDCLICK_LeftExpand") continue;
+                        var command = cmds[0];                        
+                        if (ProcessCommand(context, new CommandInfo { command = command, cmpRes = cmpRes, x = x, y= y })) continue;                        
                         Utils.MouseMouseTo(mouse, x, y);
                         Utils.MouseClick(mouse);
                         if (confirm)
@@ -81,6 +79,7 @@ namespace ccVcontrol
                 case "STDCLICK_LeftExpand":
                     //TODO: add back
                     ProcessDonate(context, cmd);
+                    new ProcessorMapByText(context).ProcessCommand();
                     break;
                 case "STDCLICK_TrainTroops":
                     new ProcessorTrain(context).ProcessCommand(cmd);
