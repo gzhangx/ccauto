@@ -48,14 +48,12 @@ namespace ccVcontrol
 
             if (found)
             {
-                found = false;
-                Thread.Sleep(2000);
-                var results = Utils.GetAppInfo();
-                for (int i = 0; i < 10; i++)
+                found = false;                
+                for (int i = 0; i < 5; i++)
                 {                                        
                     Console.WriteLine("DEBUGPRINTINFO trying to find archier or wizard for donation");
-                    
-
+                    Thread.Sleep(2000);
+                    var results = Utils.GetAppInfo();
                     foreach (var donationName in new String[] { "INFO_DonateWizard", "INFO_DonateArchier" }) {
                         var donationFormat = results.FirstOrDefault(r => r.command == donationName);
                         if (donationFormat != null)
