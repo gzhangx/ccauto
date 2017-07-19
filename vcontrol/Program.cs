@@ -37,7 +37,7 @@ namespace ccVcontrol
                         keyboard.PutScancode(0x2A);
                         Thread.Sleep(100);
                     }
-                    ProcessCommand(context, cmd);
+                    //ProcessCommand(context, cmd);
                 }
                 Thread.Sleep(100);
             }

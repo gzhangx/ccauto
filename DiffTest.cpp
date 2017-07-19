@@ -546,7 +546,9 @@ Mat doChecks() {
 		ImgChecksAndTags("buildwizardbutton.png", "INFO_BuildWizard", Point(32,52), 10),
 		ImgChecksAndTags("buildArchierButton.png", "INFO_BuildArcher", Point(54,45), 10),
 
-		ImgChecksAndTags("rearmall.png", "PRMXYCLICK_STD_RearmAll", Point(50,40), 10),
+		ImgChecksAndTags("rearmall.png", "PRMXYCLICK_ACT_RearmAll", Point(50,40), 10),
+
+		ImgChecksAndTags("chacha_settings.png", "PRMXYCLICK_STD_CloseSettings", Point(22,22), 10),		
 	};
 
 	char fname[512];
