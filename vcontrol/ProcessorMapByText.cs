@@ -10,34 +10,51 @@ namespace ccVcontrol
 
     public class ProcessorMapByText
     {
+        const string GoldMine = "GoldMine(Level)";
+        const string ElixirCollector = "ElixirCollector(level)";
+        const string TownHall = "TownHall(level)";
+        const string GoldStorage = "GoldStorage(level)";
+        const string ElixirStorage = "ElixirStorage(level)";
         const int startx = 127;
         const int starty = 100;
         const int width = 600;
         const int height = 480;
-        const int step = 40;
+        const int step = 60;
         private ProcessingContext context;
         DateTime lastProcessDate = DateTime.Now.AddMinutes(-2);
 
-        string[] tags = new string[] { "GoldMine(Level)", "ElixirCollector(level)" , "TownHall(level)", "GoldStorage(level)", "ElixirStorage(level)" };
+        string[] tags = new string[] { GoldMine , ElixirCollector, TownHall, GoldStorage, ElixirStorage};
 
+        class TagAndLocation
+        {
+            public int x;
+            public int y;
+            public string tag;
+        }
 
         public ProcessorMapByText(ProcessingContext ctx)
         {
             context = ctx;
         }
+        List<TagAndLocation> locations = new List<TagAndLocation>();
         public void ProcessCommand()
-        {            
-            if ((DateTime.Now - lastProcessDate).TotalMinutes > 1)
+        {
+            locations.ForEach(l =>
+            {
+                Console.WriteLine("====>" + l.tag + " " + l.x + "," + l.y);
+            });
+            if ((DateTime.Now - lastProcessDate).TotalMinutes > 40)
             {
                 lastProcessDate = DateTime.Now;
             }
             else return;
 
-            
-            for (int y = 0; y < height; y += step)
+            locations.Clear();
+
+            for (int y = 0; y < height - 100; y += step)
             {
                 context.MouseMouseTo(startx, starty + y);
-                for (int x = 0; x < width; x += step)
+                for (int x = 0; x < width - 100; x += step)
                 {
                     context.MouseMouseRelative( step, 0);
                     context.MouseClick();
@@ -62,14 +79,17 @@ namespace ccVcontrol
                         if (best.Length > 5)
                         {
                             bool good = false;
-                            if (bestTag == "TownHall(level)")
+                            if (bestTag == TownHall)
                             {
                                 if (best.Contains("T") || best.Contains("H")) good = true;
                             }
                             else good = true;
 
                             if (good)
-                                Console.WriteLine("got " + bestTag + " " + best);
+                            {
+                                Console.WriteLine("BESTTAG====> " + bestTag + " " + best);
+                                locations.Add(new TagAndLocation { tag = bestTag, x = x, y = y, });
+                            }
                         }
                     }
                 }
