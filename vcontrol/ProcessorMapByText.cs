@@ -21,7 +21,7 @@ namespace ccVcontrol
         const int height = 480;
         const int step = 60;
         private ProcessingContext context;
-        DateTime lastProcessDate = DateTime.Now.AddMinutes(-2);
+        DateTime lastProcessDate = DateTime.Now.AddMinutes(-1000);
 
         string[] tags = new string[] { GoldMine , ElixirCollector, TownHall, GoldStorage, ElixirStorage};
 
@@ -50,7 +50,8 @@ namespace ccVcontrol
             else return;
 
             locations.Clear();
-
+            var results = Utils.GetAppInfo();
+            context.DoStdClicks(results);
             for (int y = 0; y < height - 100; y += step)
             {
                 context.MouseMouseTo(startx, starty + y);
@@ -59,14 +60,13 @@ namespace ccVcontrol
                     context.MouseMouseRelative( step, 0);
                     context.MouseClick();
                     Thread.Sleep(1000);
-                    var results = Utils.GetAppInfo();
+                    results = Utils.GetAppInfo();
                     context.DoStdClicks(results);
                     var bottom = results.FirstOrDefault(r => r.command == "RecoResult_INFO_Bottom");
                     string best = "";
                     string bestTag = "";
                     if (bottom != null)
-                    {
-                        Console.WriteLine("got " + bottom.command+ ":"+bottom.Text);
+                    {                        
                         foreach(var tag in tags)
                         {
                             var res = LCS.LongestCommonSubsequence(tag.ToLower(), bottom.Text.ToLower());
@@ -76,16 +76,10 @@ namespace ccVcontrol
                                 bestTag = tag;
                             }
                         }
-                        if (best.Length > 5)
-                        {
-                            bool good = false;
-                            if (bestTag == TownHall)
-                            {
-                                if (best.Contains("T") || best.Contains("H")) good = true;
-                            }
-                            else good = true;
-
-                            if (good)
+                        int bestDiff = bestTag.Length - best.Length;
+                        Console.WriteLine($" at {y},{x} got {bottom.command}:{bottom.Text} diff {bestDiff}");
+                        if (bestDiff < 2)
+                        {                            
                             {
                                 Console.WriteLine("BESTTAG====> " + bestTag + " " + best);
                                 locations.Add(new TagAndLocation { tag = bestTag, x = x, y = y, });
