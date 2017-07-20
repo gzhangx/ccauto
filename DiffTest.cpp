@@ -123,7 +123,9 @@ Mat loadImageRect(Mat img, BlockInfo blk) {
 	return numBlock;
 }
 std::vector<MatAndPos> doTopNumbers(Mat img, BlockInfo blk, int PAD = 2) {
-
+	if ((blk.rect.x >= img.cols)
+		|| (blk.rect.y + blk.rect.height >= img.rows))
+		return vector<MatAndPos>();
 	//Mat img = getGrayScale(imread("data\\cctxt\\archerl1.JPG", IMREAD_COLOR));
 	Mat numBlock = loadImageRect(img, blk);
 
@@ -271,8 +273,11 @@ public:
 		found = good;
 	}
 };
+
+ImageFindLoc CheckImageMatch(Mat img, char * fileName, double threadshold = 200000);
 ImageFindLoc CheckAttackedDialog(Mat img) {
-	Mat result;
+	return CheckImageMatch(img, "data\\check\\ememyattacked.png", 2000);
+	/*Mat result;
 	Mat templ = getGrayScale(imread("data\\check\\ememyattacked.png", IMREAD_COLOR));
 	Mat mask = (imread("data\\check\\ememyattacked.mask.bmp", IMREAD_GRAYSCALE));
 	matchTemplate(img, templ, result, gmatch_method, mask);
@@ -280,7 +285,7 @@ ImageFindLoc CheckAttackedDialog(Mat img) {
 	Point matchLoc;
 	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
 	if (debugprint) printf("attacked dialog find min at %i %i val %f %f\n", minLoc.x, minLoc.y, minVal, maxVal);
-	return ImageFindLoc(minLoc, minVal, (minVal < 2000));
+	return ImageFindLoc(minLoc, minVal, (minVal < 2000));*/
 }
 
 
@@ -422,10 +427,11 @@ void printCheckLocation(ImageFindLoc where, const char * who, Point move) {
 }
 
 
-ImageFindLoc CheckImageMatch(Mat img, char * fileName, double threadshold = 200000) {
+ImageFindLoc CheckImageMatch(Mat img, char * fileName, double threadshold) {
 	Mat result;
 	Mat templ = getGrayScale(imread(fileName, IMREAD_COLOR));
 
+	if ( (templ.cols > img.cols) || (templ.rows > img.rows)) return ImageFindLoc(Point(-1, -1), 99999999999, false);
 	char maskName[512];
 	strcpy_s(maskName, fileName);
 	bool foundMask = false;
