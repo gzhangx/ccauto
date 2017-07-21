@@ -23,9 +23,23 @@ namespace ccVcontrol
                 mouse = mouse,
                 keyboard = keyboard,
             };
+
+            var cmds = Utils.GetAppInfo();
             while (true)
             {
-                var cmds = Utils.GetAppInfo();
+                context.DoStdClicks(cmds);
+                cmds = Utils.GetAppInfo();
+                if (cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand") != null) break;                
+            }
+            
+
+            Utils.GetAppInfo("-save");
+
+            new SwitchAccount(context).Process();
+            return;            
+            while (true)
+            {
+                cmds = Utils.GetAppInfo();
                 context.DoStdClicks(cmds);
                 foreach (var cmd in cmds)
                 {
