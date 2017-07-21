@@ -532,7 +532,7 @@ Mat doChecks(const char * matchFileName, int matchThreadHold) {
 	}
 	char fname[512];
 	if (matchFileName != NULL) {
-		strcpy_s(fname, "data\\check\\match\\");
+		strcpy_s(fname, "data\\check\\");
 		strcat_s(fname, matchFileName);
 		printCheckLocation(CheckImageMatch(img, fname, matchThreadHold), "SINGLEMATCH", Point(0,0));
 		return img;
@@ -618,8 +618,11 @@ int main(int argc, char** argv)
 			if (strcmp(argv[i], "-check") == 0) {
 				doChecks(NULL, -1);
 				return 0;
-			}
-			else  if (strcmp(argv[i], "-match") == 0) {
+			} else if (strcmp(argv[i], "-screenshoot") == 0) {
+				Mat screen = LoadCCScreen();
+				imwrite("tstimgs\\full.png", screen);
+				return 0;
+			} else  if (strcmp(argv[i], "-match") == 0) {
 				match = true;
 			}
 		}
