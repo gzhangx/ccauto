@@ -85,10 +85,10 @@ namespace ccVcontrol
             }
         }
 
-        public static string runApp()
+        public static string runApp(string arguments = "-check")
         {
             ProcessStartInfo start = new ProcessStartInfo();
-            start.Arguments = "-check";
+            start.Arguments = arguments;
             start.FileName = "D:\\gang\\rctest\\x64\\Debug\\temptest.exe";
             start.WorkingDirectory = "D:\\gang\\rctest";
             // Do you want to show a console window?
@@ -110,10 +110,10 @@ namespace ccVcontrol
             }
         }
 
-        public static List<CommandInfo> GetAppInfo()
+        public static List<CommandInfo> GetAppInfo(string arguments = "-check")
         {
             var res = new List<CommandInfo>();
-            foreach (var cmd in Utils.runApp().Split('\n'))
+            foreach (var cmd in Utils.runApp(arguments).Split('\n'))
             {
                 if (cmd.Length < 2) continue;
                 if (cmd.StartsWith("***** VIDEOINPUT LIBRARY")) continue;
