@@ -524,10 +524,17 @@ void DoRecoOnBlock(Mat img, RecoList checkList, BlockInfo blk) {
 
 RecoList topCheckList = LoadDataInfo("data\\check\\top");
 RecoList bottomCheckList = LoadDataInfo("data\\check\\bottom");
-Mat doChecks() {
+Mat doChecks(const char * matchFileName, int matchThreadHold) {
 	Mat img = getGrayScale(LoadCCScreen());
 	if (img.rows == 0) {
 		printf("ERR: No image");
+		return img;
+	}
+	char fname[512];
+	if (matchFileName != NULL) {
+		strcpy_s(fname, "data\\check\\match\\");
+		strcat_s(fname, matchFileName);
+		printCheckLocation(CheckImageMatch(img, fname, matchThreadHold), "SINGLEMATCH", Point(0,0));
 		return img;
 	}
 	printCheckLocation(CheckAttackedDialog(img), "PRMXYCLICK_STD_VillageAttacked", Point(345, 440));
@@ -556,8 +563,7 @@ Mat doChecks() {
 
 		ImgChecksAndTags("chacha_settings.png", "PRMXYCLICK_STD_CloseSettings", Point(22,22), 10),		
 	};
-
-	char fname[512];
+	
 	for (int i = 0; i < itms.size(); i++) {
 		ImgChecksAndTags itm = itms[i];
 		strcpy_s(fname, "data\\check\\");
@@ -595,15 +601,31 @@ int main(int argc, char** argv)
 	int thd = 220;
 
 	try {
+		bool match = 0;
+		char * matchFile = NULL;
+		int matchThreadHold = -1;
 		for (int i = 1; i < argc; i++) {
+			if (match) {
+				if (!matchFile) {
+					matchFile = argv[i];
+				}
+				else {
+					matchThreadHold = atoi(argv[i]);
+					doChecks(matchFile, matchThreadHold);
+					return 0;
+				}
+			}
 			if (strcmp(argv[i], "-check") == 0) {
-				doChecks();
+				doChecks(NULL, -1);
 				return 0;
+			}
+			else  if (strcmp(argv[i], "-match") == 0) {
+				match = true;
 			}
 		}
 		Mat screen = LoadCCScreen();
 		imwrite("tstimgs\\full.png", screen);
-		doChecks();
+		doChecks(NULL, -1);
 	}
 	catch (const char* str) {
 		printf("ERR: %s\n", str);
