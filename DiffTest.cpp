@@ -543,7 +543,7 @@ Mat doChecks(const char * matchFileName, int matchThreadHold, BlockInfo * matchR
 	printCheckLocation(CheckAttackedDialog(img), "PRMXYCLICK_STD_VillageAttacked", Point(345, 440));
 	vector<ImgChecksAndTags> itms = {
 		ImgChecksAndTags("loadVillage.png", "PRMXYCLICK_STD_LoadingVillage", Point(298,44)),
-		ImgChecksAndTags("confirm.bmp", "PRMXYCLICK_STD_ConfirmLoadVillage", Point(310, 22)),
+		ImgChecksAndTags("confirmLoadAreYouSure.png", "PRMXYCLICK_STD_ConfirmLoadVillage", Point(402, 22)),
 		ImgChecksAndTags("confirmready.png", "PRMXYCLICK_STD_ConfirmLoadVillageReady", Point(310, 22)),
 		ImgChecksAndTags("justbootup.png", "PRMXYCLICK_STD_CheckJustBootedUp", Point(52,70)),
 		ImgChecksAndTags("clashofclanicon.png", "PRMXYCLICK_STD_StartGame", Point(44,44)),
