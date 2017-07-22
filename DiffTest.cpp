@@ -608,9 +608,14 @@ int main(int argc, char** argv)
 		char * matchFile = NULL;
 		int matchThreadHold = -1;
 		bool isMatchRect = false;
+		bool isName = false;
+		char *matchName = NULL;
 		BlockInfo matchRect(Rect(),-1,NULL);
 		for (int i = 1; i < argc; i++) {
-			if (isMatchRect) {
+			if (isName) {
+				matchName = argv[i];
+				isName = false;
+			} else if (isMatchRect) {
 				char tmpmbuf[512];
 				strcpy_s(tmpmbuf, argv[i]);
 				char *nextt;
@@ -624,7 +629,7 @@ int main(int argc, char** argv)
 				matchRect.rect.height = atoi(pch);
 				pch = strtok_s(NULL, "_", &nextt);
 				matchRect.Threadshold = atoi(pch);
-				matchRect.info = "C#";
+				matchRect.info = matchName;
 				isMatchRect = false;
 			} else if (match) {
 				if (!matchFile) {
@@ -644,7 +649,9 @@ int main(int argc, char** argv)
 				imwrite("tstimgs\\full.png", screen);
 				if (matchRect.info != NULL) {
 					screen = LoadCCScreen();
-					imwrite("tstimgs\\full_r.png", loadImageRect(screen, matchRect));
+					char tempnamebuf[512];
+					sprintf_s(tempnamebuf, "tstimgs\\full_%s.png", matchName);
+					imwrite(tempnamebuf, loadImageRect(getGrayScale(screen), matchRect));
 				}
 				return 0;
 			} else  if (strcmp(argv[i], "-match") == 0) {
@@ -652,6 +659,9 @@ int main(int argc, char** argv)
 			}
 			else if (strcmp(argv[i], "-matchRect") == 0) {
 				isMatchRect = true;
+			}
+			else if (strcmp(argv[i], "-name") == 0) {
+				isName = true;
 			}
 		}
 		Mat screen = LoadCCScreen();
