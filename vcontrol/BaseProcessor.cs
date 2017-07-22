@@ -15,6 +15,7 @@ namespace ccVcontrol
             public string cmd;
             public int xoff;
             public int yoff;
+            public int delay = 100;
             public int maxRetry = 10; //10s
 
             public Action<CommandInfo, StepInfo> Act;
@@ -40,7 +41,7 @@ namespace ccVcontrol
                     var found = FindSpot(cur.cmd, 1);
                     if (found == null)
                     {
-                        stepRetry[i]++;
+                        if (i == step) stepRetry[i]++;
                     }
                     else
                     {
@@ -51,6 +52,7 @@ namespace ccVcontrol
                         {
                             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff);
                             context.MouseMouseTo(0, 0);
+                            Thread.Sleep(cur.delay);
                         }
                     }
                 }
