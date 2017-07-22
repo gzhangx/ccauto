@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using VirtualBox;
 
@@ -47,6 +48,14 @@ namespace ccVcontrol
         public void MoveMouseAndClick(int x, int y)
         {
             Utils.MoveMouseAndClick(mouse, x, y);
+        }
+
+        public void DoShift()
+        {
+            keyboard.ReleaseKeys();
+            Thread.Sleep(100);
+            keyboard.PutScancode(0x2A);
+            Thread.Sleep(100);
         }
 
     }

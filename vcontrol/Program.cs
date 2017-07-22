@@ -27,28 +27,27 @@ namespace ccVcontrol
             var cmds = Utils.GetAppInfo();
             cmds = Utils.GetAppInfo("-name allfull -screenshoot");
             cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");
+            context.DoShift();
             while (true)
             {
                 context.DoStdClicks(cmds);
                 cmds = Utils.GetAppInfo();
                 if (cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand") != null) break;                
             }            
-
-            new SwitchAccount(context).Process();
-            return;            
+            
             while (true)
             {
                 cmds = Utils.GetAppInfo();
                 context.DoStdClicks(cmds);
+
+                new SwitchAccount(context).Process();
+
                 foreach (var cmd in cmds)
                 {
                     Console.Write(".");
                     if (cmd.command.Contains("CheckJustBootedUp"))
                     {
-                        keyboard.ReleaseKeys();
-                        Thread.Sleep(100);
-                        keyboard.PutScancode(0x2A);
-                        Thread.Sleep(100);
+                        context.DoShift();
                     }
                     //ProcessCommand(context, cmd);
                 }
@@ -63,7 +62,7 @@ namespace ccVcontrol
                 case "PRMXYCLICK_ACT_LeftExpand":
                     //TODO: add back
                     ProcessDonate(context, cmd);
-                    new ProcessorMapByText(context).ProcessCommand();
+                    //new ProcessorMapByText(context).ProcessCommand();
                     break;
                 case "PRMXYCLICK_STD_TrainTroops":
                     new ProcessorTrain(context).ProcessCommand(cmd);
