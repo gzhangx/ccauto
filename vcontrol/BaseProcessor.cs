@@ -50,6 +50,7 @@ namespace ccVcontrol
                         else
                         {
                             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff);
+                            context.MouseMouseTo(0, 0);
                         }
                     }
                 }
@@ -75,7 +76,8 @@ namespace ccVcontrol
                 var cmds = Utils.GetAppInfo(name);
                 var found = cmds.FirstOrDefault(cmd => cmd.command == "SINGLEMATCH");
                 if (found != null)
-                {                    
+                {
+                    Console.WriteLine($"matching {name} found {found.cmpRes}");
                     return found;
                 }
                 Thread.Sleep(1000);

@@ -25,16 +25,13 @@ namespace ccVcontrol
             };
 
             var cmds = Utils.GetAppInfo();
-            cmds = Utils.GetAppInfo("-matchRect 79,32,167,22_200 -screenshoot");
+            cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");
             while (true)
             {
                 context.DoStdClicks(cmds);
                 cmds = Utils.GetAppInfo();
                 if (cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand") != null) break;                
-            }
-            
-
-            Utils.GetAppInfo("-save");
+            }            
 
             new SwitchAccount(context).Process();
             return;            
