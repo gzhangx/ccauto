@@ -49,7 +49,7 @@ namespace ccVcontrol
                     {
                         context.DoShift();
                     }
-                    //ProcessCommand(context, cmd);
+                    ProcessCommand(context, cmd);
                 }
                 Thread.Sleep(100);
             }
@@ -66,16 +66,6 @@ namespace ccVcontrol
                     break;
                 case "PRMXYCLICK_STD_TrainTroops":
                     new ProcessorTrain(context).ProcessCommand(cmd);
-                    break;
-                case "PRMXYCLICK_STD_ConfirmLoadVillage":
-                    context.mouse.PutMouseEvent(-200, 0, 0, 0, 0);
-                    context.MouseClick();
-                    context.SendString("CONFIRM");
-
-                    Thread.Sleep(1000);
-                    context.mouse.PutMouseEvent(200, 0, 0, 0, 0);
-                    context.MouseClick();
-                    Thread.Sleep(2000);
                     break;
                 default: return false;
             }            
