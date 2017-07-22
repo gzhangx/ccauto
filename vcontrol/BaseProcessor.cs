@@ -17,7 +17,7 @@ namespace ccVcontrol
             public int yoff;
             public int maxRetry = 10; //10s
 
-            public Action<CommandInfo> Act;
+            public Action<CommandInfo, StepInfo> Act;
         }
 
         protected ProcessingContext context;
@@ -46,7 +46,7 @@ namespace ccVcontrol
                     {
                         step = i + 1;
                         if (cur.Act != null)
-                            cur.Act(found);
+                            cur.Act(found, cur);
                         else
                         {
                             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff);
