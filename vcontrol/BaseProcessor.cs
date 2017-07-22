@@ -45,7 +45,12 @@ namespace ccVcontrol
                     else
                     {
                         step = i + 1;
-                        cur.Act(found);
+                        if (cur.Act != null)
+                            cur.Act(found);
+                        else
+                        {
+                            context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff);
+                        }
                     }
                 }
                 if (step >= steps.Count) break;

@@ -524,11 +524,14 @@ void DoRecoOnBlock(Mat img, RecoList checkList, BlockInfo blk) {
 
 RecoList topCheckList = LoadDataInfo("data\\check\\top");
 RecoList bottomCheckList = LoadDataInfo("data\\check\\bottom");
-Mat doChecks(const char * matchFileName, int matchThreadHold) {
-	Mat img = getGrayScale(LoadCCScreen());
+Mat doChecks(const char * matchFileName, int matchThreadHold, BlockInfo * matchRect) {
+	Mat img = getGrayScale(LoadCCScreen());	
 	if (img.rows == 0) {
 		printf("ERR: No image");
 		return img;
+	}
+	if (matchRect != NULL && matchRect->info != NULL) {
+		img = loadImageRect(img, *matchRect);
 	}
 	char fname[512];
 	if (matchFileName != NULL) {
@@ -604,31 +607,56 @@ int main(int argc, char** argv)
 		bool match = 0;
 		char * matchFile = NULL;
 		int matchThreadHold = -1;
+		bool isMatchRect = false;
+		BlockInfo matchRect(Rect(),-1,NULL);
 		for (int i = 1; i < argc; i++) {
-			if (match) {
+			if (isMatchRect) {
+				char tmpmbuf[512];
+				strcpy_s(tmpmbuf, argv[i]);
+				char *nextt;
+				char * pch = strtok_s(tmpmbuf, ",", &nextt);
+				matchRect.rect.x = atoi(pch);
+				pch = strtok_s(NULL, ",", &nextt);
+				matchRect.rect.y = atoi(pch);
+				pch = strtok_s(NULL, ",", &nextt);
+				matchRect.rect.width = atoi(pch);
+				pch = strtok_s(NULL, ",", &nextt);
+				matchRect.rect.height = atoi(pch);
+				pch = strtok_s(NULL, "_", &nextt);
+				matchRect.Threadshold = atoi(pch);
+				matchRect.info = "C#";
+				isMatchRect = false;
+			} else if (match) {
 				if (!matchFile) {
 					matchFile = argv[i];
 				}
 				else {
 					matchThreadHold = atoi(argv[i]);
-					doChecks(matchFile, matchThreadHold);
+					doChecks(matchFile, matchThreadHold, &matchRect);
 					return 0;
 				}
 			}
 			if (strcmp(argv[i], "-check") == 0) {
-				doChecks(NULL, -1);
+				doChecks(NULL, -1, &matchRect);
 				return 0;
 			} else if (strcmp(argv[i], "-screenshoot") == 0) {
 				Mat screen = LoadCCScreen();
 				imwrite("tstimgs\\full.png", screen);
+				if (matchRect.info != NULL) {
+					screen = LoadCCScreen();
+					imwrite("tstimgs\\full_r.png", loadImageRect(screen, matchRect));
+				}
 				return 0;
 			} else  if (strcmp(argv[i], "-match") == 0) {
 				match = true;
 			}
+			else if (strcmp(argv[i], "-matchRect") == 0) {
+				isMatchRect = true;
+			}
 		}
 		Mat screen = LoadCCScreen();
 		imwrite("tstimgs\\full.png", screen);
-		doChecks(NULL, -1);
+		doChecks(NULL, -1, NULL);
 	}
 	catch (const char* str) {
 		printf("ERR: %s\n", str);
