@@ -24,6 +24,7 @@ namespace ccVcontrol
                 keyboard = keyboard,
             };
 
+            var switchAccount = new SwitchAccount(context);
             var cmds = Utils.GetAppInfo();
             cmds = Utils.GetAppInfo("-name allfull -screenshoot");
             cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");
@@ -40,8 +41,15 @@ namespace ccVcontrol
                 cmds = Utils.GetAppInfo();
                 context.DoStdClicks(cmds);
 
-                new SwitchAccount(context).Process();
+                switchAccount.Process();
 
+                context.DoStdClicks(cmds);
+                cmds = Utils.GetAppInfo();
+
+                cmds = Utils.GetAppInfo($"-name full_act{switchAccount.CurAccount} -screenshoot");
+                cmds = Utils.GetAppInfo($"-name ful_r_act{switchAccount.CurAccount} -matchRect 79,32,167,22_200 -screenshoot");
+
+                continue;
                 foreach (var cmd in cmds)
                 {
                     Console.Write(".");

@@ -647,7 +647,9 @@ int main(int argc, char** argv)
 				return 0;
 			} else if (strcmp(argv[i], "-screenshoot") == 0) {
 				Mat screen = LoadCCScreen();
-				imwrite("tstimgs\\full.png", screen);
+				char tempnamebuf[512];
+				sprintf_s(tempnamebuf, "tstimgs\\full_%s.png", matchName);
+				imwrite(tempnamebuf, screen);
 				if (matchRect.info != NULL) {
 					screen = LoadCCScreen();
 					char tempnamebuf[512];

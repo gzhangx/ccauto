@@ -11,6 +11,10 @@ namespace ccVcontrol
     {
         const int ACCOUNTSPACING = 72;
         protected int account = 0;
+        public int CurAccount
+        {
+            get { return account; }
+        }
         const int MAXACCOUNT = 5;
         public SwitchAccount(ProcessingContext ctx) : base(ctx)
         {
@@ -29,7 +33,7 @@ namespace ccVcontrol
 
         public override void Process()
         {            
-            Console.WriteLine("Trying to find SINGLEMATCH for settings button");
+            Console.WriteLine($"Trying to find SINGLEMATCH for settings button account {account}");
             switchSteps.First(r => r.name == "SwitchAccount").Act = SwitchAccountAction;
             DoSteps(switchSteps);
             InitGame("Account_" + account);
