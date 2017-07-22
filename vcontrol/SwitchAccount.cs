@@ -27,7 +27,7 @@ namespace ccVcontrol
 
 
                 new StepInfo { cmd = "-match loadVillage.png 700", maxRetry = 30, name = "LoadVillage", xoff = 298, yoff = 44 },
-                new StepInfo { cmd = "-match confirm.bmp 700", maxRetry = 30, name = "ConfirmLoadVillage", xoff = 310, yoff = 22, Act= ConfirmLoadVillage },          
+                new StepInfo { cmd = "-match confirm.bmp 2000", maxRetry = 30, name = "ConfirmLoadVillage", xoff = 310, yoff = 22, Act= ConfirmLoadVillage },          
             };
         }
 
