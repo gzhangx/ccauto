@@ -25,6 +25,7 @@ namespace ccVcontrol
             };
 
             var cmds = Utils.GetAppInfo();
+            cmds = Utils.GetAppInfo("-matchRect 79,32,167,22_200 -screenshoot");
             while (true)
             {
                 context.DoStdClicks(cmds);

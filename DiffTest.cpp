@@ -620,7 +620,7 @@ int main(int argc, char** argv)
 				matchRect.rect.y = atoi(pch);
 				pch = strtok_s(NULL, ",", &nextt);
 				matchRect.rect.width = atoi(pch);
-				pch = strtok_s(NULL, ",", &nextt);
+				pch = strtok_s(NULL, ",_", &nextt);
 				matchRect.rect.height = atoi(pch);
 				pch = strtok_s(NULL, "_", &nextt);
 				matchRect.Threadshold = atoi(pch);
