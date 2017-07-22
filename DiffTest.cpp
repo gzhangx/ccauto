@@ -564,7 +564,8 @@ Mat doChecks(const char * matchFileName, int matchThreadHold, BlockInfo * matchR
 
 		ImgChecksAndTags("rearmall.png", "PRMXYCLICK_ACT_RearmAll", Point(50,40), 10),
 
-		ImgChecksAndTags("chacha_settings.png", "PRMXYCLICK_STD_CloseSettings", Point(22,22), 10),		
+		ImgChecksAndTags("chacha_settings.png", "PRMXYCLICK_STD_CloseSettings", Point(22,22), 10),
+		ImgChecksAndTags("anyoneThere.png", "PRMXYCLICK_STD_AnyoneThere", Point(63,119), 5000),
 	};
 	
 	for (int i = 0; i < itms.size(); i++) {
