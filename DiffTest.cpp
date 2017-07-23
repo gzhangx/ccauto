@@ -212,13 +212,18 @@ RecoList LoadDataInfo(const char * dir) {
 
 struct ImageDiffVal {
 public:
-	int x;
-	int y;
-	float val;
-	ImageDiffVal(int xx, int yy, float v) {
-		x = xx;
-		y = yy;
+	Point loc;
+	double val;
+	bool found = false;
+	ImageDiffVal(int xx, int yy, double v) {
+		loc.x = xx;
+		loc.y = yy;
 		val = v;
+	}
+	ImageDiffVal(Point p, double v, bool good) {
+		loc = p;
+		val = v;
+		found = good;
 	}
 	bool operator<(const ImageDiffVal &rhs) const { return val < rhs.val; }
 };
@@ -274,19 +279,7 @@ public:
 	}
 };
 
-ImageFindLoc CheckImageMatch(Mat img, char * fileName, double threadshold = 200000);
-ImageFindLoc CheckAttackedDialog(Mat img) {
-	return CheckImageMatch(img, "data\\check\\ememyattacked.png", 2000);
-	/*Mat result;
-	Mat templ = getGrayScale(imread("data\\check\\ememyattacked.png", IMREAD_COLOR));
-	Mat mask = (imread("data\\check\\ememyattacked.mask.bmp", IMREAD_GRAYSCALE));
-	matchTemplate(img, templ, result, gmatch_method, mask);
-	double minVal; double maxVal; Point minLoc; Point maxLoc;
-	Point matchLoc;
-	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
-	if (debugprint) printf("attacked dialog find min at %i %i val %f %f\n", minLoc.x, minLoc.y, minVal, maxVal);
-	return ImageFindLoc(minLoc, minVal, (minVal < 2000));*/
-}
+
 
 
 
@@ -360,7 +353,7 @@ vector<ImageRecoRes> DoReco(RecoList list, MatAndPos matAndPos, int blkNumber) {
 			cur.val /= (float)(recInfo.GetEffectiveCount()+0.001);
 			if (cur.val > VALMAX) continue;
 			//int xspace = cur.x / ImageRecoRes::xspacing;
-			ImageRecoRes xspace = ImageRecoRes(cur.x, templ.cols, recInfo.chr, cur.val);
+			ImageRecoRes xspace = ImageRecoRes(cur.loc.x, templ.cols, recInfo.chr, cur.val);
 
 			bool found = false;
 			for (vector<ImageRecoRes>::iterator it = res.begin(); it != res.end(); it++) {
@@ -370,10 +363,10 @@ vector<ImageRecoRes> DoReco(RecoList list, MatAndPos matAndPos, int blkNumber) {
 					found = true;
 					if (checkIfFirstRecoBetter(cur.val, existing.val) )
 					{												
-						if (debugprint) printf("rrtop blk%i %c at %i %i has %f trimed to %i replaced %c\n", blkNumber, recInfo.chr, cur.x, cur.y, cur.val, xspace.trimedX, it->c);
+						if (debugprint) printf("rrtop blk%i %c at %i %i has %f trimed to %i replaced %c\n", blkNumber, recInfo.chr, cur.loc.x, cur.loc.y, cur.val, xspace.trimedX, it->c);
 						it->val = cur.val;
 						it->c = recInfo.chr;
-						it->x = cur.x;
+						it->x = cur.loc.x;
 						it->width = recInfo.GetWidth();
 					}
 					//break;
@@ -381,7 +374,7 @@ vector<ImageRecoRes> DoReco(RecoList list, MatAndPos matAndPos, int blkNumber) {
 			}
 			if (!found) {
 				res.push_back(xspace);
-				if (debugprint) printf("top %c at %i %i has %f\n", recInfo.chr, cur.x, cur.y, cur.val);
+				if (debugprint) printf("top %c at %i %i has %f\n", recInfo.chr, cur.loc.x, cur.loc.y, cur.val);
 			}			
 		}
 		//namedWindow(result_windowName, WINDOW_NORMAL);
@@ -420,18 +413,20 @@ Mat LoadCCScreen() {
 	return windowToMat(L"cctest [Running] - Oracle VM VirtualBox");
 }
 
-void printCheckLocation(ImageFindLoc where, const char * who, Point move) {
-	if (where.found) {
-		printf("%s %i %i %f %s\n", who, where.loc.x + move.x, where.loc.y + move.y, where.val, where.found?"true":"false");
+void printCheckLocation(vector<ImageDiffVal> pts, const char * who, Point move) {
+	for (vector<ImageDiffVal>::iterator it = pts.begin(); it != pts.end(); it++) {
+		if (it->found) {
+			printf("%s %i %i %f %s\n", who, it->loc.x + move.x, it->loc.y + move.y, it->val, it->found ? "true" : "false");
+		}
 	}
 }
 
 
-ImageFindLoc CheckImageMatch(Mat img, char * fileName, double threadshold) {
+vector<ImageDiffVal> CheckImageMatch(Mat img, char * fileName, double threadshold, int topX) {
 	Mat result;
 	Mat templ = getGrayScale(imread(fileName, IMREAD_COLOR));
 
-	if ( (templ.cols > img.cols) || (templ.rows > img.rows)) return ImageFindLoc(Point(-1, -1), 99999999999, false);
+	if ( (templ.cols > img.cols) || (templ.rows > img.rows)) return vector<ImageDiffVal>();
 	char maskName[512];
 	strcpy_s(maskName, fileName);
 	bool foundMask = false;
@@ -455,11 +450,24 @@ ImageFindLoc CheckImageMatch(Mat img, char * fileName, double threadshold) {
 	else {
 		matchTemplate(img, templ, result, gmatch_method);
 	}
-	double minVal; double maxVal; Point minLoc; Point maxLoc;
-	Point matchLoc;
-	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
-	//printf("find min at %i %i val %f\n", minLoc.x, minLoc.y, minVal);
-	return ImageFindLoc(minLoc, minVal, minVal < threadshold);
+
+	
+
+	if (topX <= 1) {
+		vector<ImageDiffVal> res;
+		double minVal; double maxVal; Point minLoc; Point maxLoc;
+		Point matchLoc;
+		minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
+		//printf("find min at %i %i val %f\n", minLoc.x, minLoc.y, minVal);
+		res.push_back(ImageDiffVal(minLoc, minVal, minVal < threadshold));
+		return res;
+	}
+	else {
+		vector<ImageDiffVal> res = GetTopXGoodones(result, topX);
+		for (vector<ImageDiffVal>::iterator it = res.begin(); it != res.end(); it++)
+			it->found = it->val < threadshold;
+		return res;
+	}
 }
 
 
@@ -537,10 +545,10 @@ Mat doChecks(const char * matchFileName, int matchThreadHold, BlockInfo * matchR
 	if (matchFileName != NULL) {
 		strcpy_s(fname, "data\\check\\");
 		strcat_s(fname, matchFileName);
-		printCheckLocation(CheckImageMatch(img, fname, matchThreadHold), "SINGLEMATCH", Point(0,0));
+		printCheckLocation(CheckImageMatch(img, fname, matchThreadHold, 1), "SINGLEMATCH", Point(0,0));
 		return img;
 	}
-	printCheckLocation(CheckAttackedDialog(img), "PRMXYCLICK_STD_VillageAttacked", Point(345, 440));
+	printCheckLocation(CheckImageMatch(img, "data\\check\\ememyattacked.png", 2000, 1), "PRMXYCLICK_STD_VillageAttacked", Point(345, 440));
 	vector<ImgChecksAndTags> itms = {
 		ImgChecksAndTags("loadVillage.png", "PRMXYCLICK_STD_LoadingVillage", Point(298,44)),
 		ImgChecksAndTags("confirmLoadAreYouSure.png", "PRMXYCLICK_STD_ConfirmLoadVillage", Point(402, 22)),
@@ -572,7 +580,7 @@ Mat doChecks(const char * matchFileName, int matchThreadHold, BlockInfo * matchR
 		ImgChecksAndTags itm = itms[i];
 		strcpy_s(fname, "data\\check\\");
 		strcat_s(fname, itm.imageFileName);
-		printCheckLocation(CheckImageMatch(img, fname, itm.ThreadShold), itm.Tag, itm.point);
+		printCheckLocation(CheckImageMatch(img, fname, itm.ThreadShold,1), itm.Tag, itm.point);
 	}
 
 	int thd = 220;
