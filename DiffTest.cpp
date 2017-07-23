@@ -251,8 +251,8 @@ public:
 	int width;
 	int trimedX;
 	char c;
-	float val;
-	ImageRecoRes(int xx, int w, char chr, float v) {
+	double val;
+	ImageRecoRes(int xx, int w, char chr, double v) {
 		x = xx;
 		width = w;
 		trimedX = xx / xspacing;
@@ -285,7 +285,7 @@ public:
 
 
 //return true if a is better
-bool checkIfFirstRecoBetter(float a, float b) {
+bool checkIfFirstRecoBetter(double a, double b) {
 	return a < b;
 }
 
@@ -532,7 +532,7 @@ void DoRecoOnBlock(Mat img, RecoList checkList, BlockInfo blk) {
 
 RecoList topCheckList = LoadDataInfo("data\\check\\top");
 RecoList bottomCheckList = LoadDataInfo("data\\check\\bottom");
-Mat doChecks(const char * matchFileName, int matchThreadHold, BlockInfo * matchRect) {
+Mat doChecks(const char * matchFileName, int matchThreadHold, BlockInfo * matchRect, int topXMatches) {
 	Mat img = getGrayScale(LoadCCScreen());	
 	if (img.rows == 0) {
 		printf("ERR: No image");
@@ -545,7 +545,7 @@ Mat doChecks(const char * matchFileName, int matchThreadHold, BlockInfo * matchR
 	if (matchFileName != NULL) {
 		strcpy_s(fname, "data\\check\\");
 		strcat_s(fname, matchFileName);
-		printCheckLocation(CheckImageMatch(img, fname, matchThreadHold, 1), "SINGLEMATCH", Point(0,0));
+		printCheckLocation(CheckImageMatch(img, fname, matchThreadHold, topXMatches), "SINGLEMATCH", Point(0,0));
 		return img;
 	}
 	printCheckLocation(CheckImageMatch(img, "data\\check\\ememyattacked.png", 2000, 1), "PRMXYCLICK_STD_VillageAttacked", Point(345, 440));
@@ -614,6 +614,7 @@ int main(int argc, char** argv)
 
 	try {
 		bool match = 0;
+		int topX = 1;
 		char * matchFile = NULL;
 		int matchThreadHold = -1;
 		bool isMatchRect = false;
@@ -621,7 +622,9 @@ int main(int argc, char** argv)
 		char *matchName = NULL;
 		BlockInfo matchRect(Rect(),-1,NULL);
 		for (int i = 1; i < argc; i++) {
-			if (isName) {
+			if (topX == 0) {
+				topX = atoi(argv[i]);
+			} else if (isName) {
 				matchName = argv[i];
 				isName = false;
 			} else if (isMatchRect) {
@@ -646,12 +649,12 @@ int main(int argc, char** argv)
 				}
 				else {
 					matchThreadHold = atoi(argv[i]);
-					doChecks(matchFile, matchThreadHold, &matchRect);
+					doChecks(matchFile, matchThreadHold, &matchRect, topX);
 					return 0;
 				}
 			}
 			if (strcmp(argv[i], "-check") == 0) {
-				doChecks(NULL, -1, &matchRect);
+				doChecks(NULL, -1, &matchRect, topX);
 				return 0;
 			} else if (strcmp(argv[i], "-screenshoot") == 0) {
 				Mat screen = LoadCCScreen();
@@ -674,10 +677,13 @@ int main(int argc, char** argv)
 			else if (strcmp(argv[i], "-name") == 0) {
 				isName = true;
 			}
+			else if (strcmp(argv[i], "-top") == 0) {
+				topX = 0;
+			}
 		}
 		Mat screen = LoadCCScreen();
 		imwrite("tstimgs\\full.png", screen);
-		doChecks(NULL, -1, NULL);
+		doChecks(NULL, -1, NULL, topX);
 	}
 	catch (const char* str) {
 		printf("ERR: %s\n", str);
