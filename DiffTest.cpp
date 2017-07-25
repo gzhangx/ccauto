@@ -574,6 +574,9 @@ Mat doChecks(const char * matchFileName, int matchThreadHold, BlockInfo * matchR
 
 		ImgChecksAndTags("chacha_settings.png", "PRMXYCLICK_STD_CloseSettings", Point(22,22), 10),
 		ImgChecksAndTags("anyoneThere.png", "PRMXYCLICK_STD_AnyoneThere", Point(63,119), 5000),
+
+		ImgChecksAndTags("connectionError.png", "PRMXYCLICK_STD_ConnectionError", Point(53,121), 400),
+		
 	};
 	
 	for (int i = 0; i < itms.size(); i++) {
