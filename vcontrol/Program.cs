@@ -46,9 +46,10 @@ namespace ccVcontrol
                 context.DoStdClicks(cmds);
                 cmds = Utils.GetAppInfo();
 
-                cmds = Utils.GetAppInfo($"-name full_act{switchAccount.CurAccount} -screenshoot");
-                cmds = Utils.GetAppInfo($"-name ful_r_act{switchAccount.CurAccount} -matchRect 79,32,167,22_200 -screenshoot");
-
+                cmds = Utils.GetAppInfo($"-name act_full_{switchAccount.CurAccount} -screenshoot");
+                cmds = Utils.GetAppInfo($"-name act_r_{switchAccount.CurAccount} -matchRect 79,32,167,22_200 -screenshoot");
+                Console.WriteLine("press enter to countinue");
+                Console.ReadLine();
                 continue;
                 foreach (var cmd in cmds)
                 {

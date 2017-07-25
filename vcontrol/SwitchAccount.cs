@@ -22,7 +22,7 @@ namespace ccVcontrol
             {
                 new StepInfo { cmd = "-match settingsbutton.png 10", maxRetry = 2, name = "FindSettingsButton", xoff = 10, yoff = 10, delay = 1000 },
                 new StepInfo { cmd = "-match googlePlaySignIn.png 700", maxRetry = 3, name = "FindPlaySignin", xoff = 101, yoff = 63, delay = 5000 },
-                new StepInfo { cmd = "-match googlePlayDisconnected.png 700", maxRetry = 3, name = "FindPlaySigninDisconnected", xoff = 101, yoff = 63 , delay = 5000},
+                new StepInfo { cmd = "-match googlePlayDisconnected.png 1700", maxRetry = 3, name = "FindPlaySigninDisconnected", xoff = 101, yoff = 63 , delay = 5000},
                 new StepInfo { cmd = "-match accountlist.png 6000", maxRetry = 50, name = "SwitchAccount", xoff = 107, yoff = 89, Act = SwitchAccountAction , delay = 15000},
 
 
