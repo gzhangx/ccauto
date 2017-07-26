@@ -9,9 +9,11 @@ namespace ccVcontrol
 {
     public abstract class BaseProcessor
     {
+        const string imgdir = "tstimgs";
         public class StepInfo
         {
             public string name;
+            public string inputName;
             public string cmd;
             public int xoff;
             public int yoff;
@@ -37,8 +39,11 @@ namespace ccVcontrol
                 for (int i = step; i < steps.Count; i++)
                 {
                     var cur = steps[i];
-                    Console.WriteLine($"Doing step {cur.name} {cur.cmd}");
-                    var found = FindSpot(cur.cmd, 1);
+                    var fullInputPath = $"{imgdir}\\{cur.inputName}";
+                    var fullcmd = $"-input {fullInputPath} {cur.cmd}";
+                    Console.WriteLine($"Doing step {cur.name} {fullcmd}");
+                    Utils.doScreenShoot(fullInputPath);
+                    var found = FindSpot(fullcmd, 1);
                     if (found == null)
                     {
                         if (i == step) stepRetry[i]++;
@@ -97,7 +102,7 @@ namespace ccVcontrol
                 if (cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand") != null) break;
             }
             Thread.Sleep(1000);
-            Utils.GetAppInfo($"-name {name} -matchRect 79,32,167,22_200 -screenshoot");
+            //Utils.GetAppInfo($"-name {name} -matchRect 79,32,167,22_200 -screenshoot");
         }
         
         public abstract void Process();

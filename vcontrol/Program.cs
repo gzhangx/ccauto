@@ -26,8 +26,8 @@ namespace ccVcontrol
 
             var switchAccount = new SwitchAccount(context);
             var cmds = Utils.GetAppInfo();
-            cmds = Utils.GetAppInfo("-name allfull -screenshoot");
-            cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");
+            //cmds = Utils.GetAppInfo("-name allfull -screenshoot");
+            //cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");
             context.DoShift();
             while (true)
             {
@@ -46,8 +46,8 @@ namespace ccVcontrol
                 context.DoStdClicks(cmds);
                 cmds = Utils.GetAppInfo();
 
-                cmds = Utils.GetAppInfo($"-name act_full_{switchAccount.CurAccount} -screenshoot");
-                cmds = Utils.GetAppInfo($"-name act_r_{switchAccount.CurAccount} -matchRect 79,32,167,22_200 -screenshoot");
+                //cmds = Utils.GetAppInfo($"-name act_full_{switchAccount.CurAccount} -screenshoot");
+                //cmds = Utils.GetAppInfo($"-name act_r_{switchAccount.CurAccount} -matchRect 79,32,167,22_200 -screenshoot");
                 Console.WriteLine("press enter to countinue");
                 Console.ReadLine();
                 continue;
@@ -156,7 +156,7 @@ namespace ccVcontrol
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(e);
 
             }
             finally

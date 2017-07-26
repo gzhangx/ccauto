@@ -17,7 +17,9 @@ namespace ccVcontrol
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         static extern short VkKeyScanEx(char ch, IntPtr dwhkl);
 
-        const int YOFF = 21;
+        //"C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" controlvm cctest screenshotpng test.png
+        const string vboxman = "\"C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe\"";
+        const int YOFF = 0;// 21;
 
         public static void MouseMouseTo(IMouse mouse, int x, int y)
         {
@@ -85,6 +87,35 @@ namespace ccVcontrol
             }
         }
 
+        public static void doScreenShoot(string fname)
+        {
+            executeVBoxMngr("controlvm cctest screenshotpng " + fname);
+        }
+        public static string executeVBoxMngr(string arguments)
+        {
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.Arguments = arguments;
+            start.FileName = vboxman;
+            start.WorkingDirectory = "D:\\gang\\rctest";
+            // Do you want to show a console window?
+            start.WindowStyle = ProcessWindowStyle.Normal;
+            start.CreateNoWindow = true;
+            start.RedirectStandardOutput = true;
+            start.UseShellExecute = false;
+            int exitCode;
+
+
+            // Run the external process & wait for it to finish
+            using (Process proc = Process.Start(start))
+            {
+                var result = proc.StandardOutput.ReadToEnd();
+                proc.WaitForExit();
+                // Retrieve the app's exit code
+                exitCode = proc.ExitCode;
+                return result;
+            }
+        }
+
         public static string runApp(string arguments = "-check")
         {
             ProcessStartInfo start = new ProcessStartInfo();
@@ -113,31 +144,45 @@ namespace ccVcontrol
         public static List<CommandInfo> GetAppInfo(string arguments = "-check")
         {
             var res = new List<CommandInfo>();
-            foreach (var cmd in Utils.runApp(arguments).Split('\n'))
+            foreach (var cmd in Utils.runApp(arguments).Split(new char[]{ '\r','\n'}))
             {
                 if (cmd.Length < 2) continue;
-                if (cmd.StartsWith("***** VIDEOINPUT LIBRARY")) continue;
-                if (cmd.StartsWith("RecoResult_"))
+                if (cmd.StartsWith("ERR:"))
                 {
-                    int sp = cmd.IndexOf(" ");
-                    res.Add(new CommandInfo {
-                        command = cmd.Substring(0, sp),
-                        Text = cmd.Substring(sp + 1).Trim()
-                    });
+                    Console.WriteLine($"{cmd.Trim()} arg={arguments}");
                     continue;
                 }
-                var cmds = cmd.Split(' ');
-                var command = cmds[0];
-                int x = 0, y = 0;
-                decimal cmpRes = decimal.MaxValue;
-                if (cmds.Length > 2)
+                if (cmd.StartsWith("***** VIDEOINPUT LIBRARY")) continue;
+                try
                 {
-                    x = Convert.ToInt32(cmds[1]);
-                    y = Convert.ToInt32(cmds[2]);
+                    if (cmd.StartsWith("RecoResult_"))
+                    {
+                        int sp = cmd.IndexOf(" ");
+                        res.Add(new CommandInfo
+                        {
+                            command = cmd.Substring(0, sp),
+                            Text = cmd.Substring(sp + 1).Trim()
+                        });
+                        continue;
+                    }
+                    var cmds = cmd.Split(' ');
+                    var command = cmds[0];
+                    int x = 0, y = 0;
+                    decimal cmpRes = decimal.MaxValue;
+                    if (cmds.Length > 2)
+                    {
+                        x = Convert.ToInt32(cmds[1]);
+                        y = Convert.ToInt32(cmds[2]);
+                    }
+                    if (cmds.Length > 3)
+                        cmpRes = Convert.ToDecimal(cmds[3]);
+                    res.Add(new CommandInfo { command = command, cmpRes = cmpRes, x = x, y = y });
+                } catch (Exception exc)
+                {
+                    Console.WriteLine("failed " + exc.Message + " " + cmd);
+                    Console.WriteLine(exc);
+                    throw exc;
                 }
-                if (cmds.Length > 3)
-                    cmpRes = Convert.ToDecimal(cmds[3]);
-                res.Add(new CommandInfo { command = command, cmpRes = cmpRes, x = x,y=y });
                 
             }
             return res;

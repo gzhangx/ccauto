@@ -9,7 +9,7 @@ bool debug = false;
 bool debugprint = false;
 using namespace std;
 using namespace cv;
-Mat windowToMat(LPTSTR name);
+//Mat windowToMat(LPTSTR name);
 //! [declare]
 
 const char* image_windowName = "Source Image";
@@ -409,9 +409,9 @@ vector<ImageRecoRes> DoReco(RecoList list, MatAndPos matAndPos, int blkNumber) {
 	return ret;
 }
 
-Mat LoadCCScreen() {
-	return windowToMat(L"cctest [Running] - Oracle VM VirtualBox");
-}
+//Mat LoadCCScreen() {
+//	return windowToMat(L"cctest [Running] - Oracle VM VirtualBox");
+//}
 
 void printCheckLocation(vector<ImageDiffVal> pts, const char * who, Point move) {
 	for (vector<ImageDiffVal>::iterator it = pts.begin(); it != pts.end(); it++) {
@@ -532,8 +532,12 @@ void DoRecoOnBlock(Mat img, RecoList checkList, BlockInfo blk) {
 
 RecoList topCheckList = LoadDataInfo("data\\check\\top");
 RecoList bottomCheckList = LoadDataInfo("data\\check\\bottom");
-Mat doChecks(const char * matchFileName, int matchThreadHold, BlockInfo * matchRect, int topXMatches) {
-	Mat img = getGrayScale(LoadCCScreen());	
+Mat doChecks(char * inputImage, const char * matchFileName, int matchThreadHold, BlockInfo * matchRect, int topXMatches) {
+	if (inputImage == NULL) {
+		inputImage = "tstimgs\\full.png";
+		system("\"C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe\" controlvm cctest screenshotpng tstimgs\\full.png");
+	}
+	Mat img = getGrayScale(imread(inputImage, IMREAD_COLOR));
 	if (img.rows == 0) {
 		printf("ERR: No image");
 		return img;
@@ -589,9 +593,9 @@ Mat doChecks(const char * matchFileName, int matchThreadHold, BlockInfo * matchR
 	int thd = 220;
 	int PAD = 2;
 	vector<BlockInfo> chkBlocks = {
-		BlockInfo(Rect(780,  42,-1, 30), thd, "INFO_Gold"),
-		BlockInfo(Rect(780, 105,-1, 30), thd,"INFO_Elixir"),
-		BlockInfo(Rect(280, 605, -1,45 + PAD), thd, "INFO_Bottom")
+		BlockInfo(Rect(780,  21,-1, 30), thd, "INFO_Gold"),
+		BlockInfo(Rect(780, 84,-1, 30), thd,"INFO_Elixir"),
+		BlockInfo(Rect(280, 584, -1,45 + PAD), thd, "INFO_Bottom")
 	};
 
 	for (vector<BlockInfo>::iterator it = chkBlocks.begin(); it != chkBlocks.end(); it++) {
@@ -623,8 +627,14 @@ int main(int argc, char** argv)
 		bool isMatchRect = false;
 		bool isName = false;
 		char *matchName = NULL;
+		char *inputImage = NULL;
+		bool isInputImage = false;
 		BlockInfo matchRect(Rect(),-1,NULL);
 		for (int i = 1; i < argc; i++) {
+			if (isInputImage) {
+				inputImage = argv[i];
+				isInputImage = false;
+			}else
 			if (topX == 0) {
 				topX = atoi(argv[i]);
 			} else if (isName) {
@@ -652,20 +662,22 @@ int main(int argc, char** argv)
 				}
 				else {
 					matchThreadHold = atoi(argv[i]);
-					doChecks(matchFile, matchThreadHold, &matchRect, topX);
+					if (inputImage == NULL) throw "input not specified";
+					doChecks(inputImage, matchFile, matchThreadHold, &matchRect, topX);
 					return 0;
 				}
 			}
 			if (strcmp(argv[i], "-check") == 0) {
-				doChecks(NULL, -1, &matchRect, topX);
+				//if (inputImage == NULL) throw "input not specified";
+				doChecks(inputImage, NULL, -1, &matchRect, topX);
 				return 0;
 			} else if (strcmp(argv[i], "-screenshoot") == 0) {
-				Mat screen = LoadCCScreen();
+				//Mat screen = LoadCCScreen();
 				char tempnamebuf[512];
-				sprintf_s(tempnamebuf, "tstimgs\\full_%s.png", matchName);
-				imwrite(tempnamebuf, screen);
+				//sprintf_s(tempnamebuf, "tstimgs\\full_%s.png", matchName);
+				//imwrite(tempnamebuf, screen);
 				if (matchRect.info != NULL) {
-					screen = LoadCCScreen();
+					Mat screen = imread(inputImage, IMREAD_COLOR);
 					char tempnamebuf[512];
 					sprintf_s(tempnamebuf, "tstimgs\\full_%s.png", matchName);
 					imwrite(tempnamebuf, loadImageRect(getGrayScale(screen), matchRect));
@@ -683,10 +695,13 @@ int main(int argc, char** argv)
 			else if (strcmp(argv[i], "-top") == 0) {
 				topX = 0;
 			}
+			else if (strcmp(argv[i], "-input") == 0) {
+				isInputImage = true; //input picture
+			}
 		}
-		Mat screen = LoadCCScreen();
-		imwrite("tstimgs\\full.png", screen);
-		doChecks(NULL, -1, NULL, topX);
+		//Mat screen = LoadCCScreen();
+		//imwrite("tstimgs\\full.png", screen);
+		//doChecks(NULL, -1, NULL, topX);
 	}
 	catch (const char* str) {
 		printf("ERR: %s\n", str);
