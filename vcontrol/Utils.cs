@@ -97,7 +97,7 @@ namespace ccVcontrol
             ProcessStartInfo start = new ProcessStartInfo();
             start.Arguments = arguments;
             start.FileName = vboxman;
-            start.WorkingDirectory = "D:\\gang\\rctest";
+            start.WorkingDirectory = curDir;
             // Do you want to show a console window?
             start.WindowStyle = ProcessWindowStyle.Normal;
             start.CreateNoWindow = true;
