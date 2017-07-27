@@ -73,18 +73,19 @@ namespace ccVcontrol
         public static void SendString(IKeyboard keyboard, string str)
         {
             var codes = new short[str.Length];
-            Console.WriteLine("writiting");
+            Console.Write("writiting ");
             Thread.Sleep(1000);
             //keyboard.PutScancode(0x2A); //shift
             for (int i = 0; i < str.Length; i++)
             {
                 codes[i] = (short)GetScanCode(str[i]);
-                Console.WriteLine("code for " + str[i] + " is " + codes[i].ToString("X"));
+                Console.Write(str[i]);
                 keyboard.PutScancode((int)codes[i]);
                 Thread.Sleep(200);
                 keyboard.PutScancode((int)codes[i] | 0x80);
                 Thread.Sleep(300);
             }
+            Console.WriteLine();
         }
 
         public static void doScreenShoot(string fname)
