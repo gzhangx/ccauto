@@ -672,17 +672,20 @@ int main(int argc, char** argv)
 				//if (inputImage == NULL) throw "input not specified";
 				doChecks(inputImage, NULL, -1, &matchRect, topX);
 				return 0;
-			} else if (strcmp(argv[i], "-screenshoot") == 0) {
-				//Mat screen = LoadCCScreen();
-				char tempnamebuf[512];
-				//sprintf_s(tempnamebuf, "tstimgs\\full_%s.png", matchName);
-				//imwrite(tempnamebuf, screen);
-				if (matchRect.info != NULL) {
-					Mat screen = imread(inputImage, IMREAD_COLOR);
-					char tempnamebuf[512];
-					sprintf_s(tempnamebuf, "tstimgs\\full_%s.png", matchName);
-					imwrite(tempnamebuf, loadImageRect(getGrayScale(screen), matchRect));
+			} else if (strcmp(argv[i], "-imagecorp") == 0) {
+				if (inputImage == NULL) {
+					printf("ERR: -input not specified");
+					return -1;
 				}
+				if (matchRect.info == NULL) {
+					printf("ERR: -match rect not specified");
+					return -1;
+				}
+				
+				Mat screen = imread(inputImage, IMREAD_COLOR);					
+				printf("Writting image to %s\n", matchName);
+				imwrite(matchName, loadImageRect(getGrayScale(screen), matchRect));
+				
 				return 0;
 			} else  if (strcmp(argv[i], "-match") == 0) {
 				match = true;
