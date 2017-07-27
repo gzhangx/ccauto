@@ -41,7 +41,7 @@ namespace ccVcontrol
                     var cur = steps[i];
                     var fullInputPath = $"{imgdir}\\{cur.inputName}";
                     var fullcmd = $"-input {fullInputPath} {cur.cmd}";
-                    Console.WriteLine($"Doing step {cur.name} {fullcmd}");
+                    context.DebugLog($"Doing step {cur.name} {fullcmd}");
                     Utils.doScreenShoot(fullInputPath);
                     var found = FindSpot(fullcmd, 1);
                     if (found == null)
@@ -67,7 +67,7 @@ namespace ccVcontrol
                     var cur = steps[i];
                     if (stepRetry[i] > cur.maxRetry)
                     {
-                        Console.WriteLine($"Doing Timeout step {cur.name} {cur.cmd} {stepRetry[i]}/{cur.maxRetry}");
+                        context.DebugLog($"Doing Timeout step {cur.name} {cur.cmd} {stepRetry[i]}/{cur.maxRetry}");
                         return step;
                     }
                 }
@@ -79,12 +79,12 @@ namespace ccVcontrol
         {
             for (int retryi = 0; retryi < retry; retryi++)
             {
-                Console.WriteLine("Trying to find SINGLEMATCH for " + name);
+                context.DebugLog("Trying to find SINGLEMATCH for " + name);
                 var cmds = Utils.GetAppInfo(name);
                 var found = cmds.FirstOrDefault(cmd => cmd.command == "SINGLEMATCH");
                 if (found != null)
                 {
-                    Console.WriteLine($"matching {name} found {found.cmpRes}");
+                    context.InfoLog($"matching {name} found {found.cmpRes}");
                     return found;
                 }
                 Thread.Sleep(1000);

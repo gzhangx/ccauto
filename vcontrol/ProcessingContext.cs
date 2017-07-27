@@ -17,6 +17,14 @@ namespace ccVcontrol
             Utils.SendString(keyboard, str);
         }
 
+        public void DebugLog(string str)
+        {
+            Console.WriteLine(" " + str);
+        }
+        public void InfoLog(string str)
+        {
+            Console.WriteLine("=>" + str);
+        }
         public int DoStdClicks(List<CommandInfo> clicks)
         {
             int count = 0;

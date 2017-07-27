@@ -34,7 +34,7 @@ namespace ccVcontrol
             for (int i = 0; i < 2; i++)
             {
                 Thread.Sleep(2000);
-                Console.WriteLine("DEBUGPRINTINFO trying to find donation button");
+                context.DebugLog("DEBUGPRINTINFO trying to find donation button");
                 var results = Utils.GetAppInfo();
 
                 var donationFormat = results.FirstOrDefault(r=>r.command == "INFO_DonateButtonFound");
@@ -51,7 +51,7 @@ namespace ccVcontrol
                 found = false;                
                 for (int i = 0; i < 5; i++)
                 {                                        
-                    Console.WriteLine("DEBUGPRINTINFO trying to find archier or wizard for donation");
+                    context.DebugLog("DEBUGPRINTINFO trying to find archier or wizard for donation");
                     Thread.Sleep(2000);
                     var results = Utils.GetAppInfo();
                     foreach (var donationName in new String[] { "INFO_DonateWizard", "INFO_DonateArchier" }) {
