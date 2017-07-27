@@ -553,7 +553,8 @@ Mat doChecks(char * inputImage, const char * matchFileName, int matchThreadHold,
 		return img;
 	}
 	printCheckLocation(CheckImageMatch(img, "data\\check\\ememyattacked.png", 2000, 1), "PRMXYCLICK_STD_VillageAttacked", Point(345, 440));
-	vector<ImgChecksAndTags> itms = {
+	vector<ImgChecksAndTags> itms = {		
+		ImgChecksAndTags("ccNotResponding.png", "PRMXYCLICK_STD_ccNotResponding", Point(375,101)),
 		ImgChecksAndTags("loadVillage.png", "PRMXYCLICK_STD_LoadingVillage", Point(298,44)),
 		ImgChecksAndTags("confirmLoadAreYouSure.png", "PRMXYCLICK_STD_ConfirmLoadVillage", Point(402, 22)),
 		ImgChecksAndTags("confirmready.png", "PRMXYCLICK_STD_ConfirmLoadVillageReady", Point(310, 22)),
