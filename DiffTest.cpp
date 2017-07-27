@@ -422,7 +422,7 @@ void printCheckLocation(vector<ImageDiffVal> pts, const char * who, Point move) 
 }
 
 
-vector<ImageDiffVal> CheckImageMatch(Mat img, char * fileName, double threadshold, int topX) {
+vector<ImageDiffVal> CheckImageMatch(Mat img, const char * fileName, double threadshold, int topX) {
 	Mat result;
 	Mat templ = getGrayScale(imread(fileName, IMREAD_COLOR));
 
@@ -547,9 +547,9 @@ Mat doChecks(char * inputImage, const char * matchFileName, int matchThreadHold,
 	}
 	char fname[512];
 	if (matchFileName != NULL) {
-		strcpy_s(fname, "data\\check\\");
-		strcat_s(fname, matchFileName);
-		printCheckLocation(CheckImageMatch(img, fname, matchThreadHold, topXMatches), "SINGLEMATCH", Point(0,0));
+		//strcpy_s(fname, "data\\check\\");
+		//strcat_s(fname, matchFileName);
+		printCheckLocation(CheckImageMatch(img, matchFileName, matchThreadHold, topXMatches), "SINGLEMATCH", Point(0,0));
 		return img;
 	}
 	printCheckLocation(CheckImageMatch(img, "data\\check\\ememyattacked.png", 2000, 1), "PRMXYCLICK_STD_VillageAttacked", Point(345, 440));
