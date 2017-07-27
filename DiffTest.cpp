@@ -665,7 +665,7 @@ int main(int argc, char** argv)
 					matchThreadHold = atoi(argv[i]);
 					if (inputImage == NULL) throw "input not specified";
 					doChecks(inputImage, matchFile, matchThreadHold, &matchRect, topX);
-					return 0;
+					if (argc == i + 1) return 0;
 				}
 			}
 			if (strcmp(argv[i], "-check") == 0) {
