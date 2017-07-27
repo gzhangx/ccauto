@@ -90,7 +90,7 @@ namespace ccVcontrol
         
 
         static void Main(string[] args)
-        {
+        {            
             Utils.executeVBoxMngr("startvm cctest");
             var vbox = new VirtualBox.VirtualBox();
             VirtualBox.IMachine machine = vbox.FindMachine("cctest");

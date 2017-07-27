@@ -117,12 +117,13 @@ namespace ccVcontrol
             }
         }
 
+        static string curDir = System.IO.Directory.GetCurrentDirectory();
         public static string runApp(string arguments = "-check")
-        {
+        {            
             ProcessStartInfo start = new ProcessStartInfo();
             start.Arguments = arguments;
-            start.FileName = "D:\\gang\\rctest\\x64\\Debug\\temptest.exe";
-            start.WorkingDirectory = "D:\\gang\\rctest";
+            start.FileName = curDir + "\\x64\\Debug\\temptest.exe";
+            start.WorkingDirectory = curDir;
             // Do you want to show a console window?
             start.WindowStyle = ProcessWindowStyle.Normal;
             start.CreateNoWindow = true;
