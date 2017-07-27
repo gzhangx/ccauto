@@ -154,7 +154,7 @@ namespace ccVcontrol
                     Console.WriteLine($"{cmd.Trim()} arg={arguments}");
                     continue;
                 }
-                if (cmd.StartsWith("***** VIDEOINPUT LIBRARY")) continue;
+                if (cmd.StartsWith("*")) continue;
                 try
                 {
                     if (cmd.StartsWith("RecoResult_"))

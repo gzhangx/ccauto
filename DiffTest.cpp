@@ -683,7 +683,7 @@ int main(int argc, char** argv)
 				}
 				
 				Mat screen = imread(inputImage, IMREAD_COLOR);					
-				printf("Writting image to %s\n", matchName);
+				printf("**Writting image to %s\n", matchName);
 				imwrite(matchName, loadImageRect(getGrayScale(screen), matchRect));
 				
 				return 0;

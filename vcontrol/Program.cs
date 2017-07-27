@@ -87,10 +87,18 @@ namespace ccVcontrol
             new ProcessorDonation(context).ProcessDonate(cmd);
         }
 
-        
 
+        static void TestAccounts()
+        {
+            for (int i = 1; i <= 4; i++)
+            {
+                //80,30 122,27
+                Utils.GetAppInfo($"-name data\\accounts\\img_act{i}.png -input tstimgs\\full_act_full_{i}.png -matchRect 80,30,122,27_200 -imagecorp");
+            }
+        }
         static void Main(string[] args)
-        {            
+        {
+            TestAccounts();return;
             Utils.executeVBoxMngr("startvm cctest");
             var vbox = new VirtualBox.VirtualBox();
             VirtualBox.IMachine machine = vbox.FindMachine("cctest");
