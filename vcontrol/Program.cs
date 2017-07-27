@@ -92,8 +92,8 @@ namespace ccVcontrol
         {
             for (int i = 1; i <= 4; i++)
             {
-                //80,30 122,27
-                Utils.GetAppInfo($"-name data\\accounts\\img_act{i}.png -input tstimgs\\full_act_full_{i}.png -matchRect 80,30,122,27_200 -imagecorp");
+                //generate mask
+                //Utils.GetAppInfo($"-name data\\accounts\\img_act{i}.png -input tstimgs\\full_act_full_{i}.png -matchRect 80,30,100,27_200 -imagecorp");
             }
         }
         static void Main(string[] args)
