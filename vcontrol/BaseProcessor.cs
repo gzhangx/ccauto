@@ -40,7 +40,7 @@ namespace ccVcontrol
                 {
                     var cur = steps[i];
                     var fullInputPath = $"{imgdir}\\{cur.inputName}";
-                    var fullcmd = $"-input {fullInputPath} {cur.cmd}";
+                    var fullcmd = $"-input {fullInputPath} {cur.cmd.Replace("-match ", "-match data\\check\\")}";
                     context.DebugLog($"Doing step {cur.name} {fullcmd}");
                     Utils.doScreenShoot(fullInputPath);
                     var found = FindSpot(fullcmd, 1);
