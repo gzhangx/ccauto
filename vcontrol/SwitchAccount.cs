@@ -47,7 +47,6 @@ namespace ccVcontrol
             context.MouseMouseTo(0, 0);
 
             account++;
-            if (account >= MAXACCOUNT) account = 0;
         }
 
         private void ConfirmLoadVillage(CommandInfo found, StepInfo cur, StepContext stepContext)
