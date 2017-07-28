@@ -413,10 +413,10 @@ vector<ImageRecoRes> DoReco(RecoList list, MatAndPos matAndPos, int blkNumber) {
 //	return windowToMat(L"cctest [Running] - Oracle VM VirtualBox");
 //}
 
-void printCheckLocation(vector<ImageDiffVal> pts, const char * who, Point move) {
+void printCheckLocation(vector<ImageDiffVal> pts, const char * who, Point move, const char* ctxName) {
 	for (vector<ImageDiffVal>::iterator it = pts.begin(); it != pts.end(); it++) {
 		if (it->found) {
-			printf("%s %i %i %f %s\n", who, it->loc.x + move.x, it->loc.y + move.y, it->val, it->found ? "true" : "false");
+			printf("%s %i %i %f %s %s\n", who, it->loc.x + move.x, it->loc.y + move.y, it->val, it->found ? "true" : "false", ctxName);
 		}
 	}
 }
@@ -549,7 +549,9 @@ Mat doChecks(char * inputImage, const char * matchFileName, int matchThreadHold,
 	if (matchFileName != NULL) {
 		//strcpy_s(fname, "data\\check\\");
 		//strcat_s(fname, matchFileName);
-		printCheckLocation(CheckImageMatch(img, matchFileName, matchThreadHold, topXMatches), "SINGLEMATCH", Point(0,0));
+		char * ctxName = "";
+		if (matchRect != NULL) ctxName = matchRect->info;
+		printCheckLocation(CheckImageMatch(img, matchFileName, matchThreadHold, topXMatches), "SINGLEMATCH", Point(0,0), ctxName);
 		return img;
 	}
 	printCheckLocation(CheckImageMatch(img, "data\\check\\ememyattacked.png", 2000, 1), "PRMXYCLICK_STD_VillageAttacked", Point(345, 440));
@@ -662,6 +664,7 @@ int main(int argc, char** argv)
 					matchFile = argv[i];
 				}
 				else {
+					match = false;
 					matchThreadHold = atoi(argv[i]);
 					if (inputImage == NULL) throw "input not specified";
 					doChecks(inputImage, matchFile, matchThreadHold, &matchRect, topX);
@@ -671,7 +674,6 @@ int main(int argc, char** argv)
 			if (strcmp(argv[i], "-check") == 0) {
 				//if (inputImage == NULL) throw "input not specified";
 				doChecks(inputImage, NULL, -1, &matchRect, topX);
-				return 0;
 			} else if (strcmp(argv[i], "-imagecorp") == 0) {
 				if (inputImage == NULL) {
 					printf("ERR: -input not specified");
@@ -684,9 +686,7 @@ int main(int argc, char** argv)
 				
 				Mat screen = imread(inputImage, IMREAD_COLOR);					
 				printf("**Writting image to %s\n", matchName);
-				imwrite(matchName, loadImageRect(getGrayScale(screen), matchRect));
-				
-				return 0;
+				imwrite(matchName, loadImageRect(getGrayScale(screen), matchRect));				
 			} else  if (strcmp(argv[i], "-match") == 0) {
 				match = true;
 			}
