@@ -13,9 +13,7 @@ namespace ccVcontrol
     
     
     class Program
-    {
-        const string acctNameMatchRect = SwitchAccount.acctNameMatchRect;
-
+    {        
         static void checkLoop(IMouse mouse, IKeyboard keyboard)
         {
             ProcessingContext context = new ProcessingContext
@@ -55,7 +53,7 @@ namespace ccVcontrol
         {
             var fullImg = $"tstimgs\\accountFull_{who}.png";
             Utils.doScreenShoot(fullImg);
-            Utils.GetAppInfo($"-name data\\accounts\\img_act{who}.png -input {fullImg} {acctNameMatchRect} -imagecorp");
+            Utils.GetAppInfo($"-name data\\accounts\\img_act{who}.png -input {fullImg} {SwitchAccount.acctNameMatchRect} -imagecorp");
         }
 
         private static bool ProcessCommand(ProcessingContext context, CommandInfo cmd)
@@ -93,7 +91,7 @@ namespace ccVcontrol
             {
                 //generate mask
                 //Utils.GetAppInfo($"-name data\\accounts\\img_act{i}.png -input tstimgs\\full_act_full_{i}.png -matchRect 80,30,100,27_200 -imagecorp");
-                var res = Utils.GetAppInfo($"-name cmpact{i} -input tstimgs\\accountFull_1.png {acctNameMatchRect} -match data\\accounts\\img_act{i}.png 10000");
+                var res = Utils.GetAppInfo($"-name cmpact{i} -input tstimgs\\accountFull_1.png {SwitchAccount.acctNameMatchRect} -match data\\accounts\\img_act{i}.png 10000");
                 foreach (var r in res)
                 {
                     Console.WriteLine(r);
@@ -102,9 +100,9 @@ namespace ccVcontrol
         }
         static void Main(string[] args)
         {
-            SwitchAccount.CheckAccount("tstimgs\\accountFull_1.png");
+            SwitchAccount.CheckAccount();
             //TestAccounts();
-            return;
+            //return;
             Console.WriteLine("Starting vm");
             Utils.executeVBoxMngr("startvm cctest");
             Console.WriteLine("VmStarted, allocate machine");

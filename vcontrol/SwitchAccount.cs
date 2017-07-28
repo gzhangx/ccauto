@@ -9,7 +9,10 @@ namespace ccVcontrol
 {
     public class SwitchAccount : BaseProcessor
     {
-        public const string acctNameMatchRect = "-matchRect 80,10,100,27_200";
+        public const string acctNameRect = "100,27";
+        public const string acctNameCorpRect = "101,28";
+        public static string acctNameMatchRect = $"-matchRect 80,10,{acctNameCorpRect}_200";
+        static string acctNameCorpMatchRect = $"-matchRect 0,0,{acctNameCorpRect}_200";
         const int ACCOUNTSPACING = 72;
         const string accoungImagDir = "data\\accounts\\";
         protected int account = 0;
@@ -33,19 +36,27 @@ namespace ccVcontrol
             };
         }
 
-        public static int CheckAccount(string screenName)
+        public static int CheckAccount()
+        {
+            const string tempName = "tstimgs\\tempFullScreen.png";            
+            Utils.doScreenShoot(tempName);
+            const string tempPartName = "tstimgs\\tempName.png";
+            Utils.GetAppInfo($"-name {tempPartName} -input {tempName} {acctNameMatchRect} -imagecorp");            
+            return CheckAccountWithImage(tempPartName);
+        }
+        public static int CheckAccountWithImage(string screenName)
         {
             var actImgNameStart = accoungImagDir + "img_act";
             var files = System.IO.Directory.GetFiles(accoungImagDir).Where(f=>f.StartsWith(actImgNameStart));
             MAXACCOUNT = files.Count();
             CommandInfo good = null;
             StringBuilder sb = new StringBuilder();
-            sb.Append($" -input {screenName} ").Append(acctNameMatchRect);
+            sb.Append($" -input {screenName} ").Append(acctNameCorpMatchRect);
             foreach (var f in files)
             {
                 var actname = f.Substring(actImgNameStart.Length);
                 actname = actname.Substring(0, actname.IndexOf("."));
-                sb.Append($" -name {actname} -match {f} 10000");                
+                sb.Append($" -name {actname} -match {f} 2560600");                
             }
             var res = Utils.GetAppInfo(sb.ToString());
             foreach (var r in res)
@@ -65,7 +76,8 @@ namespace ccVcontrol
         }
 
         public override void Process()
-        {            
+        {
+            account = CheckAccount();
             Console.WriteLine($"Trying to find SINGLEMATCH for settings button account {account}");
             switchSteps.First(r => r.name == "SwitchAccount").Act = SwitchAccountAction;
             DoSteps(switchSteps);
