@@ -179,7 +179,13 @@ namespace ccVcontrol
                     }
                     if (cmds.Length > 3)
                         cmpRes = Convert.ToDecimal(cmds[3]);
-                    res.Add(new CommandInfo { command = command, cmpRes = cmpRes, x = x, y = y });
+                    string decision = null;
+                    if (cmds.Length > 4)
+                        decision = cmds[4];
+                    string extraInfo = null;
+                    if (cmds.Length > 5)
+                        extraInfo = cmds[5];
+                    res.Add(new CommandInfo { command = command, cmpRes = cmpRes, x = x, y = y, decision = decision, extraInfo = extraInfo });
                 } catch (Exception exc)
                 {
                     Console.WriteLine("failed " + exc.Message + " " + cmd);

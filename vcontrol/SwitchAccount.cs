@@ -9,13 +9,15 @@ namespace ccVcontrol
 {
     public class SwitchAccount : BaseProcessor
     {
+        public const string acctNameMatchRect = "-matchRect 80,10,100,27_200";
         const int ACCOUNTSPACING = 72;
+        const string accoungImagDir = "data\\accounts\\";
         protected int account = 0;
         public int CurAccount
         {
             get { return account; }
         }
-        const int MAXACCOUNT = 6;
+        static int MAXACCOUNT = 6;
         public SwitchAccount(ProcessingContext ctx) : base(ctx)
         {
             switchSteps = new List<StepInfo>
@@ -29,6 +31,29 @@ namespace ccVcontrol
                 new StepInfo { inputName= "chk_act_5ldv.png", cmd = "-match loadVillage.png 700", maxRetry = 30, name = "LoadVillage", xoff = 298, yoff = 44 },
                 new StepInfo { inputName= "chk_act_6cnf.png", cmd = "-match confirm.bmp 5000", maxRetry = 30, name = "ConfirmLoadVillage", xoff = 310, yoff = 22, Act= ConfirmLoadVillage },          
             };
+        }
+
+        public static void CheckAccount()
+        {
+            var files = System.IO.Directory.GetFiles(accoungImagDir).Where(f=>f.StartsWith(accoungImagDir+ "img_act"));
+            MAXACCOUNT = files.Count();
+            CommandInfo good = null;
+            foreach (var f in files)
+            {
+                var res = Utils.GetAppInfo($"-name cmpacttest -input tstimgs\\accountFull_1.png {acctNameMatchRect} -match {f} 10000");
+                foreach (var r in res)
+                {
+                    if (good == null) good = r;
+                    if (r.command == "SINGLEMATCH")
+                    {
+                        if (r.decision == "true")
+                        {
+                            if (r.cmpRes < good.cmpRes) good = r;
+                        }
+                    }
+                    Console.WriteLine(r);
+                }
+            }
         }
 
         public override void Process()
