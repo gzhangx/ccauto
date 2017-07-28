@@ -55,7 +55,7 @@ namespace ccVcontrol
         {
             var fullImg = $"tstimgs\\accountFull_{who}.png";
             Utils.doScreenShoot(fullImg);
-            Utils.GetAppInfo($"-name data\\accounts\\img_act{who}.png -input {fullImg} -matchRect 80,30,100,27_200 -imagecorp");
+            Utils.GetAppInfo($"-name data\\accounts\\img_act{who}.png -input {fullImg} -matchRect 80,10,100,27_200 -imagecorp");
         }
 
         private static bool ProcessCommand(ProcessingContext context, CommandInfo cmd)

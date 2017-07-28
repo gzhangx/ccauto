@@ -53,8 +53,9 @@ namespace ccVcontrol
         {
             Thread.Sleep(100);
             mouse.PutMouseEvent(0, 0, 0, 0, 1);
-            Thread.Sleep(100);
+            Thread.Sleep(200);
             mouse.PutMouseEvent(0, 0, 0, 0, 0);
+            Thread.Sleep(100);
         }
 
         public static void MoveMouseAndClick(IMouse mouse, int x, int y)
