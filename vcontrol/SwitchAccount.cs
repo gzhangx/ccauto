@@ -15,7 +15,7 @@ namespace ccVcontrol
         {
             get { return account; }
         }
-        const int MAXACCOUNT = 5;
+        const int MAXACCOUNT = 6;
         public SwitchAccount(ProcessingContext ctx) : base(ctx)
         {
             switchSteps = new List<StepInfo>

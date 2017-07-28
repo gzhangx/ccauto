@@ -66,5 +66,21 @@ namespace ccVcontrol
             Thread.Sleep(100);
         }
 
+
+        public List<CommandInfo> GetToEntrance()
+        {
+            while (true)
+            {
+                var cmds = Utils.GetAppInfo();
+                DebugLog("MainLoop CheckEntrance");
+                DoStdClicks(cmds);
+                DebugLog("MainLoop, CheckEntrance.getAppInfo");
+                if (cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand") != null)
+                {
+                    DebugLog("MainLoop, CheckEntrance.FoundLoaded");
+                    return cmds;
+                }
+            }
+        }
     }
 }

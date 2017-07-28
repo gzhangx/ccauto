@@ -25,21 +25,17 @@ namespace ccVcontrol
             };
 
             var switchAccount = new SwitchAccount(context);
+            context.DebugLog("Getting app info");
             var cmds = Utils.GetAppInfo();
             //cmds = Utils.GetAppInfo("-name allfull -screenshoot");
             //cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");
-            context.DoShift();
-            while (true)
-            {
-                context.DoStdClicks(cmds);
-                cmds = Utils.GetAppInfo();
-                if (cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand") != null) break;                
-            }            
+            context.DebugLog("Do shift");
+            context.DoShift();            
             
             while (true)
             {
-                cmds = Utils.GetAppInfo();
-                context.DoStdClicks(cmds);
+                //cmds = Utils.GetAppInfo();
+                cmds = context.GetToEntrance();
 
                 switchAccount.Process();
 
@@ -104,20 +100,24 @@ namespace ccVcontrol
         }
         static void Main(string[] args)
         {
-            TestAccounts();return;
+            //TestAccounts();return;
+            Console.WriteLine("Starting vm");
             Utils.executeVBoxMngr("startvm cctest");
+            Console.WriteLine("VmStarted, allocate machine");
             var vbox = new VirtualBox.VirtualBox();
             VirtualBox.IMachine machine = vbox.FindMachine("cctest");
             VirtualBoxClient vboxclient = new VirtualBoxClient();
             var session = vboxclient.Session;            
             try
             {
+                Console.WriteLine("found machine, lock machine");
                 machine.LockMachine(session, LockType.LockType_Shared);
                 var console = session.Console;
                 IEventSource es = console.EventSource;
                 var listener = es.CreateListener();
                 Array listenTYpes = new VBoxEventType[] { VBoxEventType.VBoxEventType_InputEvent };
                 es.RegisterListener(listener, listenTYpes, 0);
+                Console.WriteLine("locked machine, entry try");
                 try
                 {
                     //session.Console.Display.SetSeamlessMode(1);
@@ -137,6 +137,7 @@ namespace ccVcontrol
                     //MouseClick(mouse);
                     //MouseMouseTo(mouse, 360, 156);
                     //MouseClick(mouse);
+                    Console.WriteLine("main loop");
                     checkLoop(mouse, keyboard);
                     
 
