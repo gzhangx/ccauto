@@ -641,6 +641,7 @@ int main(int argc, char** argv)
 				topX = atoi(argv[i]);
 			} else if (isName) {
 				matchName = argv[i];
+				if (matchRect.info != NULL) matchRect.info = matchName;
 				isName = false;
 			} else if (isMatchRect) {
 				char tmpmbuf[512];
@@ -667,6 +668,7 @@ int main(int argc, char** argv)
 					matchThreadHold = atoi(argv[i]);
 					if (inputImage == NULL) throw "input not specified";
 					doChecks(inputImage, matchFile, matchThreadHold, &matchRect, topX);
+					matchFile = NULL;
 					if (argc == i + 1) return 0;
 				}
 			}
