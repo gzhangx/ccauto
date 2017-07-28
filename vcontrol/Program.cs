@@ -42,22 +42,20 @@ namespace ccVcontrol
                 context.DoStdClicks(cmds);
                 cmds = Utils.GetAppInfo();
 
-                //cmds = Utils.GetAppInfo($"-name act_full_{switchAccount.CurAccount} -screenshoot");
-                //cmds = Utils.GetAppInfo($"-name act_r_{switchAccount.CurAccount} -matchRect 79,32,167,22_200 -screenshoot");
+                Thread.Sleep(100);
+
+                GenerateAccountPics(switchAccount.CurAccount);
                 Console.WriteLine("press enter to countinue");
                 Console.ReadLine();
-                continue;
-                foreach (var cmd in cmds)
-                {
-                    Console.Write(".");
-                    if (cmd.command.Contains("CheckJustBootedUp"))
-                    {
-                        context.DoShift();
-                    }
-                    ProcessCommand(context, cmd);
-                }
-                Thread.Sleep(100);
+                
             }
+        }
+
+        private static void GenerateAccountPics(int who)
+        {
+            var fullImg = $"tstimgs\\accountFull_{who}.png";
+            Utils.doScreenShoot(fullImg);
+            Utils.GetAppInfo($"-name data\\accounts\\img_act{who}.png -input {fullImg} -matchRect 80,30,100,27_200 -imagecorp");
         }
 
         private static bool ProcessCommand(ProcessingContext context, CommandInfo cmd)

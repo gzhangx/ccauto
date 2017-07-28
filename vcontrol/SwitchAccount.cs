@@ -39,7 +39,7 @@ namespace ccVcontrol
             InitGame("Account_" + account);
         }
 
-        private void SwitchAccountAction(CommandInfo found, StepInfo cur)
+        private void SwitchAccountAction(CommandInfo found, StepInfo cur, StepContext stepContext)
         {
             if (account >= MAXACCOUNT) account = 0;
 
@@ -50,7 +50,7 @@ namespace ccVcontrol
             if (account >= MAXACCOUNT) account = 0;
         }
 
-        private void ConfirmLoadVillage(CommandInfo found, StepInfo cur)
+        private void ConfirmLoadVillage(CommandInfo found, StepInfo cur, StepContext stepContext)
         {
             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff);
             context.mouse.PutMouseEvent(-200, 0, 0, 0, 0);

@@ -20,7 +20,16 @@ namespace ccVcontrol
             public int delay = 100;
             public int maxRetry = 10; //10s
 
-            public Action<CommandInfo, StepInfo> Act;
+            public Action<CommandInfo, StepInfo, StepContext> Act;
+        }
+
+        public class StepContext
+        {
+            public int step;
+            public int[] stepRetry;
+            public bool finished = false;
+            public bool failed = false;
+            public bool finishedGood = false;
         }
 
         protected ProcessingContext context;
@@ -30,13 +39,17 @@ namespace ccVcontrol
         }
 
 
-        public int DoSteps(List<StepInfo> steps)
+        public StepContext DoSteps(List<StepInfo> steps)
         {
-            int step = 0;
-            var stepRetry = new int[steps.Count];
+            var stepCtx = new StepContext
+            {
+                step = 0,
+                stepRetry = new int[steps.Count]
+            };
+            
             while (true)
             {
-                for (int i = step; i < steps.Count; i++)
+                for (int i = stepCtx.step; i < steps.Count; i++)
                 {
                     var cur = steps[i];
                     var fullInputPath = $"{imgdir}\\{cur.inputName}";
@@ -46,13 +59,16 @@ namespace ccVcontrol
                     var found = FindSpot(fullcmd, 1);
                     if (found == null)
                     {
-                        if (i == step) stepRetry[i]++;
+                        if (i == stepCtx.step) stepCtx.stepRetry[i]++;
                     }
                     else
                     {
-                        step = i + 1;
+                        stepCtx.step = i + 1;
                         if (cur.Act != null)
-                            cur.Act(found, cur);
+                        {
+                            cur.Act(found, cur, stepCtx);
+                            if (stepCtx.finished) break;
+                        }
                         else
                         {
                             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff);
@@ -61,18 +77,18 @@ namespace ccVcontrol
                         }
                     }
                 }
-                if (step >= steps.Count) break;
-                for (int i = 0; i < stepRetry.Length; i++)
+                if (stepCtx.step >= steps.Count || stepCtx.finished) break;
+                for (int i = 0; i < stepCtx.stepRetry.Length; i++)
                 {
                     var cur = steps[i];
-                    if (stepRetry[i] > cur.maxRetry)
+                    if (stepCtx.stepRetry[i] > cur.maxRetry)
                     {
-                        context.DebugLog($"Doing Timeout step {cur.name} {cur.cmd} {stepRetry[i]}/{cur.maxRetry}");
-                        return step;
+                        context.DebugLog($"Doing Timeout step {cur.name} {cur.cmd} {stepCtx.stepRetry[i]}/{cur.maxRetry}");
+                        return stepCtx;
                     }
                 }
             }
-            return step;
+            return stepCtx;
         }
 
         public CommandInfo FindSpot(string name, int retry = 5)
