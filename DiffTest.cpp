@@ -641,7 +641,7 @@ int main(int argc, char** argv)
 				topX = atoi(argv[i]);
 			} else if (isName) {
 				matchName = argv[i];
-				if (matchRect.info != NULL) matchRect.info = matchName;
+				matchRect.info = matchName;
 				isName = false;
 			} else if (isMatchRect) {
 				char tmpmbuf[512];

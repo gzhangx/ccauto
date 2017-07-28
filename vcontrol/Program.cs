@@ -102,7 +102,7 @@ namespace ccVcontrol
         }
         static void Main(string[] args)
         {
-            SwitchAccount.CheckAccount();
+            SwitchAccount.CheckAccount("tstimgs\\accountFull_1.png");
             //TestAccounts();
             return;
             Console.WriteLine("Starting vm");

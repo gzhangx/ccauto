@@ -33,27 +33,35 @@ namespace ccVcontrol
             };
         }
 
-        public static void CheckAccount()
+        public static int CheckAccount(string screenName)
         {
-            var files = System.IO.Directory.GetFiles(accoungImagDir).Where(f=>f.StartsWith(accoungImagDir+ "img_act"));
+            var actImgNameStart = accoungImagDir + "img_act";
+            var files = System.IO.Directory.GetFiles(accoungImagDir).Where(f=>f.StartsWith(actImgNameStart));
             MAXACCOUNT = files.Count();
             CommandInfo good = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append($" -input {screenName} ").Append(acctNameMatchRect);
             foreach (var f in files)
             {
-                var res = Utils.GetAppInfo($"-name cmpacttest -input tstimgs\\accountFull_1.png {acctNameMatchRect} -match {f} 10000");
-                foreach (var r in res)
-                {
-                    if (good == null) good = r;
-                    if (r.command == "SINGLEMATCH")
-                    {
-                        if (r.decision == "true")
-                        {
-                            if (r.cmpRes < good.cmpRes) good = r;
-                        }
-                    }
-                    Console.WriteLine(r);
-                }
+                var actname = f.Substring(actImgNameStart.Length);
+                actname = actname.Substring(0, actname.IndexOf("."));
+                sb.Append($" -name {actname} -match {f} 10000");                
             }
+            var res = Utils.GetAppInfo(sb.ToString());
+            foreach (var r in res)
+            {
+                if (good == null) good = r;
+                if (r.command == "SINGLEMATCH")
+                {
+                    if (r.decision == "true")
+                    {
+                        if (r.cmpRes < good.cmpRes) good = r;
+                    }
+                }
+                Console.WriteLine(r);
+            }
+            if (good == null) return -1;
+            return Convert.ToInt32(good.extraInfo);
         }
 
         public override void Process()
