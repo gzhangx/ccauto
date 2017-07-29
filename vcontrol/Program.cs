@@ -12,7 +12,7 @@ namespace ccVcontrol
 {
     
     
-    class Program
+    public class Program
     {        
         static void checkLoop(IMouse mouse, IKeyboard keyboard)
         {
@@ -98,7 +98,7 @@ namespace ccVcontrol
                 }
             }
         }
-        static void Main(string[] args)
+        public static void Start()
         {
             SwitchAccount.CheckAccount();
             //TestAccounts();
