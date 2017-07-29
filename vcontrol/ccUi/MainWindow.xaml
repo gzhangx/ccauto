@@ -17,10 +17,11 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Grid.Column="0">
             <StackPanel Orientation="Horizontal">
-                <TextBox x:Name="name" Width="200"></TextBox>
+                <TextBox x:Name="txtName" Width="200"></TextBox>
                 <Button Click="Button_Click">Open</Button>
+                <TextBlock x:Name="info" Width="300"></TextBlock>
             </StackPanel>
         </Grid>
-        <Canvas x:Name="canvas" Grid.Row="1" Grid.Column="0" ></Canvas>
+        <Canvas x:Name="canvas" Grid.Row="1" Grid.Column="0" MouseMove="canvas_MouseMove" MouseLeftButtonUp="canvas_MouseLeftButtonUp" ></Canvas>
     </Grid>
 </Window>
