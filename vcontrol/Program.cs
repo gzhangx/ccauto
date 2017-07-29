@@ -141,31 +141,6 @@ namespace ccVcontrol
                     //MouseClick(mouse);
                     Console.WriteLine("main loop");
                     checkLoop(mouse, keyboard);
-                    
-
-                    //mouse.PutEventMultiTouch(2,)
-                    return;
-                    Thread.Sleep(1000);
-                    for (int i = 0; i < 5; i++)
-                    {
-                        mouse.PutMouseEvent(100, 100, 0, 0, 0);
-                        Console.WriteLine("at " + i);
-                        Thread.Sleep(1000);
-                    }
-                    /*
-                    for (int i = 0; i < 10; i++)
-                    {
-                        mouse.PutMouseEvent(-i * 10-100, 0, 0, 0, 0);
-                        Console.WriteLine("going to " + i);
-                        Thread.Sleep(100);
-
-                        var evt = es.GetEvent(listener, 1000);
-                        if (evt != null)
-                        {
-                            Console.WriteLine(evt.GetType() + " " + evt.ToString());
-                        }
-                    }
-                    */
                 }
                 finally
                 {
