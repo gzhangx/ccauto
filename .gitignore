@@ -12,4 +12,4 @@ tstimgs/
 data/cctxt/Thumbs.db
 /vcontrol/vcontrol.VC.VC.opendb
 /vcontrol/vcontrol.VC.db
-/data/accounts/img_act1.png
+/data/accounts/*.png
