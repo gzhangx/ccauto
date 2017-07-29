@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ccUi"
+        xmlns:toolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
@@ -17,7 +18,7 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Grid.Column="0">
             <StackPanel Orientation="Horizontal">
-                <TextBox x:Name="txtName" Width="200"></TextBox>
+                <toolkit:AutoCompleteBox x:Name="txtName" Width="200" ></toolkit:AutoCompleteBox>
                 <Button Click="Button_Click">Open</Button>
                 <TextBlock x:Name="info" Width="300"></TextBlock>
             </StackPanel>

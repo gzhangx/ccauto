@@ -25,6 +25,7 @@ namespace ccUi
         public MainWindow()
         {
             InitializeComponent();
+            txtName.ItemsSource = new List<String> { "GoldMine", "ElixirCollector", "GoldStorage", "ElixirStorage", "Townhall", "Barracks" };
         }
 
         List<PosInfo> points = new List<PosInfo>();
