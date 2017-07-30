@@ -50,6 +50,9 @@ namespace ccUi
             // Get the selected file name and display in a TextBox 
             if (result == true)
             {
+                points.Clear();
+                gpInfo.Clear();
+                canvas.Children.Clear();
                 // Open document 
                 string filename = dlg.FileName;
                 curFileName = filename;
