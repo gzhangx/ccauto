@@ -102,7 +102,7 @@ namespace ccVcontrol
             context.MouseClick();
             context.MouseMouseTo(0, 0);
             Thread.Sleep(1000);
-            context.SendString("confirmCONFIRM");
+            context.SendString("CONFIRM");
             Thread.Sleep(1000);
             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff);
         }

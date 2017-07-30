@@ -98,6 +98,7 @@ namespace ccVcontrol
                             i = stepCtx.step;
                             continue;
                         }
+                        i--;
                     }
                     else
                     {
