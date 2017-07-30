@@ -34,11 +34,13 @@ namespace ccVcontrol
                 //cmds = Utils.GetAppInfo();
                 context.GetToEntrance();
 
-                switchAccount.Process();                
-
+                switchAccount.Process();
+                var cmds = context.GetToEntrance();
                 Thread.Sleep(100);
                 
                 GenerateAccountPics(context, switchAccount.CurAccount);
+
+                DoDonate(context, cmds);
                 Console.WriteLine("press enter to countinue");
                 Console.ReadLine();
 
@@ -54,6 +56,14 @@ namespace ccVcontrol
             Utils.GetAppInfo($"-name data\\accounts\\img_act{who}.png -input {fullImg} {SwitchAccount.acctNameMatchRect} -imagecorp");
         }
 
+        private static  void DoDonate(ProcessingContext context, List<CommandInfo> cmds)
+        {
+            var cmd = cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand");
+            if (cmd != null)
+            {
+                ProcessDonate(context, cmd);
+            }
+        }
         private static bool ProcessCommand(ProcessingContext context, CommandInfo cmd)
         {
             switch (cmd.command)
