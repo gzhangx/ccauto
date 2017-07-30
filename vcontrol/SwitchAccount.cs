@@ -31,7 +31,7 @@ namespace ccVcontrol
                 new StepInfo { inputName= "chk_act_4als.png", cmd = "-match accountlist.png 6000", maxRetry = 50, name = "SwitchAccount", xoff = 107, yoff = 89, Act = SwitchAccountAction , delay = 15000},
 
 
-                new StepInfo { inputName= "chk_act_5ldv.png", cmd = "-match loadVillage.png 700", maxRetry = 30, name = "LoadVillage", xoff = 298, yoff = 44 },
+                new StepInfo { inputName= "chk_act_5ldv.png", cmd = "-match loadVillage.png 700", maxRetry = 30, name = "LoadVillage", xoff = 298, yoff = 44, delay=5000 },
                 new StepInfo { inputName= "chk_act_6cnf.png", cmd = "-match confirm.bmp 5000", maxRetry = 30, name = "ConfirmLoadVillage", xoff = 310, yoff = 22, Act= ConfirmLoadVillage },          
             };
         }
