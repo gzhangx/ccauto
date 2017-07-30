@@ -98,6 +98,12 @@ namespace ccVcontrol
                             i = stepCtx.step;
                             continue;
                         }
+                        if (stepCtx.stepRetry[i] > cur.maxRetry)
+                        {
+                            stepCtx.failed = true;
+                            stepCtx.finished = true;
+                            break;
+                        }
                         i--;
                     }
                     else
@@ -119,6 +125,12 @@ namespace ccVcontrol
                                 stepCtx.stepRetry[i]++;
                                 if (checkRetryFail(stepCtx, i)) break;
                                 i--;
+                            }else
+                            {
+                                if (i == steps.Count - 1)
+                                {
+                                    stepCtx.finished = true;                                    
+                                }
                             }
                         }
                     }

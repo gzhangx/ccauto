@@ -557,6 +557,7 @@ Mat doChecks(char * inputImage, const char * matchFileName, int matchThreadHold,
 	vector<ImgChecksAndTags> itms = {		
 		ImgChecksAndTags("ccNotResponding.png", "PRMXYCLICK_STD_ccNotResponding", Point(375,101)),
 		ImgChecksAndTags("loadVillage.png", "PRMXYCLICK_STD_LoadingVillage", Point(298,44)),
+		ImgChecksAndTags("accountlist.png", "PRMXYCLICK_STD_AccountList", Point(101,85)),
 		ImgChecksAndTags("confirmLoadAreYouSure.png", "PRMXYCLICK_STD_ConfirmLoadVillage", Point(402, 22)),
 		ImgChecksAndTags("confirmready.png", "PRMXYCLICK_STD_ConfirmLoadVillageReady", Point(310, 22)),
 		ImgChecksAndTags("justbootup.png", "PRMXYCLICK_STD_CheckJustBootedUp", Point(52,70)),
