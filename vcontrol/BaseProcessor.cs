@@ -21,6 +21,9 @@ namespace ccVcontrol
             public int maxRetry = 10; //10s
 
             public Action<CommandInfo, StepInfo, StepContext> Act;
+
+            public int stepInd;
+            public string[] otherStepCheck;
         }
 
         public class StepContext
@@ -30,6 +33,8 @@ namespace ccVcontrol
             public bool finished = false;
             public bool failed = false;
             public bool finishedGood = false;
+
+            public List<StepInfo> Steps;
         }
 
         protected ProcessingContext context;
@@ -44,63 +49,115 @@ namespace ccVcontrol
             var stepCtx = new StepContext
             {
                 step = 0,
+                Steps = steps,
                 stepRetry = new int[steps.Count]
             };
+            for (int i = 0; i < steps.Count; i++) steps[i].stepInd = i;
             
-            while (true)
+            //while (!stepCtx.finished)
             {
-                for (int i = stepCtx.step; i < steps.Count; i++)
+                for (int i = 0; i < steps.Count; i++)
                 {
                     var cur = steps[i];
-                    var fullInputPath = $"{imgdir}\\{cur.inputName}";
-                    var fullcmd = $"-input {fullInputPath} {cur.cmd.Replace("-match ", "-match data\\check\\")}";
-                    context.DebugLog($"Doing step {cur.name} {fullcmd}");
-                    Utils.doScreenShoot(fullInputPath);
-                    var found = FindSpot(fullcmd, 1);
+                    stepCtx.step = i;
+                    CommandInfo found = FindSpotOnStep(cur);
                     if (found == null)
                     {
-                        if (i == stepCtx.step) stepCtx.stepRetry[i]++;
+                        stepCtx.stepRetry[i]++;
+                        if (cur.otherStepCheck != null)
+                        {
+                            foreach (var other in cur.otherStepCheck)
+                            {
+                                if (CheckStep(stepCtx, other)) continue;
+                            }
+                        }
+                        if (stepCtx.stepRetry[i] > cur.maxRetry)
+                        {
+                            stepCtx.failed = true;
+                            stepCtx.finished = true;
+                            break;
+                        }
                     }
                     else
                     {
-                        stepCtx.step = i + 1;
                         if (cur.Act != null)
                         {
                             cur.Act(found, cur, stepCtx);
+                            i = stepCtx.step;
                             if (stepCtx.finished) break;
                         }
                         else
                         {
                             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff);
                             context.MouseMouseTo(0, 0);
-                            Thread.Sleep(cur.delay);
+                            WaitNextStep(stepCtx);
                         }
-                    }
-                }
-                if (stepCtx.step >= steps.Count || stepCtx.finished) break;
-                for (int i = 0; i < stepCtx.stepRetry.Length; i++)
-                {
-                    var cur = steps[i];
-                    if (stepCtx.stepRetry[i] > cur.maxRetry)
-                    {
-                        context.DebugLog($"Doing Timeout step {cur.name} {cur.cmd} {stepCtx.stepRetry[i]}/{cur.maxRetry}");
-                        return stepCtx;
                     }
                 }
             }
             return stepCtx;
         }
 
-        public CommandInfo FindSpot(string name, int retry = 5)
+
+        protected bool CheckStep(StepContext stepCtx, string stepName)
+        {
+            var step = stepCtx.Steps.FirstOrDefault(s => s.name == stepName);
+
+            if (FindSpotOnStep(step, $"   CHECKSEP {stepName} ") != null)
+            {
+                stepCtx.step = step.stepInd - 1;
+                return true;
+            }
+
+            return false;
+        }
+
+        protected bool WaitNextStep(StepContext stepCtx)
+        {
+            var cur = stepCtx.Steps[stepCtx.step];
+            var nextStepPt = stepCtx.step + 1;
+            if (nextStepPt >= stepCtx.Steps.Count)
+            {
+                if  (cur.delay > 0)
+                {
+                    Thread.Sleep(cur.delay);
+                }
+            }else
+            {
+                for (int wt = 0; wt < cur.delay; wt += 1000)
+                {
+                    var nextStep = stepCtx.Steps[nextStepPt];
+                    if (FindSpotOnStep(nextStep, "   WAITNEXT ") != null)
+                    {
+                        return true;
+                    }
+                    Thread.Sleep(1000);
+                }
+            }
+
+            return false;
+        }
+
+        protected virtual CommandInfo FindSpotOnStep(StepInfo cur, string printDebug= "")
+        {
+            var fullInputPath = $"{imgdir}\\{cur.inputName}";
+            var fullcmd = $"-input {fullInputPath} {cur.cmd.Replace("-match ", "-match data\\check\\")}";
+            context.DebugLog($"{printDebug}Doing step {cur.name} {fullcmd}");
+            Utils.doScreenShoot(fullInputPath);
+            var found = FindSpot(fullcmd, 1, printDebug);
+            return found;
+        }
+
+        public CommandInfo FindSpot(string name, int retry = 5, string printDebug = "")
         {
             for (int retryi = 0; retryi < retry; retryi++)
             {
-                context.DebugLog("Trying to find SINGLEMATCH for " + name);
+                context.DebugLog($"{printDebug}Trying to find SINGLEMATCH for {name}");
                 var cmds = Utils.GetAppInfo(name);
                 var found = cmds.FirstOrDefault(cmd => cmd.command == "SINGLEMATCH");
                 if (found != null)
                 {
-                    context.InfoLog($"matching {name} found {found.cmpRes}");
+                    context.InfoLog($"{printDebug}matching {name} found {found.cmpRes}");
                     return found;
                 }
                 Thread.Sleep(1000);
