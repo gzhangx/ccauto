@@ -123,7 +123,7 @@ namespace ccVcontrol
         {            
             ProcessStartInfo start = new ProcessStartInfo();
             start.Arguments = arguments;
-            start.FileName = curDir + "\\x64\\Debug\\temptest.exe";
+            start.FileName = curDir + "\\x64\\Debug\\ccReco.exe";
             start.WorkingDirectory = curDir;
             // Do you want to show a console window?
             start.WindowStyle = ProcessWindowStyle.Normal;
