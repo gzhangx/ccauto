@@ -12,7 +12,7 @@ namespace ccVcontrol
     {
         public IMouse mouse;
         public IKeyboard keyboard;
-        public void SendString(string str)
+        public virtual void SendString(string str)
         {
             Utils.SendString(keyboard, str);
         }
@@ -39,21 +39,21 @@ namespace ccVcontrol
             return count;
         }
 
-        public void MouseMouseTo(int x, int y)
+        public virtual void MouseMouseTo(int x, int y)
         {
             Utils.MouseMouseTo(mouse, x, y);
         }
 
-        public void MouseMouseRelative(int x, int y)
+        public virtual void MouseMouseRelative(int x, int y)
         {
             Utils.MouseMouseRelative(mouse, x, y);
         }
-        public void MouseClick()
+        public virtual void MouseClick()
         {
             Utils.MouseClick(mouse);
         }
 
-        public void MoveMouseAndClick(int x, int y)
+        public virtual void MoveMouseAndClick(int x, int y)
         {
             Utils.MoveMouseAndClick(mouse, x, y);
         }

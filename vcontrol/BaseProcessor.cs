@@ -44,7 +44,7 @@ namespace ccVcontrol
         }
 
 
-        public StepContext DoSteps(List<StepInfo> steps)
+        protected StepContext DoSteps(List<StepInfo> steps)
         {
             var stepCtx = new StepContext
             {
@@ -53,7 +53,8 @@ namespace ccVcontrol
                 stepRetry = new int[steps.Count]
             };
             for (int i = 0; i < steps.Count; i++) steps[i].stepInd = i;
-            
+
+            bool lastStepRes = false;
             //while (!stepCtx.finished)
             {
                 for (int i = 0; i < steps.Count; i++)
@@ -73,6 +74,7 @@ namespace ccVcontrol
                         }
                         if (stepCtx.stepRetry[i] > cur.maxRetry)
                         {
+                            lastStepRes = false;
                             stepCtx.failed = true;
                             stepCtx.finished = true;
                             break;
@@ -84,17 +86,20 @@ namespace ccVcontrol
                         {
                             cur.Act(found, cur, stepCtx);
                             i = stepCtx.step;
+                            if (stepCtx.failed) lastStepRes = false;
                             if (stepCtx.finished) break;
                         }
                         else
                         {
                             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff);
                             context.MouseMouseTo(0, 0);
-                            WaitNextStep(stepCtx);
+                            lastStepRes = WaitNextStep(stepCtx);
                         }
                     }
                 }
             }
+            stepCtx.finished = lastStepRes;
+            stepCtx.failed = !lastStepRes;
             return stepCtx;
         }
 
@@ -122,7 +127,9 @@ namespace ccVcontrol
                 {
                     Thread.Sleep(cur.delay);
                 }
-            }else
+                return true;
+            }
+            else
             {
                 for (int wt = 0; wt < cur.delay; wt += 1000)
                 {
@@ -178,6 +185,6 @@ namespace ccVcontrol
             //Utils.GetAppInfo($"-name {name} -matchRect 79,32,167,22_200 -screenshoot");
         }
         
-        public abstract void Process();
+        public abstract StepContext Process();
     }
 }

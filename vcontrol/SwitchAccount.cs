@@ -75,13 +75,14 @@ namespace ccVcontrol
             return Convert.ToInt32(good.extraInfo);
         }
 
-        public override void Process()
+        public override StepContext Process()
         {
             account = CheckAccount();
             Console.WriteLine($"Trying to find SINGLEMATCH for settings button account {account}");
             switchSteps.First(r => r.name == "SwitchAccount").Act = SwitchAccountAction;
-            DoSteps(switchSteps);
+            var res = DoSteps(switchSteps);
             InitGame("Account_" + account);
+            return res;
         }
 
         private void SwitchAccountAction(CommandInfo found, StepInfo cur, StepContext stepContext)
