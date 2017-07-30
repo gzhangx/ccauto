@@ -1,5 +1,8 @@
-﻿using System;
+﻿using ccInfo;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -25,23 +28,21 @@ namespace ccVcontrol
 
         string[] tags = new string[] { GoldMine , ElixirCollector, TownHall, GoldStorage, ElixirStorage};
 
-        class TagAndLocation
-        {
-            public int x;
-            public int y;
-            public string tag;
-        }
-
         public ProcessorMapByText(ProcessingContext ctx)
         {
             context = ctx;
         }
-        List<TagAndLocation> locations = new List<TagAndLocation>();
-        public void ProcessCommand()
+        List<PosInfo> locations = new List<PosInfo>();
+        public void ProcessCommand(int act)
         {
+            var fname = $"data\\account\\accountFull_{act}.txt";
+            if (File.Exists(fname))
+            {
+                locations = JsonConvert.DeserializeObject<List<PosInfo>>(File.ReadAllText(fname));
+            }
             locations.ForEach(l =>
             {
-                Console.WriteLine("====>" + l.tag + " " + l.x + "," + l.y);
+                Console.WriteLine("====>" + l.name + " " + l.point.x + "," + l.point.y);
             });
             if ((DateTime.Now - lastProcessDate).TotalMinutes > 40)
             {
