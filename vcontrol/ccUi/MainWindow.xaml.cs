@@ -1,4 +1,5 @@
 ﻿using ccInfo;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,6 +36,7 @@ namespace ccUi
             public Ellipse fill;  
         }
 
+        string curFileName = null;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
@@ -50,6 +52,7 @@ namespace ccUi
             {
                 // Open document 
                 string filename = dlg.FileName;
+                curFileName = filename;
                 //Convert Bitmap To Image                
                 Image i = new Image();
                 BitmapImage src = new BitmapImage();
@@ -100,6 +103,12 @@ namespace ccUi
                 gpInfo.Remove(found);
                 points.Remove(found.pinfo);
             }
+        }
+
+        private void ButtonSave_Click(object sender, RoutedEventArgs e)
+        {
+            var fname = curFileName.Replace(".png", ".txt");
+            File.WriteAllText(fname, JsonConvert.SerializeObject(points));
         }
     }
 }
