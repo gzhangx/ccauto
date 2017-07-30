@@ -71,6 +71,16 @@ namespace ccVcontrol
             return MapVirtualKeyEx(((uint)cd & 0xff), 0, IntPtr.Zero);
         }
 
+        static Dictionary<char, int> vkmap = new Dictionary<char, int>
+        {
+            {'C',0x43 },
+            {'O',0x4F },
+            {'N',0x4E },
+            {'F',0x46 },
+            {'I',0x49 },
+            {'R',0x52 },
+            {'M',0x4D },
+        };
         public static void SendString(IKeyboard keyboard, string str)
         {
             var codes = new short[str.Length];
