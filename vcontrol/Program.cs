@@ -12,10 +12,8 @@ namespace ccVcontrol
 {
     
     
-    class Program
-    {
-        
-
+    public class Program
+    {        
         static void checkLoop(IMouse mouse, IKeyboard keyboard)
         {
             ProcessingContext context = new ProcessingContext
@@ -25,42 +23,37 @@ namespace ccVcontrol
             };
 
             var switchAccount = new SwitchAccount(context);
+            context.DebugLog("Getting app info");
             var cmds = Utils.GetAppInfo();
-            cmds = Utils.GetAppInfo("-name allfull -screenshoot");
-            cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");
-            context.DoShift();
-            while (true)
-            {
-                context.DoStdClicks(cmds);
-                cmds = Utils.GetAppInfo();
-                if (cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand") != null) break;                
-            }            
+            //cmds = Utils.GetAppInfo("-name allfull -screenshoot");
+            //cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");
+            context.DebugLog("Do shift");
+            context.DoShift();            
             
             while (true)
             {
-                cmds = Utils.GetAppInfo();
-                context.DoStdClicks(cmds);
+                //cmds = Utils.GetAppInfo();
+                cmds = context.GetToEntrance();
 
                 switchAccount.Process();
 
                 context.DoStdClicks(cmds);
                 cmds = Utils.GetAppInfo();
 
-                cmds = Utils.GetAppInfo($"-name full_act{switchAccount.CurAccount} -screenshoot");
-                cmds = Utils.GetAppInfo($"-name ful_r_act{switchAccount.CurAccount} -matchRect 79,32,167,22_200 -screenshoot");
-
-                continue;
-                foreach (var cmd in cmds)
-                {
-                    Console.Write(".");
-                    if (cmd.command.Contains("CheckJustBootedUp"))
-                    {
-                        context.DoShift();
-                    }
-                    ProcessCommand(context, cmd);
-                }
                 Thread.Sleep(100);
+
+                GenerateAccountPics(switchAccount.CurAccount);
+                Console.WriteLine("press enter to countinue");
+                Console.ReadLine();
+                
             }
+        }
+
+        private static void GenerateAccountPics(int who)
+        {
+            var fullImg = $"tstimgs\\accountFull_{who}.png";
+            Utils.doScreenShoot(fullImg);
+            Utils.GetAppInfo($"-name data\\accounts\\img_act{who}.png -input {fullImg} {SwitchAccount.acctNameMatchRect} -imagecorp");
         }
 
         private static bool ProcessCommand(ProcessingContext context, CommandInfo cmd)
@@ -86,22 +79,47 @@ namespace ccVcontrol
             new ProcessorDonation(context).ProcessDonate(cmd);
         }
 
-        
 
-        static void Main(string[] args)
-        {                       
+        static void TestAccounts()
+        {
+            for (int i = 1; i <= 4; i++)
+            {
+                //generate mask
+                //Utils.GetAppInfo($"-name data\\accounts\\img_act{i}.png -input tstimgs\\full_act_full_{i}.png -matchRect 80,30,100,27_200 -imagecorp");
+            }
+            for (int i = 1; i <= 4; i++)
+            {
+                //generate mask
+                //Utils.GetAppInfo($"-name data\\accounts\\img_act{i}.png -input tstimgs\\full_act_full_{i}.png -matchRect 80,30,100,27_200 -imagecorp");
+                var res = Utils.GetAppInfo($"-name cmpact{i} -input tstimgs\\accountFull_1.png {SwitchAccount.acctNameMatchRect} -match data\\accounts\\img_act{i}.png 10000");
+                foreach (var r in res)
+                {
+                    Console.WriteLine(r);
+                }
+            }
+        }
+        public static void Start()
+        {
+            SwitchAccount.CheckAccount();
+            //TestAccounts();
+            //return;
+            Console.WriteLine("Starting vm");
+            Utils.executeVBoxMngr("startvm cctest");
+            Console.WriteLine("VmStarted, allocate machine");
             var vbox = new VirtualBox.VirtualBox();
             VirtualBox.IMachine machine = vbox.FindMachine("cctest");
             VirtualBoxClient vboxclient = new VirtualBoxClient();
             var session = vboxclient.Session;            
             try
             {
+                Console.WriteLine("found machine, lock machine");
                 machine.LockMachine(session, LockType.LockType_Shared);
                 var console = session.Console;
                 IEventSource es = console.EventSource;
                 var listener = es.CreateListener();
                 Array listenTYpes = new VBoxEventType[] { VBoxEventType.VBoxEventType_InputEvent };
                 es.RegisterListener(listener, listenTYpes, 0);
+                Console.WriteLine("locked machine, entry try");
                 try
                 {
                     //session.Console.Display.SetSeamlessMode(1);
@@ -121,32 +139,8 @@ namespace ccVcontrol
                     //MouseClick(mouse);
                     //MouseMouseTo(mouse, 360, 156);
                     //MouseClick(mouse);
+                    Console.WriteLine("main loop");
                     checkLoop(mouse, keyboard);
-                    
-
-                    //mouse.PutEventMultiTouch(2,)
-                    return;
-                    Thread.Sleep(1000);
-                    for (int i = 0; i < 5; i++)
-                    {
-                        mouse.PutMouseEvent(100, 100, 0, 0, 0);
-                        Console.WriteLine("at " + i);
-                        Thread.Sleep(1000);
-                    }
-                    /*
-                    for (int i = 0; i < 10; i++)
-                    {
-                        mouse.PutMouseEvent(-i * 10-100, 0, 0, 0, 0);
-                        Console.WriteLine("going to " + i);
-                        Thread.Sleep(100);
-
-                        var evt = es.GetEvent(listener, 1000);
-                        if (evt != null)
-                        {
-                            Console.WriteLine(evt.GetType() + " " + evt.ToString());
-                        }
-                    }
-                    */
                 }
                 finally
                 {
@@ -155,7 +149,7 @@ namespace ccVcontrol
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(e);
 
             }
             finally

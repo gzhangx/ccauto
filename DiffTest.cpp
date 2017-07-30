@@ -9,7 +9,7 @@ bool debug = false;
 bool debugprint = false;
 using namespace std;
 using namespace cv;
-Mat windowToMat(LPTSTR name);
+//Mat windowToMat(LPTSTR name);
 //! [declare]
 
 const char* image_windowName = "Source Image";
@@ -251,8 +251,8 @@ public:
 	int width;
 	int trimedX;
 	char c;
-	float val;
-	ImageRecoRes(int xx, int w, char chr, float v) {
+	double val;
+	ImageRecoRes(int xx, int w, char chr, double v) {
 		x = xx;
 		width = w;
 		trimedX = xx / xspacing;
@@ -285,7 +285,7 @@ public:
 
 
 //return true if a is better
-bool checkIfFirstRecoBetter(float a, float b) {
+bool checkIfFirstRecoBetter(double a, double b) {
 	return a < b;
 }
 
@@ -409,20 +409,20 @@ vector<ImageRecoRes> DoReco(RecoList list, MatAndPos matAndPos, int blkNumber) {
 	return ret;
 }
 
-Mat LoadCCScreen() {
-	return windowToMat(L"cctest [Running] - Oracle VM VirtualBox");
-}
+//Mat LoadCCScreen() {
+//	return windowToMat(L"cctest [Running] - Oracle VM VirtualBox");
+//}
 
-void printCheckLocation(vector<ImageDiffVal> pts, const char * who, Point move) {
+void printCheckLocation(vector<ImageDiffVal> pts, const char * who, Point move, const char* ctxName) {
 	for (vector<ImageDiffVal>::iterator it = pts.begin(); it != pts.end(); it++) {
 		if (it->found) {
-			printf("%s %i %i %f %s\n", who, it->loc.x + move.x, it->loc.y + move.y, it->val, it->found ? "true" : "false");
+			printf("%s %i %i %f %s %s\n", who, it->loc.x + move.x, it->loc.y + move.y, it->val, it->found ? "true" : "false", ctxName);
 		}
 	}
 }
 
 
-vector<ImageDiffVal> CheckImageMatch(Mat img, char * fileName, double threadshold, int topX) {
+vector<ImageDiffVal> CheckImageMatch(Mat img, const char * fileName, double threadshold, int topX) {
 	Mat result;
 	Mat templ = getGrayScale(imread(fileName, IMREAD_COLOR));
 
@@ -532,8 +532,12 @@ void DoRecoOnBlock(Mat img, RecoList checkList, BlockInfo blk) {
 
 RecoList topCheckList = LoadDataInfo("data\\check\\top");
 RecoList bottomCheckList = LoadDataInfo("data\\check\\bottom");
-Mat doChecks(const char * matchFileName, int matchThreadHold, BlockInfo * matchRect) {
-	Mat img = getGrayScale(LoadCCScreen());	
+Mat doChecks(char * inputImage, const char * matchFileName, int matchThreadHold, BlockInfo * matchRect, int topXMatches) {
+	if (inputImage == NULL) {
+		inputImage = "tstimgs\\full.png";
+		system("\"C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe\" controlvm cctest screenshotpng tstimgs\\full.png");
+	}
+	Mat img = getGrayScale(imread(inputImage, IMREAD_COLOR));
 	if (img.rows == 0) {
 		printf("ERR: No image");
 		return img;
@@ -542,14 +546,16 @@ Mat doChecks(const char * matchFileName, int matchThreadHold, BlockInfo * matchR
 		img = loadImageRect(img, *matchRect);
 	}
 	char fname[512];
+	const char * ctxName = matchRect != NULL? matchRect->info:"";
 	if (matchFileName != NULL) {
-		strcpy_s(fname, "data\\check\\");
-		strcat_s(fname, matchFileName);
-		printCheckLocation(CheckImageMatch(img, fname, matchThreadHold, 1), "SINGLEMATCH", Point(0,0));
+		//strcpy_s(fname, "data\\check\\");
+		//strcat_s(fname, matchFileName);		
+		printCheckLocation(CheckImageMatch(img, matchFileName, matchThreadHold, topXMatches), "SINGLEMATCH", Point(0,0), ctxName);
 		return img;
 	}
-	printCheckLocation(CheckImageMatch(img, "data\\check\\ememyattacked.png", 2000, 1), "PRMXYCLICK_STD_VillageAttacked", Point(345, 440));
-	vector<ImgChecksAndTags> itms = {
+	printCheckLocation(CheckImageMatch(img, "data\\check\\ememyattacked.png", 2000, 1), "PRMXYCLICK_STD_VillageAttacked", Point(345, 440), ctxName);
+	vector<ImgChecksAndTags> itms = {		
+		ImgChecksAndTags("ccNotResponding.png", "PRMXYCLICK_STD_ccNotResponding", Point(375,101)),
 		ImgChecksAndTags("loadVillage.png", "PRMXYCLICK_STD_LoadingVillage", Point(298,44)),
 		ImgChecksAndTags("confirmLoadAreYouSure.png", "PRMXYCLICK_STD_ConfirmLoadVillage", Point(402, 22)),
 		ImgChecksAndTags("confirmready.png", "PRMXYCLICK_STD_ConfirmLoadVillageReady", Point(310, 22)),
@@ -583,15 +589,15 @@ Mat doChecks(const char * matchFileName, int matchThreadHold, BlockInfo * matchR
 		ImgChecksAndTags itm = itms[i];
 		strcpy_s(fname, "data\\check\\");
 		strcat_s(fname, itm.imageFileName);
-		printCheckLocation(CheckImageMatch(img, fname, itm.ThreadShold,1), itm.Tag, itm.point);
+		printCheckLocation(CheckImageMatch(img, fname, itm.ThreadShold,1), itm.Tag, itm.point, ctxName);
 	}
 
 	int thd = 220;
 	int PAD = 2;
 	vector<BlockInfo> chkBlocks = {
-		BlockInfo(Rect(780,  42,-1, 30), thd, "INFO_Gold"),
-		BlockInfo(Rect(780, 105,-1, 30), thd,"INFO_Elixir"),
-		BlockInfo(Rect(280, 605, -1,45 + PAD), thd, "INFO_Bottom")
+		BlockInfo(Rect(780,  21,-1, 30), thd, "INFO_Gold"),
+		BlockInfo(Rect(780, 84,-1, 30), thd,"INFO_Elixir"),
+		BlockInfo(Rect(280, 584, -1,45 + PAD), thd, "INFO_Bottom")
 	};
 
 	for (vector<BlockInfo>::iterator it = chkBlocks.begin(); it != chkBlocks.end(); it++) {
@@ -617,15 +623,25 @@ int main(int argc, char** argv)
 
 	try {
 		bool match = 0;
+		int topX = 1;
 		char * matchFile = NULL;
 		int matchThreadHold = -1;
 		bool isMatchRect = false;
 		bool isName = false;
 		char *matchName = NULL;
+		char *inputImage = NULL;
+		bool isInputImage = false;
 		BlockInfo matchRect(Rect(),-1,NULL);
 		for (int i = 1; i < argc; i++) {
-			if (isName) {
+			if (isInputImage) {
+				inputImage = argv[i];
+				isInputImage = false;
+			}else
+			if (topX == 0) {
+				topX = atoi(argv[i]);
+			} else if (isName) {
 				matchName = argv[i];
+				matchRect.info = matchName;
 				isName = false;
 			} else if (isMatchRect) {
 				char tmpmbuf[512];
@@ -648,26 +664,30 @@ int main(int argc, char** argv)
 					matchFile = argv[i];
 				}
 				else {
+					match = false;
 					matchThreadHold = atoi(argv[i]);
-					doChecks(matchFile, matchThreadHold, &matchRect);
-					return 0;
+					if (inputImage == NULL) throw "input not specified";
+					doChecks(inputImage, matchFile, matchThreadHold, &matchRect, topX);
+					matchFile = NULL;
+					if (argc == i + 1) return 0;
 				}
 			}
 			if (strcmp(argv[i], "-check") == 0) {
-				doChecks(NULL, -1, &matchRect);
-				return 0;
-			} else if (strcmp(argv[i], "-screenshoot") == 0) {
-				Mat screen = LoadCCScreen();
-				char tempnamebuf[512];
-				sprintf_s(tempnamebuf, "tstimgs\\full_%s.png", matchName);
-				imwrite(tempnamebuf, screen);
-				if (matchRect.info != NULL) {
-					screen = LoadCCScreen();
-					char tempnamebuf[512];
-					sprintf_s(tempnamebuf, "tstimgs\\full_%s.png", matchName);
-					imwrite(tempnamebuf, loadImageRect(getGrayScale(screen), matchRect));
+				//if (inputImage == NULL) throw "input not specified";
+				doChecks(inputImage, NULL, -1, &matchRect, topX);
+			} else if (strcmp(argv[i], "-imagecorp") == 0) {
+				if (inputImage == NULL) {
+					printf("ERR: -input not specified");
+					return -1;
 				}
-				return 0;
+				if (matchRect.info == NULL) {
+					printf("ERR: -match rect not specified");
+					return -1;
+				}
+				
+				Mat screen = imread(inputImage, IMREAD_COLOR);					
+				printf("**Writting image to %s\n", matchName);
+				imwrite(matchName, loadImageRect(getGrayScale(screen), matchRect));				
 			} else  if (strcmp(argv[i], "-match") == 0) {
 				match = true;
 			}
@@ -677,10 +697,16 @@ int main(int argc, char** argv)
 			else if (strcmp(argv[i], "-name") == 0) {
 				isName = true;
 			}
+			else if (strcmp(argv[i], "-top") == 0) {
+				topX = 0;
+			}
+			else if (strcmp(argv[i], "-input") == 0) {
+				isInputImage = true; //input picture
+			}
 		}
-		Mat screen = LoadCCScreen();
-		imwrite("tstimgs\\full.png", screen);
-		doChecks(NULL, -1, NULL);
+		//Mat screen = LoadCCScreen();
+		//imwrite("tstimgs\\full.png", screen);
+		//doChecks(NULL, -1, NULL, topX);
 	}
 	catch (const char* str) {
 		printf("ERR: %s\n", str);

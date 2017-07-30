@@ -37,13 +37,13 @@ namespace ccVcontrol
                 for (int i = 0; i < 5; i++)
                 {
                     Thread.Sleep(2000);
-                    Console.WriteLine("DEBUGPRINTINFO trying to find archier or wizard to build");
+                    context.DebugLog("DEBUGPRINTINFO trying to find archier or wizard to build");
                                         
                     foreach (var donationName in new String[] { "INFO_BuildWizard", "INFO_BuildArcher" }) {
                         var donationFormat = results.FirstOrDefault(r => r.command == donationName);
                         if (donationFormat != null)
                         {
-                            Console.WriteLine("Found " + donationName);
+                            context.DebugLog("Found " + donationName);
                             found = true;
                             Utils.MoveMouseAndClick(context.mouse, donationFormat.x, donationFormat.y);
                             if (donationName == "INFO_BuildWizard")
@@ -62,7 +62,7 @@ namespace ccVcontrol
                         Utils.MoveMouseAndClick(context.mouse, close.x, close.y);
                     }
                 }
-                if (found) Console.WriteLine("units build");
+                if (found) context.DebugLog("units build");
             }
             
         }

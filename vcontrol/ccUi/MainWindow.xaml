@@ -1,0 +1,29 @@
+﻿<Window x:Class="ccUi.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ccUi"
+        xmlns:toolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="40px"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30px"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <StackPanel Orientation="Horizontal">
+                <toolkit:AutoCompleteBox x:Name="txtName" Width="200" ></toolkit:AutoCompleteBox>
+                <Button Click="Button_Click">Open</Button>
+                <Button Click="ButtonSave_Click">Save</Button>
+                <TextBlock x:Name="info" Width="300"></TextBlock>
+            </StackPanel>
+        </Grid>
+        <Canvas x:Name="canvas" Grid.Row="1" Grid.Column="0" MouseMove="canvas_MouseMove" MouseLeftButtonUp="canvas_MouseLeftButtonUp" ></Canvas>
+    </Grid>
+</Window>

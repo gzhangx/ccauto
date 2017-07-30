@@ -13,5 +13,11 @@ namespace ccVcontrol
         public int y;
         public decimal cmpRes;
         public string Text;
+        public string decision;
+        public string extraInfo;
+        public override string ToString()
+        {
+            return $"CommandInfo: {command} ({x},{y}):{cmpRes} {Text} d={decision} {extraInfo}";
+        }
     }
 }

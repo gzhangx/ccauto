@@ -9,16 +9,27 @@ namespace ccVcontrol
 {
     public abstract class BaseProcessor
     {
+        const string imgdir = "tstimgs";
         public class StepInfo
         {
             public string name;
+            public string inputName;
             public string cmd;
             public int xoff;
             public int yoff;
             public int delay = 100;
             public int maxRetry = 10; //10s
 
-            public Action<CommandInfo, StepInfo> Act;
+            public Action<CommandInfo, StepInfo, StepContext> Act;
+        }
+
+        public class StepContext
+        {
+            public int step;
+            public int[] stepRetry;
+            public bool finished = false;
+            public bool failed = false;
+            public bool finishedGood = false;
         }
 
         protected ProcessingContext context;
@@ -28,26 +39,36 @@ namespace ccVcontrol
         }
 
 
-        public int DoSteps(List<StepInfo> steps)
+        public StepContext DoSteps(List<StepInfo> steps)
         {
-            int step = 0;
-            var stepRetry = new int[steps.Count];
+            var stepCtx = new StepContext
+            {
+                step = 0,
+                stepRetry = new int[steps.Count]
+            };
+            
             while (true)
             {
-                for (int i = step; i < steps.Count; i++)
+                for (int i = stepCtx.step; i < steps.Count; i++)
                 {
                     var cur = steps[i];
-                    Console.WriteLine($"Doing step {cur.name} {cur.cmd}");
-                    var found = FindSpot(cur.cmd, 1);
+                    var fullInputPath = $"{imgdir}\\{cur.inputName}";
+                    var fullcmd = $"-input {fullInputPath} {cur.cmd.Replace("-match ", "-match data\\check\\")}";
+                    context.DebugLog($"Doing step {cur.name} {fullcmd}");
+                    Utils.doScreenShoot(fullInputPath);
+                    var found = FindSpot(fullcmd, 1);
                     if (found == null)
                     {
-                        if (i == step) stepRetry[i]++;
+                        if (i == stepCtx.step) stepCtx.stepRetry[i]++;
                     }
                     else
                     {
-                        step = i + 1;
+                        stepCtx.step = i + 1;
                         if (cur.Act != null)
-                            cur.Act(found, cur);
+                        {
+                            cur.Act(found, cur, stepCtx);
+                            if (stepCtx.finished) break;
+                        }
                         else
                         {
                             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff);
@@ -56,30 +77,30 @@ namespace ccVcontrol
                         }
                     }
                 }
-                if (step >= steps.Count) break;
-                for (int i = 0; i < stepRetry.Length; i++)
+                if (stepCtx.step >= steps.Count || stepCtx.finished) break;
+                for (int i = 0; i < stepCtx.stepRetry.Length; i++)
                 {
                     var cur = steps[i];
-                    if (stepRetry[i] > cur.maxRetry)
+                    if (stepCtx.stepRetry[i] > cur.maxRetry)
                     {
-                        Console.WriteLine($"Doing Timeout step {cur.name} {cur.cmd} {stepRetry[i]}/{cur.maxRetry}");
-                        return step;
+                        context.DebugLog($"Doing Timeout step {cur.name} {cur.cmd} {stepCtx.stepRetry[i]}/{cur.maxRetry}");
+                        return stepCtx;
                     }
                 }
             }
-            return step;
+            return stepCtx;
         }
 
         public CommandInfo FindSpot(string name, int retry = 5)
         {
             for (int retryi = 0; retryi < retry; retryi++)
             {
-                Console.WriteLine("Trying to find SINGLEMATCH for " + name);
+                context.DebugLog("Trying to find SINGLEMATCH for " + name);
                 var cmds = Utils.GetAppInfo(name);
                 var found = cmds.FirstOrDefault(cmd => cmd.command == "SINGLEMATCH");
                 if (found != null)
                 {
-                    Console.WriteLine($"matching {name} found {found.cmpRes}");
+                    context.InfoLog($"matching {name} found {found.cmpRes}");
                     return found;
                 }
                 Thread.Sleep(1000);
@@ -97,7 +118,7 @@ namespace ccVcontrol
                 if (cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand") != null) break;
             }
             Thread.Sleep(1000);
-            Utils.GetAppInfo($"-name {name} -matchRect 79,32,167,22_200 -screenshoot");
+            //Utils.GetAppInfo($"-name {name} -matchRect 79,32,167,22_200 -screenshoot");
         }
         
         public abstract void Process();
