@@ -40,7 +40,7 @@ namespace ccVcontrol
                 
                 GenerateAccountPics(context, switchAccount.CurAccount);
 
-                DoDonate(context, cmds);
+                //DoDonate(context, cmds);
                 Console.WriteLine("press enter to countinue");
                 Console.ReadLine();
 
