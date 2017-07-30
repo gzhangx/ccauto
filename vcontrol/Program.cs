@@ -23,34 +23,32 @@ namespace ccVcontrol
             };
 
             var switchAccount = new SwitchAccount(context);
-            context.DebugLog("Getting app info");
-            var cmds = Utils.GetAppInfo();
+            context.DebugLog("Getting app info");            
             //cmds = Utils.GetAppInfo("-name allfull -screenshoot");
             //cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");            
-            cmds = context.GetToEntrance();
+            context.GetToEntrance();
             context.DebugLog("Do shift");
             context.DoShift();
             while (true)
             {                
                 //cmds = Utils.GetAppInfo();
-                cmds = context.GetToEntrance();                
+                context.GetToEntrance();
 
-                switchAccount.Process();
-
-                context.DoStdClicks(cmds);
-                cmds = Utils.GetAppInfo();
+                switchAccount.Process();                
 
                 Thread.Sleep(100);
-
-                GenerateAccountPics(switchAccount.CurAccount);
+                
+                GenerateAccountPics(context, switchAccount.CurAccount);
                 Console.WriteLine("press enter to countinue");
                 Console.ReadLine();
 
             }
         }
 
-        private static void GenerateAccountPics(int who)
+        private static void GenerateAccountPics(ProcessingContext context, int who)
         {
+            context.DebugLog("Generate account pics");
+            context.GetToEntrance();
             var fullImg = $"tstimgs\\accountFull_{who}.png";
             Utils.doScreenShoot(fullImg);
             Utils.GetAppInfo($"-name data\\accounts\\img_act{who}.png -input {fullImg} {SwitchAccount.acctNameMatchRect} -imagecorp");
