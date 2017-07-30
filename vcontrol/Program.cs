@@ -26,14 +26,14 @@ namespace ccVcontrol
             context.DebugLog("Getting app info");
             var cmds = Utils.GetAppInfo();
             //cmds = Utils.GetAppInfo("-name allfull -screenshoot");
-            //cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");
-            context.DebugLog("Do shift");
-            context.DoShift();            
-            
+            //cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");            
+
             while (true)
-            {
+            {                
                 //cmds = Utils.GetAppInfo();
                 cmds = context.GetToEntrance();
+                context.DebugLog("Do shift");
+                context.DoShift();
 
                 switchAccount.Process();
 
@@ -45,7 +45,7 @@ namespace ccVcontrol
                 GenerateAccountPics(switchAccount.CurAccount);
                 Console.WriteLine("press enter to countinue");
                 Console.ReadLine();
-                
+
             }
         }
 

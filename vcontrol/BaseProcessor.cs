@@ -43,7 +43,36 @@ namespace ccVcontrol
             context = ctx;
         }
 
+        protected bool checkRetryFail(StepContext stepCtx, int i)
+        {
+            StepInfo cur = stepCtx.Steps[i];
+            if (stepCtx.stepRetry[i] > cur.maxRetry)
+            {
+                stepCtx.failed = true;
+                stepCtx.finished = true;
+                return true;
+            }
+            return false;
+        }
 
+        protected bool FoundOtherGoodAlts(StepContext stepCtx, StepInfo cur)
+        {
+            if (cur.otherStepCheck != null)
+            {
+                bool otherFound = false;
+                foreach (var other in cur.otherStepCheck)
+                {
+                    if (CheckStep(stepCtx, other))
+                    {
+                        otherFound = true;
+                        break;
+                    }
+                }
+                context.DebugLog($"   FOUND ALT {otherFound}");
+                return (otherFound);
+            }
+            return false;
+        }
         protected StepContext DoSteps(List<StepInfo> steps)
         {
             var stepCtx = new StepContext
@@ -54,7 +83,6 @@ namespace ccVcontrol
             };
             for (int i = 0; i < steps.Count; i++) steps[i].stepInd = i;
 
-            bool lastStepRes = false;
             //while (!stepCtx.finished)
             {
                 for (int i = 0; i < steps.Count; i++)
@@ -65,19 +93,10 @@ namespace ccVcontrol
                     if (found == null)
                     {
                         stepCtx.stepRetry[i]++;
-                        if (cur.otherStepCheck != null)
+                        if (FoundOtherGoodAlts(stepCtx, cur))
                         {
-                            foreach (var other in cur.otherStepCheck)
-                            {
-                                if (CheckStep(stepCtx, other)) continue;
-                            }
-                        }
-                        if (stepCtx.stepRetry[i] > cur.maxRetry)
-                        {
-                            lastStepRes = false;
-                            stepCtx.failed = true;
-                            stepCtx.finished = true;
-                            break;
+                            i = stepCtx.step;
+                            continue;
                         }
                     }
                     else
@@ -85,21 +104,25 @@ namespace ccVcontrol
                         if (cur.Act != null)
                         {
                             cur.Act(found, cur, stepCtx);
-                            i = stepCtx.step;
-                            if (stepCtx.failed) lastStepRes = false;
+                            i = stepCtx.step;                            
                             if (stepCtx.finished) break;
                         }
                         else
                         {
                             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff);
                             context.MouseMouseTo(0, 0);
-                            lastStepRes = WaitNextStep(stepCtx);
+                            bool lastStepRes = WaitNextStep(stepCtx);
+                            if (!lastStepRes)
+                            {
+                                stepCtx.failed = true;
+                                stepCtx.stepRetry[i]++;
+                                if (checkRetryFail(stepCtx, i)) break;
+                                i--;
+                            }
                         }
                     }
                 }
-            }
-            stepCtx.finished = lastStepRes;
-            stepCtx.failed = !lastStepRes;
+            }            
             return stepCtx;
         }
 
@@ -138,6 +161,7 @@ namespace ccVcontrol
                     {
                         return true;
                     }
+                    if (FoundOtherGoodAlts(stepCtx, nextStep)) return true;
                     Thread.Sleep(1000);
                 }
             }
