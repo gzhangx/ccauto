@@ -61,9 +61,9 @@ namespace ccVcontrol
         public void DoShift()
         {
             keyboard.ReleaseKeys();
-            Thread.Sleep(100);
+            Thread.Sleep(1000);
             keyboard.PutScancode(0x2A);
-            Thread.Sleep(100);
+            Thread.Sleep(200);
         }
 
 

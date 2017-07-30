@@ -27,13 +27,13 @@ namespace ccVcontrol
             var cmds = Utils.GetAppInfo();
             //cmds = Utils.GetAppInfo("-name allfull -screenshoot");
             //cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");            
-
+            cmds = context.GetToEntrance();
+            context.DebugLog("Do shift");
+            context.DoShift();
             while (true)
             {                
                 //cmds = Utils.GetAppInfo();
-                cmds = context.GetToEntrance();
-                context.DebugLog("Do shift");
-                context.DoShift();
+                cmds = context.GetToEntrance();                
 
                 switchAccount.Process();
 
