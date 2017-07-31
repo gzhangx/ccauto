@@ -21,7 +21,7 @@ namespace ccVcontrol
                 mouse = mouse,
                 keyboard = keyboard,
             };
-
+            //Utils.doScreenShoot("tstimgs\\full.png");
             var switchAccount = new SwitchAccount(context);
             context.DebugLog("Getting app info");            
             //cmds = Utils.GetAppInfo("-name allfull -screenshoot");
