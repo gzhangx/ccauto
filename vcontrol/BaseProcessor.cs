@@ -24,6 +24,10 @@ namespace ccVcontrol
 
             public int stepInd;
             public string[] otherStepCheck;
+            public override string ToString()
+            {
+                return $"StepInfo {name} inpu={inputName} {cmd} {xoff},{yoff}";
+            }
         }
 
         public class StepContext
