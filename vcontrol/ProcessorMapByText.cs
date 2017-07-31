@@ -56,30 +56,61 @@ namespace ccVcontrol
                 context.MoveMouseAndClick(loc.point.x, loc.point.y);
                 Thread.Sleep(1000);
                 var results = Utils.GetAppInfo();
-                var bottom = results.FirstOrDefault(r => r.command == "RecoResult_INFO_Bottom");
-                string best = "";
-                string bestTag = "";
-                if (bottom != null)
+                //"RecoResult_INFO_Builders"
+                int num = NumBuilders(results);
+                context.InfoLog("Number of builders " + num);
+                GetStructureName(loc, results);
+            }
+        }
+
+        private int NumBuilders(List<CommandInfo> cmds)
+        {
+            var cmd = cmds.FirstOrDefault(c => c.command == "RecoResult_INFO_Builders");
+            try
+            {
+                if (cmd != null)
                 {
-                    foreach (var tag in tags)
+                    if (cmd.Text != null && cmd.Text.Contains("/"))
                     {
-                        var res = LCS.LongestCommonSubsequence(tag.ToLower(), bottom.Text.ToLower());
-                        if (res.Length > best.Length)
-                        {
-                            best = res;
-                            bestTag = tag;
-                        }
-                    }
-                    int bestDiff = bestTag.Length - best.Length;
-                    Console.WriteLine($" at {loc.point.x},{loc.point.y} got {bottom.command}:{bottom.Text} diff {bestDiff}");
-                    if (bestDiff < 2)
-                    {
-                        {
-                            Console.WriteLine("BESTTAG====> " + bestTag + " " + best);
-                        }
+                        var cc = cmd.Text.Split('/');
+                        return int.Parse(cc[0].Trim());
                     }
                 }
             }
+            catch (Exception exc)
+            {
+                context.InfoLog("ERROR " + exc.ToString() + " " + cmd);
+            }
+            return 0;
+        }
+
+        private string GetStructureName(PosInfo loc, List<CommandInfo> results)
+        {
+            var bottom = results.FirstOrDefault(r => r.command == "RecoResult_INFO_Bottom");
+            string best = "";
+            string bestTag = "";
+            if (bottom != null)
+            {
+                foreach (var tag in tags)
+                {
+                    var res = LCS.LongestCommonSubsequence(tag.ToLower(), bottom.Text.ToLower());
+                    if (res.Length > best.Length)
+                    {
+                        best = res;
+                        bestTag = tag;
+                    }
+                }
+                int bestDiff = bestTag.Length - best.Length;
+                Console.WriteLine($" at {loc.point.x},{loc.point.y} got {bottom.command}:{bottom.Text} diff {bestDiff}");
+                if (bestDiff < 2)
+                {
+                    {
+                        Console.WriteLine("BESTTAG====> " + bestTag + " " + best);
+                        return bestTag;
+                    }
+                }
+            }
+            return null;
         }
     }
 }
