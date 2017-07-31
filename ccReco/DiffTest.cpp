@@ -598,6 +598,7 @@ Mat doChecks(char * inputImage, const char * matchFileName, int matchThreadHold,
 	vector<BlockInfo> chkBlocks = {
 		BlockInfo(Rect(780,  21,-1, 30), thd, "INFO_Gold"),
 		BlockInfo(Rect(780, 84,-1, 30), thd,"INFO_Elixir"),
+		BlockInfo(Rect(378, 23, 60, 28), thd,"INFO_Builders"),
 		BlockInfo(Rect(280, 584, -1,45 + PAD), thd, "INFO_Bottom")
 	};
 
