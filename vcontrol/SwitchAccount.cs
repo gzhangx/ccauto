@@ -26,13 +26,13 @@ namespace ccVcontrol
             switchSteps = new List<StepInfo>
             {
                 new StepInfo { inputName= "chk_act_1stb.png", cmd = "-match settingsbutton.png 10", maxRetry = 2, name = "FindSettingsButton", xoff = 10, yoff = 10, delay = 1000 },
-                new StepInfo { inputName= "chk_act_2psi.png", cmd = "-match googlePlaySignIn.png 700", maxRetry = 3, name = "FindPlaySignin", xoff = 101, yoff = 63, delay = 5000 },
-                new StepInfo { inputName= "chk_act_3dsc.png", cmd = "-match googlePlayDisconnected.png 1700", maxRetry = 3, name = "FindPlaySigninDisconnected", xoff = 101, yoff = 63 , delay = 5000},
-                new StepInfo { inputName= "chk_act_4als.png", cmd = "-match accountlist.png 6000", maxRetry = 50, name = "SwitchAccount", xoff = 107, yoff = 89, Act = SwitchAccountAction , delay = 15000},
+                new StepInfo { inputName= "chk_act_2psi.png", cmd = "-match googlePlaySignIn.png 1700", maxRetry = 3, name = "FindPlaySignin", xoff = 101, yoff = 63, delay = 5000, otherStepCheck = new [] { "FindPlaySigninDisconnected" } },
+                new StepInfo { inputName= "chk_act_3dsc.png", cmd = "-match googlePlayDisconnected.png 1700", maxRetry = 3, name = "FindPlaySigninDisconnected", xoff = 101, yoff = 63 , delay = 3000},
+                new StepInfo { inputName= "chk_act_4als.png", cmd = "-match accountlist.png 6000", maxRetry = 5, name = "SwitchAccount", xoff = 107, yoff = 89, Act = SwitchAccountAction , delay = 15000},
 
 
-                new StepInfo { inputName= "chk_act_5ldv.png", cmd = "-match loadVillage.png 700", maxRetry = 30, name = "LoadVillage", xoff = 298, yoff = 44 },
-                new StepInfo { inputName= "chk_act_6cnf.png", cmd = "-match confirm.bmp 5000", maxRetry = 30, name = "ConfirmLoadVillage", xoff = 310, yoff = 22, Act= ConfirmLoadVillage },          
+                new StepInfo { inputName= "chk_act_5ldv.png", cmd = "-match loadVillage.png 700", maxRetry = 5, name = "LoadVillage", xoff = 298, yoff = 44, delay=5000 },
+                new StepInfo { inputName= "chk_act_6cnf.png", cmd = "-match confirm.bmp 5000", maxRetry = 5, name = "ConfirmLoadVillage", xoff = 310, yoff = 22, Act= ConfirmLoadVillage },          
             };
         }
 
@@ -42,7 +42,7 @@ namespace ccVcontrol
             Utils.doScreenShoot(tempName);
             const string tempPartName = "tstimgs\\tempName.png";
             Utils.GetAppInfo($"-name {tempPartName} -input {tempName} {acctNameMatchRect} -imagecorp");            
-            return CheckAccountWithImage(tempPartName);
+            return CheckAccountWithImage(tempPartName) - 1;
         }
         public static int CheckAccountWithImage(string screenName)
         {
@@ -75,18 +75,19 @@ namespace ccVcontrol
             return Convert.ToInt32(good.extraInfo);
         }
 
-        public override void Process()
+        public override StepContext Process()
         {
             account = CheckAccount();
             Console.WriteLine($"Trying to find SINGLEMATCH for settings button account {account}");
             switchSteps.First(r => r.name == "SwitchAccount").Act = SwitchAccountAction;
-            DoSteps(switchSteps);
+            var res = DoSteps(switchSteps);
             InitGame("Account_" + account);
+            return res;
         }
 
         private void SwitchAccountAction(CommandInfo found, StepInfo cur, StepContext stepContext)
         {
-            if (account >= MAXACCOUNT) account = 0;
+            if (account >= MAXACCOUNT || account < 0) account = 0;
 
             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff + (account* ACCOUNTSPACING));
             context.MouseMouseTo(0, 0);

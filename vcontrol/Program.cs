@@ -21,41 +21,51 @@ namespace ccVcontrol
                 mouse = mouse,
                 keyboard = keyboard,
             };
-
+            //Utils.doScreenShoot("tstimgs\\full.png");
             var switchAccount = new SwitchAccount(context);
-            context.DebugLog("Getting app info");
-            var cmds = Utils.GetAppInfo();
+            context.DebugLog("Getting app info");            
             //cmds = Utils.GetAppInfo("-name allfull -screenshoot");
-            //cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");
+            //cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");            
+            context.GetToEntrance();
             context.DebugLog("Do shift");
-            context.DoShift();            
-            
+            context.DoShift();
             while (true)
-            {
+            {                
                 //cmds = Utils.GetAppInfo();
-                cmds = context.GetToEntrance();
+                context.GetToEntrance();
 
-                switchAccount.Process();
+                new ProcessorMapByText(context).ProcessCommand(SwitchAccount.CheckAccount());
+                switchAccount.Process();                
 
-                context.DoStdClicks(cmds);
-                cmds = Utils.GetAppInfo();
-
+                var cmds = context.GetToEntrance();
                 Thread.Sleep(100);
+                
+                GenerateAccountPics(context, switchAccount.CurAccount);
 
-                GenerateAccountPics(switchAccount.CurAccount);
+                //DoDonate(context, cmds);
                 Console.WriteLine("press enter to countinue");
                 Console.ReadLine();
-                
+
             }
         }
 
-        private static void GenerateAccountPics(int who)
+        private static void GenerateAccountPics(ProcessingContext context, int who)
         {
+            context.DebugLog("Generate account pics");
+            context.GetToEntrance();
             var fullImg = $"tstimgs\\accountFull_{who}.png";
             Utils.doScreenShoot(fullImg);
             Utils.GetAppInfo($"-name data\\accounts\\img_act{who}.png -input {fullImg} {SwitchAccount.acctNameMatchRect} -imagecorp");
         }
 
+        private static  void DoDonate(ProcessingContext context, List<CommandInfo> cmds)
+        {
+            var cmd = cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand");
+            if (cmd != null)
+            {
+                ProcessDonate(context, cmd);
+            }
+        }
         private static bool ProcessCommand(ProcessingContext context, CommandInfo cmd)
         {
             switch (cmd.command)

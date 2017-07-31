@@ -1,5 +1,8 @@
-﻿using System;
+﻿using ccInfo;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -15,33 +18,31 @@ namespace ccVcontrol
         const string TownHall = "TownHall(level)";
         const string GoldStorage = "GoldStorage(level)";
         const string ElixirStorage = "ElixirStorage(level)";
-        const int startx = 127;
-        const int starty = 100;
-        const int width = 600;
-        const int height = 480;
-        const int step = 60;
         private ProcessingContext context;
         DateTime lastProcessDate = DateTime.Now.AddMinutes(-1000);
 
-        string[] tags = new string[] { GoldMine , ElixirCollector, TownHall, GoldStorage, ElixirStorage};
-
-        class TagAndLocation
-        {
-            public int x;
-            public int y;
-            public string tag;
-        }
+        string[] tags = new string[] { GoldMine, ElixirCollector, TownHall, GoldStorage, ElixirStorage };
 
         public ProcessorMapByText(ProcessingContext ctx)
         {
             context = ctx;
         }
-        List<TagAndLocation> locations = new List<TagAndLocation>();
-        public void ProcessCommand()
+        List<PosInfo> locations = new List<PosInfo>();
+        public void ProcessCommand(int act)
         {
+            if (act <= 0)
+            {
+                context.InfoLog("Failed to recognize account");
+                return;
+            }
+            var fname = $"data\\accounts\\accountFull_{act}.txt";
+            if (File.Exists(fname))
+            {
+                locations = JsonConvert.DeserializeObject<List<PosInfo>>(File.ReadAllText(fname));
+            }
             locations.ForEach(l =>
             {
-                Console.WriteLine("====>" + l.tag + " " + l.x + "," + l.y);
+                Console.WriteLine("====>" + l.name + " " + l.point.x + "," + l.point.y);
             });
             if ((DateTime.Now - lastProcessDate).TotalMinutes > 40)
             {
@@ -49,46 +50,67 @@ namespace ccVcontrol
             }
             else return;
 
-            locations.Clear();
-            var results = Utils.GetAppInfo();
-            context.DoStdClicks(results);
-            for (int y = 0; y < height - 100; y += step)
+
+            foreach (var loc in locations)
             {
-                context.MouseMouseTo(startx, starty + y);
-                for (int x = 0; x < width - 100; x += step)
+                context.MoveMouseAndClick(loc.point.x, loc.point.y);
+                Thread.Sleep(1000);
+                var results = Utils.GetAppInfo();
+                //"RecoResult_INFO_Builders"
+                int num = NumBuilders(results);
+                context.InfoLog("Number of builders " + num);
+                GetStructureName(loc, results);
+            }
+        }
+
+        private int NumBuilders(List<CommandInfo> cmds)
+        {
+            var cmd = cmds.FirstOrDefault(c => c.command == "RecoResult_INFO_Builders");
+            try
+            {
+                if (cmd != null)
                 {
-                    context.MouseMouseRelative( step, 0);
-                    context.MouseClick();
-                    Thread.Sleep(1000);
-                    results = Utils.GetAppInfo();
-                    context.DoStdClicks(results);
-                    var bottom = results.FirstOrDefault(r => r.command == "RecoResult_INFO_Bottom");
-                    string best = "";
-                    string bestTag = "";
-                    if (bottom != null)
-                    {                        
-                        foreach(var tag in tags)
-                        {
-                            var res = LCS.LongestCommonSubsequence(tag.ToLower(), bottom.Text.ToLower());
-                            if (res.Length > best.Length)
-                            {
-                                best = res;
-                                bestTag = tag;
-                            }
-                        }
-                        int bestDiff = bestTag.Length - best.Length;
-                        Console.WriteLine($" at {y},{x} got {bottom.command}:{bottom.Text} diff {bestDiff}");
-                        if (bestDiff < 2)
-                        {                            
-                            {
-                                Console.WriteLine("BESTTAG====> " + bestTag + " " + best);
-                                locations.Add(new TagAndLocation { tag = bestTag, x = x, y = y, });
-                            }
-                        }
+                    if (cmd.Text != null && cmd.Text.Contains("/"))
+                    {
+                        var cc = cmd.Text.Split('/');
+                        return int.Parse(cc[0].Trim());
                     }
                 }
             }
-            
+            catch (Exception exc)
+            {
+                context.InfoLog("ERROR " + exc.ToString() + " " + cmd);
+            }
+            return 0;
+        }
+
+        private string GetStructureName(PosInfo loc, List<CommandInfo> results)
+        {
+            var bottom = results.FirstOrDefault(r => r.command == "RecoResult_INFO_Bottom");
+            string best = "";
+            string bestTag = "";
+            if (bottom != null)
+            {
+                foreach (var tag in tags)
+                {
+                    var res = LCS.LongestCommonSubsequence(tag.ToLower(), bottom.Text.ToLower());
+                    if (res.Length > best.Length)
+                    {
+                        best = res;
+                        bestTag = tag;
+                    }
+                }
+                int bestDiff = bestTag.Length - best.Length;
+                Console.WriteLine($" at {loc.point.x},{loc.point.y} got {bottom.command}:{bottom.Text} diff {bestDiff}");
+                if (bestDiff < 2)
+                {
+                    {
+                        Console.WriteLine("BESTTAG====> " + bestTag + " " + best);
+                        return bestTag;
+                    }
+                }
+            }
+            return null;
         }
     }
 }
