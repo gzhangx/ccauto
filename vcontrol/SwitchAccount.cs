@@ -42,7 +42,7 @@ namespace ccVcontrol
             Utils.doScreenShoot(tempName);
             const string tempPartName = "tstimgs\\tempName.png";
             Utils.GetAppInfo($"-name {tempPartName} -input {tempName} {acctNameMatchRect} -imagecorp");            
-            return CheckAccountWithImage(tempPartName);
+            return CheckAccountWithImage(tempPartName) - 1;
         }
         public static int CheckAccountWithImage(string screenName)
         {
