@@ -200,6 +200,9 @@ RecoList LoadDataInfo(const char * dir) {
 			char buf[512];
 			sprintf_s(buf, "%s\\%s", dir, de->d_name);
 			Mat img = getGrayScale(imread(buf));
+			if (!strcmp(de->d_name, "t__fslash.png")) {
+				de->d_name[2] = '/';
+			}
 			res.recoInfo.push_back(RecoInfo(img, de->d_name[2]));
 			res.averageWidth += img.cols;
 		}
