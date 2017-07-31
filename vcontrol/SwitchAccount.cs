@@ -42,7 +42,7 @@ namespace ccVcontrol
             Utils.doScreenShoot(tempName);
             const string tempPartName = "tstimgs\\tempName.png";
             Utils.GetAppInfo($"-name {tempPartName} -input {tempName} {acctNameMatchRect} -imagecorp");            
-            return CheckAccountWithImage(tempPartName) - 1;
+            return CheckAccountWithImage(tempPartName);
         }
         public static int CheckAccountWithImage(string screenName)
         {
@@ -77,7 +77,7 @@ namespace ccVcontrol
 
         public override StepContext Process()
         {
-            account = CheckAccount();
+            account = CheckAccount() - 1;
             Console.WriteLine($"Trying to find SINGLEMATCH for settings button account {account}");
             switchSteps.First(r => r.name == "SwitchAccount").Act = SwitchAccountAction;
             var res = DoSteps(switchSteps);
@@ -87,12 +87,12 @@ namespace ccVcontrol
 
         private void SwitchAccountAction(CommandInfo found, StepInfo cur, StepContext stepContext)
         {
+            account++;
             if (account >= MAXACCOUNT || account < 0) account = 0;
 
             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff + (account* ACCOUNTSPACING));
             context.MouseMouseTo(0, 0);
-
-            account++;
+            
         }
 
         private void ConfirmLoadVillage(CommandInfo found, StepInfo cur, StepContext stepContext)
