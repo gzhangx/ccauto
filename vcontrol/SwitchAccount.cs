@@ -56,7 +56,7 @@ namespace ccVcontrol
             {
                 var actname = f.Substring(actImgNameStart.Length);
                 actname = actname.Substring(0, actname.IndexOf("."));
-                sb.Append($" -name {actname} -match {f} 2560600");                
+                sb.Append($" -name {actname} -match {f} 96876875");                
             }
             var res = Utils.GetAppInfo(sb.ToString());
             foreach (var r in res)
