@@ -424,10 +424,14 @@ void printCheckLocation(vector<ImageDiffVal> pts, const char * who, Point move, 
 	}
 }
 
-
+bool imageIs3Channel(Mat img) {
+	return (img.type() & CV_8SC3) ? true:false;
+}
 vector<ImageDiffVal> CheckImageMatch(Mat img, const char * fileName, double threadshold, int topX) {
-	Mat result;
-	Mat templ = getGrayScale(imread(fileName, IMREAD_COLOR));
+	Mat result;	
+	Mat templ = imread(fileName, IMREAD_COLOR);
+	bool img3C = imageIs3Channel(img);
+	if( !img3C ) templ = getGrayScale(templ);
 
 	if ( (templ.cols > img.cols) || (templ.rows > img.rows)) return vector<ImageDiffVal>();
 	char maskName[512];
@@ -444,7 +448,7 @@ vector<ImageDiffVal> CheckImageMatch(Mat img, const char * fileName, double thre
 	Mat mask;
 	if (foundMask) {
 		mask = imread(maskName, IMREAD_COLOR);
-		if (mask.data) mask = getGrayScale(mask);
+		if (mask.data && !img3C ) mask = getGrayScale(mask);
 	}
 
 	if (mask.data) {
@@ -533,12 +537,44 @@ void DoRecoOnBlock(Mat img, RecoList checkList, BlockInfo blk) {
 	printf("%s\n", buf);
 }
 
+
+void vbxScreenShoot(const char * inputImage) {	
+	char buf[1024];
+	sprintf_s(buf, "\"C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe\" controlvm cctest screenshotpng %s", inputImage);
+	system(buf);
+}
+
+bool DoImgMatch(char * inputImage, const char * matchFileName, int matchThreadHold, BlockInfo * matchRect, int topXMatches) {
+	if (inputImage == NULL) {
+		inputImage = "tstimgs\\full.png";
+		vbxScreenShoot(inputImage);
+	}
+	Mat img = imread(inputImage, IMREAD_COLOR);
+	if (img.rows == 0) {
+		printf("ERR: No image");
+		return false;
+	}
+	if (matchRect != NULL && matchRect->info != NULL) {
+		Rect rect = matchRect->rect;
+		if (rect.width <= 0) {
+			rect.width = img.cols - rect.x;
+		}
+		Mat imgBlk = img(rect);
+		img = imgBlk;
+	}
+	if (matchFileName != NULL) {
+		const char * ctxName = matchRect != NULL ? matchRect->info : "";
+		printCheckLocation(CheckImageMatch(img, matchFileName, matchThreadHold, topXMatches), "SINGLEMATCH", Point(0, 0), ctxName);
+		return true;
+	}
+	return false;
+}
 RecoList topCheckList = LoadDataInfo("data\\check\\top");
 RecoList bottomCheckList = LoadDataInfo("data\\check\\bottom");
 Mat doChecks(char * inputImage, const char * matchFileName, int matchThreadHold, BlockInfo * matchRect, int topXMatches) {
 	if (inputImage == NULL) {
 		inputImage = "tstimgs\\full.png";
-		system("\"C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe\" controlvm cctest screenshotpng tstimgs\\full.png");
+		vbxScreenShoot(inputImage);
 	}
 	Mat img = getGrayScale(imread(inputImage, IMREAD_COLOR));
 	if (img.rows == 0) {
@@ -672,7 +708,7 @@ int main(int argc, char** argv)
 					match = false;
 					matchThreadHold = atoi(argv[i]);
 					if (inputImage == NULL) throw "input not specified";
-					doChecks(inputImage, matchFile, matchThreadHold, &matchRect, topX);
+					DoImgMatch(inputImage, matchFile, matchThreadHold, &matchRect, topX);
 					matchFile = NULL;
 					if (argc == i + 1) return 0;
 				}

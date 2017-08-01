@@ -26,13 +26,13 @@ namespace ccVcontrol
             switchSteps = new List<StepInfo>
             {
                 new StepInfo { inputName= "chk_act_1stb.png", cmd = "-match settingsbutton.png 10", maxRetry = 2, name = "FindSettingsButton", xoff = 10, yoff = 10, delay = 1000 },
-                new StepInfo { inputName= "chk_act_2psi.png", cmd = "-match googlePlaySignIn.png 1700", maxRetry = 3, name = "FindPlaySignin", xoff = 101, yoff = 63, delay = 5000, otherStepCheck = new [] { "FindPlaySigninDisconnected" } },
-                new StepInfo { inputName= "chk_act_3dsc.png", cmd = "-match googlePlayDisconnected.png 1700", maxRetry = 3, name = "FindPlaySigninDisconnected", xoff = 101, yoff = 63 , delay = 3000},
+                new StepInfo { inputName= "chk_act_2psi.png", cmd = "-match googlePlaySignIn.png 3000", maxRetry = 3, name = "FindPlaySignin", xoff = 101, yoff = 63, delay = 5000, otherStepCheck = new [] { "FindPlaySigninDisconnected" } },
+                new StepInfo { inputName= "chk_act_3dsc.png", cmd = "-match googlePlayDisconnected.png 3000", maxRetry = 3, name = "FindPlaySigninDisconnected", xoff = 101, yoff = 63 , delay = 3000},
                 new StepInfo { inputName= "chk_act_4als.png", cmd = "-match accountlist.png 6000", maxRetry = 5, name = "SwitchAccount", xoff = 107, yoff = 89, Act = SwitchAccountAction , delay = 15000},
 
 
-                new StepInfo { inputName= "chk_act_5ldv.png", cmd = "-match loadVillage.png 700", maxRetry = 5, name = "LoadVillage", xoff = 298, yoff = 44, delay=5000 },
-                new StepInfo { inputName= "chk_act_6cnf.png", cmd = "-match confirm.bmp 5000", maxRetry = 5, name = "ConfirmLoadVillage", xoff = 310, yoff = 22, Act= ConfirmLoadVillage },          
+                new StepInfo { inputName= "chk_act_5ldv.png", cmd = "-match loadVillage.png 1000", maxRetry = 5, name = "LoadVillage", xoff = 298, yoff = 44, delay=5000 },
+                new StepInfo { inputName= "chk_act_6cnf.png", cmd = "-match confirm.bmp 10000", maxRetry = 5, name = "ConfirmLoadVillage", xoff = 310, yoff = 22, Act= ConfirmLoadVillage },          
             };
         }
 
