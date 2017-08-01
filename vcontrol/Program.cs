@@ -34,7 +34,7 @@ namespace ccVcontrol
                 //cmds = Utils.GetAppInfo();
                 context.GetToEntrance();
 
-                new ProcessorMapByText(context).ProcessCommand(SwitchAccount.CheckAccount());
+                //new ProcessorMapByText(context).ProcessCommand(SwitchAccount.CheckAccount());
                 switchAccount.Process();                
 
                 var cmds = context.GetToEntrance();
@@ -55,7 +55,7 @@ namespace ccVcontrol
             context.GetToEntrance();
             var fullImg = $"tstimgs\\accountFull_{who}.png";
             Utils.doScreenShoot(fullImg);
-            Utils.GetAppInfo($"-name data\\accounts\\img_act{who}.png -input {fullImg} {SwitchAccount.acctNameMatchRect} -imagecorp");
+            //Utils.GetAppInfo($"-name data\\accounts\\img_act{who}.png -input {fullImg} {SwitchAccount.acctNameMatchRect} -imagecorp");
         }
 
         private static  void DoDonate(ProcessingContext context, List<CommandInfo> cmds)
