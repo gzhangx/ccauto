@@ -30,7 +30,7 @@ namespace ccVcontrol
             int count = 0;
             foreach (var cmd in clicks)
             {
-                if (cmd.command.StartsWith("PRMXYCLICK_STD_"))
+                if (cmd.command.StartsWith("PRMXYCLICK_STD_") && cmd.decision == "true")
                 {
                     count++;
                     MoveMouseAndClick(cmd.x, cmd.y);
@@ -67,6 +67,12 @@ namespace ccVcontrol
         }
 
 
+        protected bool CheckFound(List<CommandInfo> cmds, string toFind)
+        {
+            var cmd = cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand");
+            if (cmd == null) return false;
+            return cmd.decision == "true";
+        }
         public List<CommandInfo> GetToEntrance()
         {
             while (true)
@@ -75,7 +81,7 @@ namespace ccVcontrol
                 DebugLog("MainLoop CheckEntrance");
                 DoStdClicks(cmds);
                 DebugLog("MainLoop, CheckEntrance.getAppInfo");
-                if (cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand") != null)
+                if (CheckFound(cmds, "PRMXYCLICK_ACT_LeftExpand"))
                 {
                     DebugLog("MainLoop, CheckEntrance.FoundLoaded");
                     return cmds;
