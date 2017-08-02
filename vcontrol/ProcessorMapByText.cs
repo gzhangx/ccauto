@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace ccVcontrol
 {
@@ -20,6 +21,8 @@ namespace ccVcontrol
         const string ElixirStorage = "ElixirStorage(level)";
         private ProcessingContext context;
         DateTime lastProcessDate = DateTime.Now.AddMinutes(-1000);
+
+        const string tempImgName = "tstimgs\\tempFullScreenAct.png";
 
         string[] tags = new string[] { GoldMine, ElixirCollector, TownHall, GoldStorage, ElixirStorage };
 
@@ -55,12 +58,19 @@ namespace ccVcontrol
             {
                 context.MoveMouseAndClick(loc.point.x, loc.point.y);
                 Thread.Sleep(1000);
-                var results = Utils.GetAppInfo();
-                //"RecoResult_INFO_Builders"
-                int num = NumBuilders(results);
-                context.InfoLog("Number of builders " + num);
-                GetStructureName(loc, results);
+                Utils.doScreenShoot(tempImgName);
+                canUpgrade(tempImgName);
+                //ExtractItemname(loc);
             }
+        }
+
+        private void ExtractItemname(PosInfo loc)
+        {
+            var results = Utils.GetAppInfo();
+            //"RecoResult_INFO_Builders"
+            int num = NumBuilders(results);
+            context.InfoLog("Number of builders " + num);
+            GetStructureName(loc, results);
         }
 
         private int NumBuilders(List<CommandInfo> cmds)
@@ -111,6 +121,25 @@ namespace ccVcontrol
                 }
             }
             return null;
+        }
+
+        public static CommandInfo canUpgrade(string imgName)
+        {
+            string[] resultTypes = new[] { "Good", "Bad" };
+            string[] itemTypes = new[] { "Gold", "Eli" };
+            var sb = new StringBuilder();
+            sb.Append($"-input {imgName} ");
+            foreach (var rt in resultTypes)
+            {
+                foreach (var itm in itemTypes)
+                {
+                    sb.Append($"-name {rt} -match data\\check\\upgrade{itm}{rt}.png 1000 ");
+                }
+            }
+            var res = Utils.GetAppInfo(sb.ToString());
+            res = res.OrderBy(r => r.cmpRes).ToList();
+            foreach (var r in res) Console.WriteLine("           DEBUGRM " + r);
+            return res.Where(r => r.decision == "true").FirstOrDefault();
         }
     }
 }

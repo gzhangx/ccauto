@@ -92,6 +92,9 @@ namespace ccVcontrol
 
         static void TestAccounts()
         {
+            Utils.doScreenShoot("tstimgs\\tmptesttest.png");
+            ProcessorMapByText.canUpgrade("tstimgs\\tmptesttest.png");
+            return;
             for (int i = 1; i <= 4; i++)
             {
                 //generate mask
