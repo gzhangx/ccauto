@@ -555,7 +555,7 @@ bool DoImgMatch(char * inputImage, const char * matchFileName, int matchThreadHo
 		printf("ERR: No image");
 		return false;
 	}
-	if (matchRect != NULL && matchRect->info != NULL) {
+	if (matchRect != NULL && matchRect->info != NULL && (matchRect->rect.y > 0)) {
 		Rect rect = matchRect->rect;
 		if (rect.width <= 0) {
 			rect.width = img.cols - rect.x;
@@ -564,7 +564,7 @@ bool DoImgMatch(char * inputImage, const char * matchFileName, int matchThreadHo
 		img = imgBlk;
 	}
 	if (matchFileName != NULL) {
-		const char * ctxName = matchRect != NULL ? matchRect->info : "";
+		const char * ctxName = matchRect != NULL ? matchRect->info : matchFileName;
 		printCheckLocation(CheckImageMatch(img, matchFileName, matchThreadHold, topXMatches), "SINGLEMATCH", Point(0, 0), ctxName);
 		return true;
 	}

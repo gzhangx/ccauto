@@ -110,7 +110,8 @@ namespace ccVcontrol
         }
         public static void Start()
         {
-            SwitchAccount.CheckAccount();
+            //var rrr = Utils.GetAppInfo($"-input tstimgs\\upgradeelibad.png -name upgradegood -match data\\check\\upgradeeligood.png 10000 -name upgradebad -match data\\check\\upgradeelibad.png 10000");
+            //SwitchAccount.CheckAccount();
             //TestAccounts();
             //return;
             Console.WriteLine("Starting vm");
