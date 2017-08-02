@@ -129,17 +129,25 @@ namespace ccVcontrol
             string[] itemTypes = new[] { "Gold", "Eli" };
             var sb = new StringBuilder();
             sb.Append($"-input {imgName} ");
+            const int actx = 200;
+            const int acty = 630;
             foreach (var rt in resultTypes)
             {
                 foreach (var itm in itemTypes)
                 {
-                    sb.Append($"-name {rt} -match data\\check\\upgrade{itm}{rt}.png 1000 ");
+                    sb.Append($"-name {rt} -matchRect {actx},{acty},650,105_200 -match data\\check\\upgrade{itm}{rt}.png 40 ");
                 }
             }
             var res = Utils.GetAppInfo(sb.ToString());
-            res = res.OrderBy(r => r.cmpRes).ToList();
+            res = res.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
             foreach (var r in res) Console.WriteLine("           DEBUGRM " + r);
-            return res.Where(r => r.decision == "true").FirstOrDefault();
+            var found = res.FirstOrDefault();
+            if (found != null)
+            {
+                found.x += actx;
+                found.y += acty;
+            }
+            return found;
         }
     }
 }

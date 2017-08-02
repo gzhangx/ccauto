@@ -115,7 +115,7 @@ namespace ccVcontrol
         {
             //var rrr = Utils.GetAppInfo($"-input tstimgs\\upgradeelibad.png -name upgradegood -match data\\check\\upgradeeligood.png 10000 -name upgradebad -match data\\check\\upgradeelibad.png 10000");
             //SwitchAccount.CheckAccount();
-            //TestAccounts();
+            TestAccounts(); //TODO DEBUG REMOVE THIS 
             //return;
             Console.WriteLine("Starting vm");
             Utils.executeVBoxMngr("startvm cctest");
