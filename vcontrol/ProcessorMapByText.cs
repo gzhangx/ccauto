@@ -123,7 +123,12 @@ namespace ccVcontrol
             return null;
         }
 
-        public static CommandInfo canUpgrade(string imgName)
+        public class UpgradeTrain
+        {
+            public CommandInfo upgrade;
+            public CommandInfo train;
+        }
+        public static UpgradeTrain canUpgrade(string imgName)
         {
             string[] resultTypes = new[] { "Good", "Bad" };
             string[] itemTypes = new[] { "Gold", "Eli" };
@@ -138,16 +143,21 @@ namespace ccVcontrol
                     sb.Append($"-name {rt} -matchRect {actx},{acty},650,105_200 -match data\\check\\upgrade{itm}{rt}.png 40 ");
                 }
             }
+            sb.Append($" -name Train -matchRect {actx},{acty},650,105_200 -match data\\check\\traintroops.png 40 ");
             var res = Utils.GetAppInfo(sb.ToString());
             res = res.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
+            res.ForEach(r =>
+            {
+                r.x += actx;
+                r.y += acty;
+            });
             foreach (var r in res) Console.WriteLine("           DEBUGRM " + r);
             var found = res.FirstOrDefault();
-            if (found != null)
+            return new UpgradeTrain
             {
-                found.x += actx;
-                found.y += acty;
-            }
-            return found;
+                upgrade = res.FirstOrDefault(r => r.extraInfo == "Good" || r.extraInfo == "Bad"),
+                train = res.FirstOrDefault(r => r.extraInfo == "Train"),
+            };
         }
     }
 }
