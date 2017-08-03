@@ -47,60 +47,127 @@ namespace ccVcontrol
             {
                 Console.WriteLine("====>" + l.name + " " + l.point.x + "," + l.point.y);
             });
-            if ((DateTime.Now - lastProcessDate).TotalMinutes > 40)
-            {
-                lastProcessDate = DateTime.Now;
-            }
-            else return;
 
 
+            var badLocs = new List<PosInfo>();
+            int nameTry = 0;
             foreach (var loc in locations)
             {
                 context.MoveMouseAndClick(loc.point.x, loc.point.y);
                 Thread.Sleep(1000);
                 Utils.doScreenShoot(tempImgName);
                 var results = Utils.GetAppInfo();
+                if (string.IsNullOrWhiteSpace(loc.name))
+                {
+                    loc.name = GetStructureName(loc, results);
+                    context.DebugLog($"     FOUND {loc.name}");
+                    if (string.IsNullOrWhiteSpace(loc.name))
+                    {
+                        nameTry++;
+                        context.MoveMouseAndClick(loc.point.x, loc.point.y);
+                        Thread.Sleep(1000);
+                        results = Utils.GetAppInfo();
+                        loc.name = GetStructureName(loc, results);
+                        if (string.IsNullOrWhiteSpace(loc.name))
+                        {
+                            badLocs.Add(loc);
+                            context.DebugLog("     Removing bad loc");
+                        }
+                    }
+                }
                 //"RecoResult_INFO_Builders"
                 int numBuilders = NumBuilders(results);
                 context.InfoLog($"Number of builders available {numBuilders}");
                 var actionItems = canUpgrade(tempImgName);
                 if (numBuilders > 0)
                 {
-                    if (actionItems.upgrade != null)
+                    RetryAction(actionItems.upgrade, Upgraded);                    
+                }
+                foreach (var otherAct in actionItems.other)
+                {
+                    switch (otherAct.extraInfo)
                     {
-                        context.MoveMouseAndClick(actionItems.upgrade.x + 20, actionItems.upgrade.y + 20);
-                        for (int retry = 0; retry < 3; retry++)
-                        {
-                            Utils.doScreenShoot(tempImgName);
-                            var sb = new StringBuilder();
-                            sb.Append($"-input {tempImgName} ");                            
-                            sb.Append($"-name g1 -match data\\check\\upgradeWithEliButton.png 400 ");                            
-                            sb.Append($" -name g2 -match data\\check\\upgradeWithGoldButton.png 400 ");
-                            var btns = Utils.GetAppInfo(sb.ToString());
-                            foreach (var btn in btns) context.DebugLog("           check train button " + btn);
-                            btns = btns.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
-                            if (btns.FirstOrDefault() != null)
-                            {
-                                var btn = btns.First();
-                                context.MoveMouseAndClick(btn.x + 20, btn.y + 20);
-                                break;
-                            }
-                        }
-                        results = Utils.GetAppInfo();
-                        context.DoStdClicks(results);
+                        case "RearmAll":
+                            RetryAction(otherAct, () => CheckMatchAndAct("okcancel.png 3000 ", 300, 54));
+                            break;
+                        case "Train":
+                            RetryAction(otherAct, () => CheckMatchAndAct("buildwizardbutton.png 30 ", 54, 46, 10));
+                            break;
                     }
                 }
-                //ExtractItemname(loc);
+            }
+            foreach (var p in badLocs) locations.Remove(p);
+            File.WriteAllText(fname, JsonConvert.SerializeObject(locations));
+        }
+
+        private void RetryAction(CommandInfo cmd, Func<bool> act)
+        {
+            if (cmd != null)
+            {
+                context.MoveMouseAndClick(cmd.x + 20, cmd.y + 20);
+                for (int retry = 0; retry < 3; retry++)
+                {
+                    if (act()) break;
+                }
+                var results = Utils.GetAppInfo();
+                context.DoStdClicks(results);
             }
         }
 
-        private void ExtractItemname(PosInfo loc)
+        private bool Upgraded()
+        {
+            Utils.doScreenShoot(tempImgName);
+            var sb = new StringBuilder();
+            sb.Append($"-input {tempImgName} ");
+            sb.Append($"-name g1 -match data\\check\\upgradeWithEliButton.png 400 ");
+            sb.Append($" -name g2 -match data\\check\\upgradeWithGoldButton.png 400 ");
+            var btns = Utils.GetAppInfo(sb.ToString());
+            foreach (var btn in btns) context.DebugLog("           check train button " + btn);
+            btns = btns.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
+            if (btns.FirstOrDefault() != null)
+            {
+                var btn = btns.First();
+                context.MoveMouseAndClick(btn.x + 20, btn.y + 20);
+                return true;
+            }
+            return false;
+        }
+
+        private bool CheckMatchAndAct(string img, int offx, int offy, int repeat = 1)
+        {
+            Utils.doScreenShoot(tempImgName);
+            var sb = new StringBuilder();
+            sb.Append($"-input {tempImgName} ");
+            sb.Append($"-name g1 -match data\\check\\{img} ");
+            var btns = Utils.GetAppInfo(sb.ToString());
+            foreach (var btn in btns) context.DebugLog("           check rearmall " + btn);
+            btns = btns.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
+            if (btns.FirstOrDefault() != null)
+            {
+                var btn = btns.First();
+                while (repeat > 0)
+                {
+                    context.MoveMouseAndClick(btn.x + offx, btn.y + offy);
+                    repeat--;
+                    if (repeat != 0)
+                    {
+                        btns = Utils.GetAppInfo(sb.ToString());
+                        btn = btns.FirstOrDefault(r => r.decision == "true");
+                        if (btn == null) break;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private string ExtractItemname(PosInfo loc)
         {
             var results = Utils.GetAppInfo();
             //"RecoResult_INFO_Builders"
-            int num = NumBuilders(results);
-            context.InfoLog("Number of builders " + num);
-            GetStructureName(loc, results);
+            //int num = NumBuilders(results);
+            //context.InfoLog("Number of builders " + num);
+            return GetStructureName(loc, results);
         }
 
         private int NumBuilders(List<CommandInfo> cmds)
@@ -156,8 +223,7 @@ namespace ccVcontrol
         public class UpgradeTrain
         {
             public CommandInfo upgrade;
-            public CommandInfo train;
-            public CommandInfo rearm;
+            public List<CommandInfo> other;
         }
         public static UpgradeTrain canUpgrade(string imgName)
         {
@@ -174,22 +240,32 @@ namespace ccVcontrol
                     sb.Append($"-name {rt} -matchRect {actx},{acty},650,105_200 -match data\\check\\upgrade{itm}{rt}.png 40 ");
                 }
             }
-            sb.Append($" -name Train -matchRect {actx},{acty},650,105_200 -match data\\check\\traintroops.png 40 ");
-            sb.Append($" -name RearmAll -matchRect {actx},{acty},650,105_200 -match data\\check\\rearmall.png 30 ");
-            var res = Utils.GetAppInfo(sb.ToString());
-            res = res.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
+            var otherActs = new[] { "Train", "RearmAll" };
+            var otherImgs = new Dictionary<string, string>
+            {
+                {"Train","data\\check\\traintroops.png 30" },
+                {"RearmAll","data\\check\\rearmall.png 30" }
+            };
+            foreach (var name in otherActs)
+                sb.Append($" -name {name} -matchRect {actx},{acty},650,105_200 -match {otherImgs[name]} ");            
+            var res = Utils.GetAppInfo(sb.ToString());            
             res.ForEach(r =>
             {
                 r.x += actx;
                 r.y += acty;
             });
             foreach (var r in res) Console.WriteLine("           DEBUGRM " + r);
-            var found = res.FirstOrDefault();
+            res = res.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
+            var others = new List<CommandInfo>();
+            foreach (var name in otherActs)
+            {
+                var found = res.FirstOrDefault(r => r.extraInfo == name);
+                if (found != null) others.Add(found);
+            }
             return new UpgradeTrain
             {
                 upgrade = res.FirstOrDefault(r => r.extraInfo == "Good" || r.extraInfo == "Bad"),
-                train = res.FirstOrDefault(r => r.extraInfo == "Train"),
-                rearm = res.FirstOrDefault(r=>r.extraInfo == "RearmAll"),
+                other = others,
             };
         }
     }

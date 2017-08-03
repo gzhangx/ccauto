@@ -94,7 +94,6 @@ namespace ccVcontrol
         {
             Utils.doScreenShoot("tstimgs\\tmptesttest.png");
             var actr = ProcessorMapByText.canUpgrade("tstimgs\\tmptesttest.png");
-            Console.WriteLine(actr.train);
             Console.WriteLine(actr.upgrade);
             return;
             for (int i = 1; i <= 4; i++)
