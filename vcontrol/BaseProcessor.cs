@@ -207,6 +207,9 @@ namespace ccVcontrol
                 {
                     context.InfoLog($"{printDebug}matching {name} found {found.cmpRes} {found.decision}");
                     return found;
+                }else
+                {
+                    context.InfoLog($"{printDebug}matching {name} NOT found {found.cmpRes} {found.decision}");
                 }
                 Thread.Sleep(1000);
             }
