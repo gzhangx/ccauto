@@ -206,6 +206,7 @@ namespace ccVcontrol
                 if (found != null && found.decision == "true")
                 {
                     context.InfoLog($"{printDebug}matching {name} found {found.cmpRes} {found.decision}");
+                    context.LogMatchAnalyst(name, found.cmpRes);
                     return found;
                 }else
                 {

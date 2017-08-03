@@ -25,6 +25,30 @@ namespace ccVcontrol
         {
             Console.WriteLine("=>" + str);
         }
+
+        public void LogMatchAnalyst(string str, decimal res)
+        {
+            DebugLog($"...LogMatchAnalyst {str}/{res}");
+            //format  -input tstimgs\chk_act_6cnf.png -match data\check\confirm.bmp 10000/8038.000000
+            int ind = str.IndexOf("-match");
+            if (ind > 0)
+            {
+                try
+                {
+                    var nnn = str.Substring(ind);
+                    var parts = nnn.Split(' ');
+                    var fname = parts[1];
+                    var matchres = parts[2];
+                    InfoLog($"  LogMatchAnalyst==>{fname} {res.ToString("#")}/{matchres}");
+                } catch (Exception exc)
+                {
+                    InfoLog($"Bad format exc for LogMatchAnalyst {str}");
+                }
+            }else
+            {
+                InfoLog("Bad format for LogMatchAnalyst " + str);
+            }
+        }
         public int DoStdClicks(List<CommandInfo> clicks)
         {
             int count = 0;
