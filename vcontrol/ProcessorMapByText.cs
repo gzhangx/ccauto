@@ -54,12 +54,18 @@ namespace ccVcontrol
 
             var badLocs = new List<PosInfo>();
             int nameTry = 0;
+            var results = Utils.GetAppInfo();
+            int numBuilders = NumBuilders(results);
             foreach (var loc in locations)
             {
+                if (numBuilders == 0)
+                {
+                    if (loc.name != TownHall && loc.name != Barracks) continue;
+                }
                 context.MoveMouseAndClick(loc.point.x, loc.point.y);
                 Thread.Sleep(1000);
                 Utils.doScreenShoot(tempImgName);
-                var results = Utils.GetAppInfo();
+                results = Utils.GetAppInfo();
                 if (string.IsNullOrWhiteSpace(loc.name))
                 {
                     loc.name = GetStructureName(loc, results);
@@ -79,7 +85,7 @@ namespace ccVcontrol
                     }
                 }
                 //"RecoResult_INFO_Builders"
-                int numBuilders = NumBuilders(results);                
+                numBuilders = NumBuilders(results);
                 context.InfoLog($"Number of builders available {numBuilders}");
                 if (numBuilders == 0)
                 {
