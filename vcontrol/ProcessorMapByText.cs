@@ -56,10 +56,23 @@ namespace ccVcontrol
             int nameTry = 0;
             var results = Utils.GetAppInfo();
             int numBuilders = NumBuilders(results);
+            bool gotFirstGold = false;
+            bool gotFirstEli = false;
+            bool trained = false;
             foreach (var loc in locations)
             {
                 if (numBuilders == 0 && !string.IsNullOrWhiteSpace(loc.name))
                 {
+                    if (loc.name == GoldMine && !gotFirstGold)
+                    {
+                        gotFirstGold = true;
+                        context.MoveMouseAndClick(loc.point.x, loc.point.y);
+                    }
+                    if (loc.name == ElixirCollector && !gotFirstEli)
+                    {
+                        gotFirstEli = true;
+                        context.MoveMouseAndClick(loc.point.x, loc.point.y);
+                    }
                     if (loc.name != TownHall && loc.name != Barracks) continue;
                 }
                 context.MoveMouseAndClick(loc.point.x, loc.point.y);
@@ -104,7 +117,11 @@ namespace ccVcontrol
                             RetryAction(otherAct, () => CheckMatchAndAct("okcancel.png 3000 ", 300, 54));
                             break;
                         case "Train":
-                            RetryAction(otherAct, () => CheckMatchAndAct("buildwizardbutton.png 30 ", 54, 46, 10));
+                            if (!trained)
+                            {
+                                RetryAction(otherAct, () => CheckMatchAndAct("buildwizardbutton.png 30 ", 54, 46, 10));
+                                trained = true;
+                            }
                             break;
                     }
                 }
