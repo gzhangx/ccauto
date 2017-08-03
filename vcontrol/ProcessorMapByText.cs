@@ -103,6 +103,7 @@ namespace ccVcontrol
                 if (numBuilders == 0)
                 {
                     if (loc.name != TownHall && loc.name != Barracks) continue;
+                    if (loc.name == Barracks && trained) continue;
                 }
                 var actionItems = canUpgrade(tempImgName);
                 if (numBuilders > 0)
