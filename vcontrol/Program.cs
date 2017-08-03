@@ -24,6 +24,7 @@ namespace ccVcontrol
             context.GetToEntrance();
             context.DebugLog("Do shift");
             context.DoShift();
+            DoDonate(context);
             while (context.vdcontroller.canContinue())
             {                
                 //cmds = Utils.GetAppInfo();

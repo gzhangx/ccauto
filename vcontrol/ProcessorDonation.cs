@@ -30,8 +30,10 @@ namespace ccVcontrol
             for (int i = 0; i < 2; i++)
             {
                 Thread.Sleep(2000);
+                Utils.doScreenShoot(ProcessorMapByText.tempImgName);                
                 context.DebugLog("DEBUGPRINTINFO trying to find donation button");
-                var results = Utils.GetAppInfo("-name donate -top 5 -matchRect 227,102,140,600_200 -match data\\check\\donatebutton.png 200000");
+                //-matchRect 227,102,140,600_200
+                var results = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name donate -matchRect 227,102,140,600_200 -top 5  -match data\\check\\donatebutton.png 20");
 
                 var donationFormat = results.FirstOrDefault(r=>r.command == "INFO_DonateButtonFound");
                 if (donationFormat != null)

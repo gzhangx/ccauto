@@ -26,7 +26,7 @@ namespace ccVcontrol
         private ProcessingContext context;
         DateTime lastProcessDate = DateTime.Now.AddMinutes(-1000);
 
-        const string tempImgName = "tstimgs\\tempFullScreenAct.png";        
+        public const string tempImgName = "tstimgs\\tempFullScreenAct.png";        
 
         public ProcessorMapByText(ProcessingContext ctx)
         {
