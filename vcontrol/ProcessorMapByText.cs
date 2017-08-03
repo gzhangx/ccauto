@@ -157,6 +157,7 @@ namespace ccVcontrol
         {
             public CommandInfo upgrade;
             public CommandInfo train;
+            public CommandInfo rearm;
         }
         public static UpgradeTrain canUpgrade(string imgName)
         {
@@ -174,6 +175,7 @@ namespace ccVcontrol
                 }
             }
             sb.Append($" -name Train -matchRect {actx},{acty},650,105_200 -match data\\check\\traintroops.png 40 ");
+            sb.Append($" -name RearmAll -matchRect {actx},{acty},650,105_200 -match data\\check\\rearmall.png 30 ");
             var res = Utils.GetAppInfo(sb.ToString());
             res = res.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
             res.ForEach(r =>
@@ -187,6 +189,7 @@ namespace ccVcontrol
             {
                 upgrade = res.FirstOrDefault(r => r.extraInfo == "Good" || r.extraInfo == "Bad"),
                 train = res.FirstOrDefault(r => r.extraInfo == "Train"),
+                rearm = res.FirstOrDefault(r=>r.extraInfo == "RearmAll"),
             };
         }
     }
