@@ -39,7 +39,7 @@ namespace ccVcontrol
                     var parts = nnn.Split(' ');
                     var fname = parts[1];
                     var matchres = parts[2];
-                    InfoLog($"  LogMatchAnalyst==>{fname} {res.ToString("#")}/{matchres}");
+                    InfoLog($"  LogMatchAnalyst==>{fname} {res.ToString("0")}/{matchres}");
                 } catch (Exception exc)
                 {
                     InfoLog($"Bad format exc for LogMatchAnalyst {str}");

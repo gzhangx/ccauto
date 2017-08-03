@@ -58,7 +58,7 @@ namespace ccVcontrol
             int numBuilders = NumBuilders(results);
             foreach (var loc in locations)
             {
-                if (numBuilders == 0)
+                if (numBuilders == 0 && !string.IsNullOrWhiteSpace(loc.name))
                 {
                     if (loc.name != TownHall && loc.name != Barracks) continue;
                 }
