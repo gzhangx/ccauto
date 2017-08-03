@@ -14,13 +14,8 @@ namespace ccVcontrol
     
     public class Program
     {        
-        static void checkLoop(IMouse mouse, IKeyboard keyboard)
+        static void checkLoop(ProcessingContext context)
         {
-            ProcessingContext context = new ProcessingContext
-            {
-                mouse = mouse,
-                keyboard = keyboard,
-            };
             //Utils.doScreenShoot("tstimgs\\full.png");
             var switchAccount = new SwitchAccount(context);
             context.DebugLog("Getting app info");            
@@ -29,12 +24,13 @@ namespace ccVcontrol
             context.GetToEntrance();
             context.DebugLog("Do shift");
             context.DoShift();
-            while (true)
+            while (context.vdcontroller.canContinue())
             {                
                 //cmds = Utils.GetAppInfo();
                 context.GetToEntrance();
-
-                new ProcessorMapByText(context).ProcessCommand(SwitchAccount.CheckAccount());
+                int acct = SwitchAccount.CheckAccount();
+                context.vdcontroller.NotifyStartingAccount(acct);
+                new ProcessorMapByText(context).ProcessCommand(acct);
                 switchAccount.Process();                
 
                 var cmds = context.GetToEntrance();
@@ -43,8 +39,8 @@ namespace ccVcontrol
                 GenerateAccountPics(context, switchAccount.CurAccount);
 
                 //DoDonate(context, cmds);
-                Console.WriteLine("press enter to countinue");
-                Console.ReadLine();
+                //Console.WriteLine("press enter to countinue");
+                //Console.ReadLine();
 
             }
         }
@@ -112,7 +108,7 @@ namespace ccVcontrol
                 }
             }
         }
-        public static void Start()
+        public static void Start(IVDController controller)
         {
             //var rrr = Utils.GetAppInfo($"-input tstimgs\\upgradeelibad.png -name upgradegood -match data\\check\\upgradeeligood.png 10000 -name upgradebad -match data\\check\\upgradeelibad.png 10000");
             //SwitchAccount.CheckAccount();
@@ -155,7 +151,7 @@ namespace ccVcontrol
                     //MouseMouseTo(mouse, 360, 156);
                     //MouseClick(mouse);
                     Console.WriteLine("main loop");
-                    checkLoop(mouse, keyboard);
+                    checkLoop(new ProcessingContext(mouse, keyboard, controller));                    
                 }
                 finally
                 {

@@ -119,8 +119,7 @@ namespace ccVcontrol
                         case "Train":
                             if (!trained)
                             {
-                                RetryAction(otherAct, () => CheckMatchAndAct("buildwizardbutton.png 30 ", 54, 46, 10));
-                                trained = true;
+                                trained = RetryAction(otherAct, () => CheckMatchAndAct("buildwizardbutton.png 30 ", 54, 46, 10));
                             }
                             break;
                     }
@@ -130,18 +129,19 @@ namespace ccVcontrol
             File.WriteAllText(fname, JsonConvert.SerializeObject(locations, Formatting.Indented));
         }
 
-        private void RetryAction(CommandInfo cmd, Func<bool> act)
+        private bool RetryAction(CommandInfo cmd, Func<bool> act)
         {
             if (cmd != null)
             {
                 context.MoveMouseAndClick(cmd.x + 20, cmd.y + 20);
                 for (int retry = 0; retry < 3; retry++)
                 {
-                    if (act()) break;
+                    if (act()) return true;
                 }
                 var results = Utils.GetAppInfo();
                 context.DoStdClicks(results);
             }
+            return false;
         }
 
         private bool Upgraded()

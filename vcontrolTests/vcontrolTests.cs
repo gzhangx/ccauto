@@ -11,6 +11,11 @@ namespace vcontrolTests
     {
         public List<ccPoint> mouseMoveTos = new List<ccPoint>();
         public List<ccPoint> mouseMoveAndClick = new List<ccPoint>();
+
+        public FakeProcessingContext() : base(null, null, null)
+        {
+        }
+
         public override void MouseMouseTo(int x, int y)
         {
             mouseMoveTos.Add(new ccPoint(x, y));
