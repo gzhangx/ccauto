@@ -126,6 +126,7 @@ namespace ccVcontrol
                     DebugLog("MainLoop, CheckEntrance.FoundLoaded");
                     return cmds;
                 }
+                Thread.Sleep(5000);
             }
         }
     }

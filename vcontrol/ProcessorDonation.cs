@@ -21,14 +21,10 @@ namespace ccVcontrol
             {
                 return;
             }
-            if ((DateTime.Now - lastProcessDate).TotalMinutes > 1)
-            {
-                lastProcessDate = DateTime.Now;
-            }
-            else return;
 
-            Utils.MouseMouseTo(context.mouse, cmd.x, cmd.y);
-            Utils.MouseClick(context.mouse);
+            //ImgChecksAndTags("donatebutton1.png", "INFO_DonateButtonFound", Point(51,19)),
+
+            context.MoveMouseAndClick(cmd.x, cmd.y);            
 
             bool found = false;
             for (int i = 0; i < 2; i++)
@@ -54,7 +50,7 @@ namespace ccVcontrol
                     context.DebugLog("DEBUGPRINTINFO trying to find archier or wizard for donation");
                     Thread.Sleep(2000);
                     var results = Utils.GetAppInfo();
-                    foreach (var donationName in new String[] { "INFO_DonateWizard", "INFO_DonateArchier" }) {
+                    foreach (var donationName in new String[] { "INFO_DonateWizard" }) {
                         var donationFormat = results.FirstOrDefault(r => r.command == donationName);
                         if (donationFormat != null)
                         {
