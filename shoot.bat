@@ -1,0 +1,1 @@
+"C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" controlvm cctest screenshotpng tstimgs\full.png

@@ -31,7 +31,7 @@ namespace ccVcontrol
             {
                 Thread.Sleep(2000);
                 context.DebugLog("DEBUGPRINTINFO trying to find donation button");
-                var results = Utils.GetAppInfo();
+                var results = Utils.GetAppInfo("-name donate -top 5 -matchRect 227,102,140,600_200 -match data\\check\\donatebutton.png 200000");
 
                 var donationFormat = results.FirstOrDefault(r=>r.command == "INFO_DonateButtonFound");
                 if (donationFormat != null)
