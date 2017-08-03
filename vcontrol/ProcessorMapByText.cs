@@ -59,7 +59,37 @@ namespace ccVcontrol
                 context.MoveMouseAndClick(loc.point.x, loc.point.y);
                 Thread.Sleep(1000);
                 Utils.doScreenShoot(tempImgName);
-                canUpgrade(tempImgName);
+                var results = Utils.GetAppInfo();
+                //"RecoResult_INFO_Builders"
+                int numBuilders = NumBuilders(results);
+                context.InfoLog($"Number of builders available {numBuilders}");
+                var actionItems = canUpgrade(tempImgName);
+                if (numBuilders > 0)
+                {
+                    if (actionItems.upgrade != null)
+                    {
+                        context.MoveMouseAndClick(actionItems.upgrade.x + 20, actionItems.upgrade.y + 20);
+                        for (int retry = 0; retry < 3; retry++)
+                        {
+                            Utils.doScreenShoot(tempImgName);
+                            var sb = new StringBuilder();
+                            sb.Append($"-input {tempImgName} ");                            
+                            sb.Append($"-name g1 -match data\\check\\upgradeWithEliButton.png 400 ");                            
+                            sb.Append($" -name g2 -match data\\check\\upgradeWithGoldButton.png 400 ");
+                            var btns = Utils.GetAppInfo(sb.ToString());
+                            foreach (var btn in btns) context.DebugLog("           check train button " + btn);
+                            btns = btns.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
+                            if (btns.FirstOrDefault() != null)
+                            {
+                                var btn = btns.First();
+                                context.MoveMouseAndClick(btn.x + 20, btn.y + 20);
+                                break;
+                            }
+                        }
+                        results = Utils.GetAppInfo();
+                        context.DoStdClicks(results);
+                    }
+                }
                 //ExtractItemname(loc);
             }
         }

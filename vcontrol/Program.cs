@@ -34,7 +34,7 @@ namespace ccVcontrol
                 //cmds = Utils.GetAppInfo();
                 context.GetToEntrance();
 
-                //new ProcessorMapByText(context).ProcessCommand(SwitchAccount.CheckAccount());
+                new ProcessorMapByText(context).ProcessCommand(SwitchAccount.CheckAccount());
                 switchAccount.Process();                
 
                 var cmds = context.GetToEntrance();
