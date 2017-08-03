@@ -79,8 +79,12 @@ namespace ccVcontrol
                     }
                 }
                 //"RecoResult_INFO_Builders"
-                int numBuilders = NumBuilders(results);
+                int numBuilders = NumBuilders(results);                
                 context.InfoLog($"Number of builders available {numBuilders}");
+                if (numBuilders == 0)
+                {
+                    if (loc.name != TownHall && loc.name != Barracks) continue;
+                }
                 var actionItems = canUpgrade(tempImgName);
                 if (numBuilders > 0)
                 {
@@ -100,7 +104,7 @@ namespace ccVcontrol
                 }
             }
             foreach (var p in badLocs) locations.Remove(p);
-            File.WriteAllText(fname, JsonConvert.SerializeObject(locations));
+            File.WriteAllText(fname, JsonConvert.SerializeObject(locations, Formatting.Indented));
         }
 
         private void RetryAction(CommandInfo cmd, Func<bool> act)
