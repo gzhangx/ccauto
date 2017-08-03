@@ -203,10 +203,14 @@ namespace ccVcontrol
                 context.DebugLog($"{printDebug}Trying to find SINGLEMATCH for {name}");
                 var cmds = Utils.GetAppInfo(name);
                 var found = cmds.FirstOrDefault(cmd => cmd.command == "SINGLEMATCH");
-                if (found != null)
+                if (found != null && found.decision == "true")
                 {
-                    context.InfoLog($"{printDebug}matching {name} found {found.cmpRes}");
+                    context.InfoLog($"{printDebug}matching {name} found {found.cmpRes} {found.decision}");
+                    context.LogMatchAnalyst(name, found.cmpRes);
                     return found;
+                }else
+                {
+                    context.InfoLog($"{printDebug}matching {name} NOT found {found.cmpRes} {found.decision}");
                 }
                 Thread.Sleep(1000);
             }

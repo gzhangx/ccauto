@@ -25,12 +25,36 @@ namespace ccVcontrol
         {
             Console.WriteLine("=>" + str);
         }
+
+        public void LogMatchAnalyst(string str, decimal res)
+        {
+            DebugLog($"...LogMatchAnalyst {str}/{res}");
+            //format  -input tstimgs\chk_act_6cnf.png -match data\check\confirm.bmp 10000/8038.000000
+            int ind = str.IndexOf("-match");
+            if (ind > 0)
+            {
+                try
+                {
+                    var nnn = str.Substring(ind);
+                    var parts = nnn.Split(' ');
+                    var fname = parts[1];
+                    var matchres = parts[2];
+                    InfoLog($"  LogMatchAnalyst==>{fname} {res.ToString("0")}/{matchres}");
+                } catch (Exception exc)
+                {
+                    InfoLog($"Bad format exc for LogMatchAnalyst {str}");
+                }
+            }else
+            {
+                InfoLog("Bad format for LogMatchAnalyst " + str);
+            }
+        }
         public int DoStdClicks(List<CommandInfo> clicks)
         {
             int count = 0;
             foreach (var cmd in clicks)
             {
-                if (cmd.command.StartsWith("PRMXYCLICK_STD_"))
+                if (cmd.command.StartsWith("PRMXYCLICK_STD_") && cmd.decision == "true")
                 {
                     count++;
                     MoveMouseAndClick(cmd.x, cmd.y);
@@ -67,6 +91,12 @@ namespace ccVcontrol
         }
 
 
+        protected bool CheckFound(List<CommandInfo> cmds, string toFind)
+        {
+            var cmd = cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand");
+            if (cmd == null) return false;
+            return cmd.decision == "true";
+        }
         public List<CommandInfo> GetToEntrance()
         {
             while (true)
@@ -75,7 +105,7 @@ namespace ccVcontrol
                 DebugLog("MainLoop CheckEntrance");
                 DoStdClicks(cmds);
                 DebugLog("MainLoop, CheckEntrance.getAppInfo");
-                if (cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand") != null)
+                if (CheckFound(cmds, "PRMXYCLICK_ACT_LeftExpand"))
                 {
                     DebugLog("MainLoop, CheckEntrance.FoundLoaded");
                     return cmds;
