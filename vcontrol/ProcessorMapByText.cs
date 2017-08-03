@@ -136,12 +136,18 @@ namespace ccVcontrol
             if (cmd != null)
             {
                 context.MoveMouseAndClick(cmd.x + 20, cmd.y + 20);
+                bool gotit = false;
                 for (int retry = 0; retry < 3; retry++)
                 {
-                    if (act()) return true;
+                    if (act())
+                    {
+                        gotit = true;
+                        break;
+                    }
                 }
                 var results = Utils.GetAppInfo();
                 context.DoStdClicks(results);
+                return gotit;
             }
             return false;
         }
