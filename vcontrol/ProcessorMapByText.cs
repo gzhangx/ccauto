@@ -14,17 +14,19 @@ namespace ccVcontrol
 
     public class ProcessorMapByText
     {
-        const string GoldMine = "GoldMine(Level)";
-        const string ElixirCollector = "ElixirCollector(level)";
-        const string TownHall = "TownHall(level)";
-        const string GoldStorage = "GoldStorage(level)";
-        const string ElixirStorage = "ElixirStorage(level)";
+        const string GoldMine = "GoldMine";
+        const string ElixirCollector = "ElixirCollector";
+        const string TownHall = "TownHall";
+        const string GoldStorage = "GoldStorage";
+        const string ElixirStorage = "ElixirStorage";
+        const string Barracks = "Barracks";
+        const string ArmyCamp = "ArmyCamp";
+        const string Laboratory = "Laboratory";
+        const string ClanCastle = "ClanCastle";
         private ProcessingContext context;
         DateTime lastProcessDate = DateTime.Now.AddMinutes(-1000);
 
-        const string tempImgName = "tstimgs\\tempFullScreenAct.png";
-
-        string[] tags = new string[] { GoldMine, ElixirCollector, TownHall, GoldStorage, ElixirStorage };
+        const string tempImgName = "tstimgs\\tempFullScreenAct.png";        
 
         public ProcessorMapByText(ProcessingContext ctx)
         {
@@ -193,6 +195,10 @@ namespace ccVcontrol
 
         private string GetStructureName(PosInfo loc, List<CommandInfo> results)
         {
+            string[] tags = new string[] {
+            GoldMine, ElixirCollector, TownHall, GoldStorage, ElixirStorage,
+            Barracks, ArmyCamp, Laboratory,
+            };
             var bottom = results.FirstOrDefault(r => r.command == "RecoResult_INFO_Bottom");
             string best = "";
             string bestTag = "";
