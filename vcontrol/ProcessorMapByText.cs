@@ -35,6 +35,7 @@ namespace ccVcontrol
         List<PosInfo> locations = new List<PosInfo>();
         public void ProcessCommand(int act)
         {
+            //Test();
             if (act <= 0)
             {
                 context.InfoLog("Failed to recognize account");
@@ -163,13 +164,14 @@ namespace ccVcontrol
             return false;
         }
 
-        private string ExtractItemname(PosInfo loc)
+        private void Test()
         {
             var results = Utils.GetAppInfo();
             //"RecoResult_INFO_Builders"
             //int num = NumBuilders(results);
             //context.InfoLog("Number of builders " + num);
-            return GetStructureName(loc, results);
+            var res = GetStructureName(new PosInfo(), results);
+            Console.WriteLine(res);
         }
 
         private int NumBuilders(List<CommandInfo> cmds)
@@ -198,6 +200,7 @@ namespace ccVcontrol
             string[] tags = new string[] {
             GoldMine, ElixirCollector, TownHall, GoldStorage, ElixirStorage,
             Barracks, ArmyCamp, Laboratory,
+            ClanCastle,
             };
             var bottom = results.FirstOrDefault(r => r.command == "RecoResult_INFO_Bottom");
             string best = "";
