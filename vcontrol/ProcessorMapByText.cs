@@ -183,15 +183,16 @@ namespace ccVcontrol
             if (btns.FirstOrDefault() != null)
             {
                 var btn = btns.First();
+                context.MoveMouseAndClick(btn.x + offx, btn.y + offy);
                 while (repeat > 0)
                 {
-                    context.MoveMouseAndClick(btn.x + offx, btn.y + offy);
+                    context.MouseClick();
                     repeat--;
                     if (repeat != 0)
                     {
-                        btns = Utils.GetAppInfo(sb.ToString());
-                        btn = btns.FirstOrDefault(r => r.decision == "true");
-                        if (btn == null) break;
+                        //btns = Utils.GetAppInfo(sb.ToString());
+                        //btn = btns.FirstOrDefault(r => r.decision == "true");
+                        //if (btn == null) break;
                     }
                 }
                 return true;
