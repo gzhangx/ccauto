@@ -74,6 +74,7 @@ namespace ccVcontrol
                         context.MoveMouseAndClick(loc.point.x, loc.point.y);
                     }
                     if (loc.name != TownHall && loc.name != Barracks) continue;
+                    if (loc.name == Barracks && trained) continue;
                 }
                 context.MoveMouseAndClick(loc.point.x, loc.point.y);
                 Thread.Sleep(1000);
