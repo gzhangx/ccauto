@@ -6,12 +6,27 @@ using System.Threading.Tasks;
 
 namespace ccVcontrol
 {
-    class SimpleController : IVDController
+    public class SimpleController : IVDController
     {
-        public int[] accountStartCounts = new int[4];
+        public int[] accountStartCounts;
+        public SimpleController()
+        {
+            string tmp;
+            var files = SwitchAccount.GetAccountFiles(out tmp);
+            accountStartCounts = new int[files.Count()];
+        }
         public bool canContinue()
         {
-            return true;
+            bool keepGoing = false;
+            for (var i = 0; i < accountStartCounts.Length;i++)
+            {
+                Console.WriteLine($"for account {i} got {accountStartCounts[i]}");
+                if (accountStartCounts[i] == 0)
+                {
+                    keepGoing = true;
+                }
+            }
+            return keepGoing;
         }
 
         public void Log(string type, string msg)
@@ -32,6 +47,7 @@ namespace ccVcontrol
 
         public void NotifyStartingAccount(int act)
         {
+            accountStartCounts[act]++;
             Console.WriteLine($"=======================> Starting account {act}");
         }
     }

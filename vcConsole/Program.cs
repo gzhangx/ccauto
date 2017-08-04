@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ccVcontrol;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,36 +11,8 @@ namespace vcConsole
     {
         static void Main(string[] args)
         {
-            ccVcontrol.Program.Start(new ConsoleController());
+            ccVcontrol.Program.Start(new SimpleController());
         }
     }
 
-    class ConsoleController : ccVcontrol.IVDController
-    {
-        public bool canContinue()
-        {
-            return true;
-        }
-
-        public void Log(string type, string msg)
-        {
-            switch(type)
-            {
-                case "debug":
-                    Console.WriteLine(" " + msg);
-                    break;
-                case "info":
-                    Console.WriteLine("=>" + msg);
-                    break;
-                default:
-                    Console.WriteLine("." + msg);
-                    break;
-            }
-        }
-
-        public void NotifyStartingAccount(int act)
-        {
-            Console.WriteLine($"=======================> Starting account {act}");
-        }
-    }
 }

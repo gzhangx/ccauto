@@ -44,10 +44,17 @@ namespace ccVcontrol
             Utils.GetAppInfo($"-name {tempPartName} -input {tempName} {acctNameMatchRect} -imagecorp");            
             return CheckAccountWithImage(tempPartName);
         }
+        public static IEnumerable<string> GetAccountFiles(out string imgStart)
+        {
+            var actImgNameStart = accoungImagDir + "img_act";
+            imgStart = actImgNameStart;
+            var files = System.IO.Directory.GetFiles(accoungImagDir).Where(f => f.StartsWith(actImgNameStart));
+            return files;
+        }
         public static int CheckAccountWithImage(string screenName)
         {
             var actImgNameStart = accoungImagDir + "img_act";
-            var files = System.IO.Directory.GetFiles(accoungImagDir).Where(f=>f.StartsWith(actImgNameStart));
+            var files = GetAccountFiles(out actImgNameStart);
             MAXACCOUNT = files.Count();
             CommandInfo good = null;
             StringBuilder sb = new StringBuilder();
