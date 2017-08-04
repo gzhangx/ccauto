@@ -23,54 +23,48 @@ namespace ccVcontrol
             }
 
             //ImgChecksAndTags("donatebutton1.png", "INFO_DonateButtonFound", Point(51,19)),
-
-            context.MoveMouseAndClick(cmd.x, cmd.y);            
-
-            bool found = false;
-            for (int i = 0; i < 2; i++)
+            var processed = new List<CommandInfo>();
+            for (int i = 0; i < 5; i++)
             {
-                Thread.Sleep(2000);
-                Utils.doScreenShoot(ProcessorMapByText.tempImgName);                
+                context.MoveMouseAndClick(cmd.x, cmd.y);            
+                bool found = false;
+                //Thread.Sleep(2000);
+                Utils.doScreenShoot(ProcessorMapByText.tempImgName);
                 context.DebugLog("DEBUGPRINTINFO trying to find donation button");
                 //-matchRect 227,102,140,600_200
-                var results = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name donate -matchRect 227,102,140,600_200 -top 5  -match data\\check\\donatebutton.png 20");
-
-                var donationFormat = results.FirstOrDefault(r=>r.command == "INFO_DonateButtonFound");
-                if (donationFormat != null)
+                const int donateRectx = 227;
+                const int donateRecty = 102;
+                var results = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name donate -matchRect {donateRectx},{donateRecty},140,600_200 -top 5  -match data\\check\\donatebutton.png 250");                
+                foreach (var donate in results)
                 {
-                    found = true;
-                    Utils.MoveMouseAndClick(context.mouse, donationFormat.x, donationFormat.y);
-                    break;
-                }
-            }
-
-            if (found)
-            {
-                found = false;                
-                for (int i = 0; i < 5; i++)
-                {                                        
-                    context.DebugLog("DEBUGPRINTINFO trying to find archier or wizard for donation");
-                    Thread.Sleep(2000);
-                    var results = Utils.GetAppInfo();
-                    foreach (var donationName in new String[] { "INFO_DonateWizard" }) {
-                        var donationFormat = results.FirstOrDefault(r => r.command == donationName);
-                        if (donationFormat != null)
+                    if (donate.decision == "true")
+                    {
+                        if (processed.Any(p =>
                         {
-                            found = true;
-                            Utils.MoveMouseAndClick(context.mouse, donationFormat.x, donationFormat.y);
-                            for (int j = 0; j < 5; j++)
-                            {
-                                Utils.MouseClick(context.mouse);
-                            }
+                            return Math.Abs(p.y - donate.y) < 20;
+                        })) continue;
+                        processed.Add(donate);
+                        found = true;
+                        context.MoveMouseAndClick(donateRectx + donate.x + 50, donateRecty + donate.y + 50);
 
-                            found = true;
+                        for (int dwretry = 0; dwretry < 2; dwretry++)
+                        {
+                            Utils.doScreenShoot(ProcessorMapByText.tempImgName);                            
+                            var dw = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name dw  -match data\\check\\donate_wizard.png 200");
+                            var dwbtn = dw.FirstOrDefault(dwf => dwf.decision == "true");
+                            if (dwbtn != null)
+                            {
+                                context.MoveMouseAndClick(50 + dwbtn.x, 50 + dwbtn.y);
+                                for (int cli = 0; cli< 5; cli++) context.MouseClick();
+                                break;
+                            }
                         }
                     }
-                    if (found) break;
-                }
-                
-            }
-            
+                    results = Utils.GetAppInfo();
+                    context.DoStdClicks(results);
+                }                
+                if (!found) break;
+            }            
         }
     }
 }

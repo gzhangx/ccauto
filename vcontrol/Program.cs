@@ -23,18 +23,17 @@ namespace ccVcontrol
             //cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");            
             context.GetToEntrance();
             context.DebugLog("Do shift");
-            context.DoShift();
-            DoDonate(context);
+            context.DoShift();            
             while (context.vdcontroller.canContinue())
             {                
                 //cmds = Utils.GetAppInfo();
                 context.GetToEntrance();
+                DoDonate(context);
+                context.GetToEntrance();
                 int acct = SwitchAccount.CheckAccount();
                 context.vdcontroller.NotifyStartingAccount(acct);
                 new ProcessorMapByText(context).ProcessCommand(acct);
-                switchAccount.Process();                
-                
-                DoDonate(context);
+                switchAccount.Process();
 
                 context.GetToEntrance();
                 Thread.Sleep(100);
