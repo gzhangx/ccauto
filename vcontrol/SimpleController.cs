@@ -47,7 +47,7 @@ namespace ccVcontrol
 
         public void NotifyStartingAccount(int act)
         {
-            accountStartCounts[act]++;
+            accountStartCounts[act - 1]++;
             Console.WriteLine($"=======================> Starting account {act}");
         }
     }
