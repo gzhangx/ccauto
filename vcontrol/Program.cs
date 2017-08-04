@@ -73,10 +73,10 @@ namespace ccVcontrol
         }
 
 
-        static void TestAccounts()
+        static void TestAccounts(ProcessingContext context)
         {
             Utils.doScreenShoot("tstimgs\\tmptesttest.png");
-            var actr = ProcessorMapByText.canUpgrade("tstimgs\\tmptesttest.png");
+            var actr = ProcessorMapByText.canUpgrade(context, "tstimgs\\tmptesttest.png");
             Console.WriteLine(actr.upgrade);
             return;
             for (int i = 1; i <= 4; i++)
@@ -99,7 +99,7 @@ namespace ccVcontrol
         {
             //var rrr = Utils.GetAppInfo($"-input tstimgs\\upgradeelibad.png -name upgradegood -match data\\check\\upgradeeligood.png 10000 -name upgradebad -match data\\check\\upgradeelibad.png 10000");
             //SwitchAccount.CheckAccount();
-            TestAccounts(); //TODO DEBUG REMOVE THIS 
+            //TestAccounts(); //TODO DEBUG REMOVE THIS 
             //return;
             Console.WriteLine("Starting vm");
             Utils.executeVBoxMngr($"startvm {Utils.vmname}");

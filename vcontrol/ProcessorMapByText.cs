@@ -106,7 +106,7 @@ namespace ccVcontrol
                     if (loc.name != TownHall && loc.name != Barracks) continue;
                     if (loc.name == Barracks && trained) continue;
                 }
-                var actionItems = canUpgrade(tempImgName);
+                var actionItems = canUpgrade(context, tempImgName);
                 if (numBuilders > 0)
                 {
                     RetryAction(actionItems.upgrade, Upgraded);                    
@@ -271,7 +271,7 @@ namespace ccVcontrol
             public CommandInfo upgrade;
             public List<CommandInfo> other;
         }
-        public static UpgradeTrain canUpgrade(string imgName)
+        public static UpgradeTrain canUpgrade(ProcessingContext context, string imgName)
         {
             string[] resultTypes = new[] { "Good", "Bad" };
             string[] itemTypes = new[] { "Gold", "Eli" };
@@ -300,7 +300,9 @@ namespace ccVcontrol
                 r.x += actx;
                 r.y += acty;
             });
-            foreach (var r in res) Console.WriteLine("           DEBUGRM " + r);
+
+            if (context != null)
+                foreach (var r in res) context.DebugLog("           DEBUGRM " + r);
             res = res.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
             var others = new List<CommandInfo>();
             foreach (var name in otherActs)
