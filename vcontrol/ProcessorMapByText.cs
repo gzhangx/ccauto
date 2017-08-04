@@ -166,6 +166,7 @@ namespace ccVcontrol
             if (btns.FirstOrDefault() != null)
             {
                 var btn = btns.First();
+                context.LogMatchAnalyst("-match upgradeWithEliButton.png 400", btn.cmpRes);
                 context.MoveMouseAndClick(btn.x + 20, btn.y + 20);
                 return true;
             }
@@ -184,6 +185,7 @@ namespace ccVcontrol
             if (btns.FirstOrDefault() != null)
             {
                 var btn = btns.First();
+                context.LogMatchAnalyst(sb.ToString(), btn.cmpRes);
                 context.MoveMouseAndClick(btn.x + offx, btn.y + offy);
                 while (repeat > 0)
                 {
@@ -304,11 +306,22 @@ namespace ccVcontrol
             if (context != null)
                 foreach (var r in res) context.DebugLog("           DEBUGRM " + r);
             res = res.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
+
+            if (context != null)
+            {
+                var upgrade = res.FirstOrDefault(r => r.extraInfo == "Good" || r.extraInfo == "Bad");
+                if (upgrade != null)
+                    context.LogMatchAnalyst(sb.ToString(), upgrade.cmpRes);
+            }
             var others = new List<CommandInfo>();
             foreach (var name in otherActs)
             {
                 var found = res.FirstOrDefault(r => r.extraInfo == name);
-                if (found != null) others.Add(found);
+                if (found != null)
+                {
+                    others.Add(found);
+                    context.LogMatchAnalyst(sb.ToString(), found.cmpRes);
+                }
             }
             return new UpgradeTrain
             {
