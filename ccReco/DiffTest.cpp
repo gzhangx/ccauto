@@ -607,6 +607,7 @@ Mat doChecks(char * inputImage, const char * matchFileName, int matchThreadHold,
 		//ImgChecksAndTags("donate_wizard.png", "INFO_DonateWizard", Point(40,40), 10),
 		ImgChecksAndTags("chacha.png", "PRMXYCLICK_STD_Close", Point(12,14)),
 		ImgChecksAndTags("chacha_closeTrain.png", "PRMXYCLICK_STD_Close", Point(22,22)),
+		ImgChecksAndTags("upgradeFailedClose.png", "PRMXYCLICK_STD_Close", Point(22,22)),
 		ImgChecksAndTags("leftshrink.png", "PRMXYCLICK_STD_LeftShrink", Point(22,64), 10),
 
 		//ImgChecksAndTags("upgrade.png", "INFO_UpgradeButton", Point(42,34), 5),
