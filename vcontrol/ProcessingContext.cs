@@ -67,6 +67,7 @@ namespace ccVcontrol
         }
         public int DoStdClicks(List<CommandInfo> clicks)
         {
+            MouseMouseTo(0, 0);
             int count = 0;
             foreach (var cmd in clicks)
             {

@@ -50,7 +50,7 @@ namespace ccVcontrol
                         for (int dwretry = 0; dwretry < 2; dwretry++)
                         {
                             Utils.doScreenShoot(ProcessorMapByText.tempImgName);                            
-                            var dw = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name dw  -match data\\check\\donate_wizard.png 200");
+                            var dw = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name dw  -match data\\check\\donate_wizard.png 300");
                             var dwbtn = dw.FirstOrDefault(dwf => dwf.decision == "true");
                             if (dwbtn != null)
                             {
