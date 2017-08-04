@@ -33,6 +33,7 @@ namespace ccVcontrol
                 int acct = SwitchAccount.CheckAccount();
                 context.vdcontroller.NotifyStartingAccount(acct);
                 new ProcessorMapByText(context).ProcessCommand(acct);
+                context.GetToEntrance();
                 switchAccount.Process();
 
                 context.GetToEntrance();
