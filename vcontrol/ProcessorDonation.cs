@@ -34,7 +34,7 @@ namespace ccVcontrol
                 //-matchRect 227,102,140,600_200
                 const int donateRectx = 227;
                 const int donateRecty = 102;
-                var results = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name donate -matchRect {donateRectx},{donateRecty},140,600_200 -top 5  -match data\\check\\donatebutton.png 250");                
+                var results = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name donate -matchRect {donateRectx},{donateRecty},140,600_200 -top 5  -match data\\check\\donatebutton.png 350");                
                 foreach (var donate in results)
                 {
                     if (donate.decision == "true")
@@ -45,7 +45,7 @@ namespace ccVcontrol
                         })) continue;
                         processed.Add(donate);
                         found = true;
-                        context.MoveMouseAndClick(donateRectx + donate.x + 10, donateRecty + donate.y + 10);
+                        context.MoveMouseAndClick(donateRectx + donate.x + 55, donateRecty + donate.y + 23);
 
                         for (int dwretry = 0; dwretry < 2; dwretry++)
                         {
