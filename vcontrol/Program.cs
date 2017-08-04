@@ -101,10 +101,10 @@ namespace ccVcontrol
             TestAccounts(); //TODO DEBUG REMOVE THIS 
             //return;
             Console.WriteLine("Starting vm");
-            Utils.executeVBoxMngr("startvm cctest");
+            Utils.executeVBoxMngr($"startvm {Utils.vmname}");
             Console.WriteLine("VmStarted, allocate machine");
             var vbox = new VirtualBox.VirtualBox();
-            VirtualBox.IMachine machine = vbox.FindMachine("cctest");
+            VirtualBox.IMachine machine = vbox.FindMachine(Utils.vmname);
             VirtualBoxClient vboxclient = new VirtualBoxClient();
             var session = vboxclient.Session;            
             try
@@ -156,6 +156,7 @@ namespace ccVcontrol
             }
 
             Console.WriteLine(machine.VideoCaptureWidth);
+            Utils.executeVBoxMngr($"controlvm {Utils.vmname} poweroff");
         }
     }
 }

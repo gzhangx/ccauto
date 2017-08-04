@@ -12,6 +12,7 @@ namespace ccVcontrol
 {
     public class Utils
     {
+        public const string vmname = "cctest";
         [DllImport("user32.dll")]
         static extern uint MapVirtualKeyEx(uint uCode, uint uMapType, IntPtr dwhkl);
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
@@ -101,7 +102,7 @@ namespace ccVcontrol
 
         public static void doScreenShoot(string fname)
         {
-            executeVBoxMngr("controlvm cctest screenshotpng " + fname);
+            executeVBoxMngr($"controlvm {vmname} screenshotpng {fname}");
         }
         public static string executeVBoxMngr(string arguments)
         {
