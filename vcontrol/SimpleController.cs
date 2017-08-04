@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +10,11 @@ namespace ccVcontrol
     public class SimpleController : IVDController
     {
         public int[] accountStartCounts;
+        protected ILog Logger;
         public SimpleController()
         {
+            log4net.Config.XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo("log4net.conf"));
+            Logger = LogManager.GetLogger("ccVcontrol");
             string tmp;
             var files = SwitchAccount.GetAccountFiles(out tmp);
             accountStartCounts = new int[files.Count()];
@@ -34,13 +38,16 @@ namespace ccVcontrol
             switch (type)
             {
                 case "debug":
-                    Console.WriteLine(" " + msg);
+                    //Console.WriteLine(" " + msg);
+                    Logger.Debug(msg);
                     break;
                 case "info":
-                    Console.WriteLine("=>" + msg);
+                    //Console.WriteLine("=>" + msg);
+                    Logger.Info(msg);
                     break;
                 default:
-                    Console.WriteLine("." + msg);
+                    //Console.WriteLine("." + msg);
+                    Logger.Info("." + msg);
                     break;
             }
         }
@@ -48,7 +55,7 @@ namespace ccVcontrol
         public void NotifyStartingAccount(int act)
         {
             accountStartCounts[act - 1]++;
-            Console.WriteLine($"=======================> Starting account {act}");
+            Logger.Info($"=======================> Starting account {act}");
         }
     }
 }

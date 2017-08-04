@@ -11,7 +11,7 @@ namespace vcConsole
     class Program
     {
         static void Main(string[] args)
-        {
+        {            
             while (true)
             {
                 ccVcontrol.Program.Start(new SimpleController());
