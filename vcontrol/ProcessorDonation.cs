@@ -45,7 +45,7 @@ namespace ccVcontrol
                         })) continue;
                         processed.Add(donate);
                         found = true;
-                        context.MoveMouseAndClick(donateRectx + donate.x + 50, donateRecty + donate.y + 50);
+                        context.MoveMouseAndClick(donateRectx + donate.x + 10, donateRecty + donate.y + 10);
 
                         for (int dwretry = 0; dwretry < 2; dwretry++)
                         {
