@@ -85,7 +85,7 @@ namespace ccVcontrol
         public override StepContext Process()
         {
             account = CheckAccount() - 1;
-            Console.WriteLine($"Trying to find SINGLEMATCH for settings button account {account}");
+            context.InfoLog($"Trying to find SINGLEMATCH for settings button account ----- {account}");
             switchSteps.First(r => r.name == "SwitchAccount").Act = SwitchAccountAction;
             var res = DoSteps(switchSteps);
             InitGame("Account_" + account);
