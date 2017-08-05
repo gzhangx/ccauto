@@ -165,7 +165,7 @@ namespace ccVcontrol
             {
                 if  (cur.delay > 0)
                 {
-                    Thread.Sleep(cur.delay);
+                    context.Sleep(cur.delay);
                 }
                 return true;
             }
@@ -179,7 +179,7 @@ namespace ccVcontrol
                         return true;
                     }
                     if (FoundOtherGoodAlts(stepCtx, nextStep)) return true;
-                    Thread.Sleep(1000);
+                    context.Sleep(1000);
                 }
             }
 
@@ -212,7 +212,7 @@ namespace ccVcontrol
                 {
                     context.InfoLog($"{printDebug}matching {name} NOT found {found.cmpRes} {found.decision}");
                 }
-                Thread.Sleep(1000);
+                context.Sleep(1000);
             }
             return null;
         }

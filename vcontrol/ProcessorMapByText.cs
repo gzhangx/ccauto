@@ -75,7 +75,7 @@ namespace ccVcontrol
                     if (loc.name == Barracks && trained) continue;
                 }
                 context.MoveMouseAndClick(loc.point.x, loc.point.y);
-                Thread.Sleep(1000);
+                context.Sleep(1000);
                 Utils.doScreenShoot(tempImgName);
                 results = Utils.GetAppInfo();
                 if (string.IsNullOrWhiteSpace(loc.name))
@@ -86,7 +86,7 @@ namespace ccVcontrol
                     {
                         nameTry++;
                         context.MoveMouseAndClick(loc.point.x, loc.point.y);
-                        Thread.Sleep(1000);
+                        context.Sleep(1000);
                         results = Utils.GetAppInfo();
                         loc.name = GetStructureName(loc, results);
                         if (string.IsNullOrWhiteSpace(loc.name))

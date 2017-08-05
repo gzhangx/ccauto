@@ -13,6 +13,7 @@ namespace ccVcontrol
         bool canContinue();
         void NotifyStartingAccount(int act);
         void Log(string type, string msg);
+        void Sleep(int ms);
     }
     public class ProcessingContext
     {
@@ -27,6 +28,10 @@ namespace ccVcontrol
             keyboard = k;
             vdcontroller = c;
             stdClk = new StandardClicks(this);
+        }
+        public void Sleep(int ms)
+        {
+            vdcontroller.Sleep(ms);
         }
         public virtual void SendString(string str)
         {
@@ -97,9 +102,9 @@ namespace ccVcontrol
         public void DoShift()
         {
             keyboard.ReleaseKeys();
-            Thread.Sleep(1000);
+            Sleep(1000);
             keyboard.PutScancode(0x2A);
-            Thread.Sleep(200);
+            Sleep(200);
         }
 
 
@@ -121,7 +126,7 @@ namespace ccVcontrol
                     DebugLog(" CheckEntrance.FoundLoaded");                    
                     return cmds;
                 }
-                Thread.Sleep(5000);
+                Sleep(5000);
             }
         }
     }

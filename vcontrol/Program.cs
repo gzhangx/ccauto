@@ -27,12 +27,12 @@ namespace ccVcontrol
             while (context.vdcontroller.canContinue())
             {
                 context.GetToEntrance();
-                Thread.Sleep(4000);
+                context.Sleep(4000);
                 int acct = SwitchAccount.CheckAccount();
                 if (acct <= 0)
                 {
                     context.InfoLog("failed to get account, try again");
-                    Thread.Sleep(4000);
+                    context.Sleep(4000);
                     acct = SwitchAccount.CheckAccount();
                 }
                 switchAccount.CurAccount = acct;
@@ -48,7 +48,7 @@ namespace ccVcontrol
                 switchAccount.Process();
                 context.InfoLog("===>Step get to entrance");
                 context.GetToEntrance();
-                Thread.Sleep(4000);
+                context.Sleep(4000);
                 
                 
 

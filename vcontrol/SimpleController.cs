@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ccVcontrol
@@ -56,6 +57,12 @@ namespace ccVcontrol
         {
             accountStartCounts[act - 1]++;
             Logger.Info($"=======================> Starting account {act}");
+        }
+
+        public void Sleep(int ms)
+        {
+            Logger.Debug($"               Sleeping {ms}");
+            Thread.Sleep(ms);
         }
     }
 }
