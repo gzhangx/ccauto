@@ -1,4 +1,5 @@
 ﻿using ccVcontrol;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,16 @@ namespace vcConsole
     class Program
     {
         static void Main(string[] args)
-        {            
+        {
+            ILog Logger = LogManager.GetLogger("main");        
             while (true)
             {
+                DateTime startTime = DateTime.UtcNow;
+                Logger.Info("Starting");
                 ccVcontrol.Program.Start(new SimpleController());
-                Console.WriteLine("Sleeping");
+                Logger.Info($"Sleeping, run time = {DateTime.UtcNow.Subtract(startTime).TotalSeconds.ToString("0.00")}s");
                 Thread.Sleep(1000 * 60 * 10);
-                Console.WriteLine("Done Sleeping");
+                Logger.Info("Done Sleeping");
             }
         }
     }

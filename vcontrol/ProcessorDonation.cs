@@ -60,9 +60,8 @@ namespace ccVcontrol
                                 break;
                             }
                         }
-                    }
-                    results = Utils.GetAppInfo();
-                    context.DoStdClicks(results);
+                    }                    
+                    context.DoStdClicks();
                 }                
                 if (!found) break;
             }            

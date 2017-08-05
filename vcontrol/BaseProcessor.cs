@@ -219,12 +219,12 @@ namespace ccVcontrol
 
         public void InitGame(string name)
         {
-            var cmds = Utils.GetAppInfo();            
+            //var cmds = Utils.GetAppInfo();            
             while (true)
             {
-                context.DoStdClicks(cmds);
-                cmds = Utils.GetAppInfo();
-                if (cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand") != null) break;
+                var cmds = context.DoStdClicks();
+                //cmds = Utils.GetAppInfo();
+                if (cmds.FirstOrDefault(c => c.extraInfo == "PRMXYCLICK_ACT_LeftExpand") != null) break;
             }
             Thread.Sleep(1000);
             //Utils.GetAppInfo($"-name {name} -matchRect 79,32,167,22_200 -screenshoot");

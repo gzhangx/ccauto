@@ -19,11 +19,14 @@ namespace ccVcontrol
         public IMouse mouse;
         public IKeyboard keyboard;
         public IVDController vdcontroller;
+
+        private StandardClicks stdClk;
         public ProcessingContext(IMouse m, IKeyboard k, IVDController c)
         {
             mouse = m;
             keyboard = k;
             vdcontroller = c;
+            stdClk = new StandardClicks(this);
         }
         public virtual void SendString(string str)
         {
@@ -65,19 +68,11 @@ namespace ccVcontrol
                 InfoLog("Bad format for LogMatchAnalyst " + str);
             }
         }
-        public int DoStdClicks(List<CommandInfo> clicks)
+        public List<CommandInfo> DoStdClicks()
         {
             MouseMouseTo(0, 0);
-            int count = 0;
-            foreach (var cmd in clicks)
-            {
-                if (cmd.command.StartsWith("PRMXYCLICK_STD_") && cmd.decision == "true")
-                {
-                    count++;
-                    MoveMouseAndClick(cmd.x, cmd.y);
-                }
-            }
-            return count;
+            var clicks = stdClk.Processing();
+            return clicks;
         }
 
         public virtual void MouseMouseTo(int x, int y)
@@ -110,17 +105,16 @@ namespace ccVcontrol
 
         protected bool CheckFound(List<CommandInfo> cmds, string toFind)
         {
-            var cmd = cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand");
+            var cmd = cmds.FirstOrDefault(c => c.extraInfo == "PRMXYCLICK_ACT_LeftExpand");
             if (cmd == null) return false;
             return cmd.decision == "true";
         }
         public List<CommandInfo> GetToEntrance()
         {
             while (true)
-            {
-                var cmds = Utils.GetAppInfo();
+            {                
                 DebugLog("MainLoop CheckEntrance");
-                DoStdClicks(cmds);
+                var cmds = DoStdClicks();
                 DebugLog("MainLoop, CheckEntrance.getAppInfo");
                 if (CheckFound(cmds, "PRMXYCLICK_ACT_LeftExpand"))
                 {

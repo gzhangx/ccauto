@@ -593,6 +593,8 @@ Mat doChecks(char * inputImage, const char * matchFileName, int matchThreadHold,
 		printCheckLocation(CheckImageMatch(img, matchFileName, matchThreadHold, topXMatches), "SINGLEMATCH", Point(0,0), ctxName);
 		return img;
 	}
+
+	/*
 	printCheckLocation(CheckImageMatch(img, "data\\check\\ememyattacked.png", 2000, 1), "PRMXYCLICK_STD_VillageAttacked", Point(345, 440), ctxName);
 	vector<ImgChecksAndTags> itms = {		
 		ImgChecksAndTags("ccNotResponding.png", "PRMXYCLICK_STD_ccNotResponding", Point(375,101)),
@@ -611,7 +613,7 @@ Mat doChecks(char * inputImage, const char * matchFileName, int matchThreadHold,
 		ImgChecksAndTags("leftshrink.png", "PRMXYCLICK_STD_LeftShrink", Point(22,64), 10),
 
 		//ImgChecksAndTags("upgrade.png", "INFO_UpgradeButton", Point(42,34), 5),
-		ImgChecksAndTags("traintroops.png", "PRMXYCLICK_ACT_TrainTroops", Point(45,45), 5),
+		//ImgChecksAndTags("traintroops.png", "PRMXYCLICK_ACT_TrainTroops", Point(45,45), 5),
 
 		//ImgChecksAndTags("buildwizardbutton.png", "INFO_BuildWizard", Point(32,52), 10),
 		//ImgChecksAndTags("buildArchierButton.png", "INFO_BuildArcher", Point(54,45), 10),
@@ -633,7 +635,7 @@ Mat doChecks(char * inputImage, const char * matchFileName, int matchThreadHold,
 		strcat_s(fname, itm.imageFileName);
 		printCheckLocation(CheckImageMatch(img, fname, itm.ThreadShold,1), itm.Tag, itm.point, ctxName);
 	}
-
+	*/
 	int thd = 220;
 	int PAD = 2;
 	vector<BlockInfo> chkBlocks = {
