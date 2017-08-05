@@ -42,6 +42,7 @@ namespace ccVcontrol
                 context.InfoLog("===>Step Donate");
                 //cmds = Utils.GetAppInfo();                
                 ProcessDonate(context, context.GetToEntrance());
+                context.GetToEntrance();
                 context.InfoLog("===>Step textmap");
                 new ProcessorMapByText(context).ProcessCommand(acct);
                 context.InfoLog("===>Step SwitchAccount");
