@@ -26,7 +26,7 @@ namespace ccVcontrol
         private ProcessingContext context;
         DateTime lastProcessDate = DateTime.Now.AddMinutes(-1000);
 
-        const string tempImgName = "tstimgs\\tempFullScreenAct.png";        
+        public const string tempImgName = "tstimgs\\tempFullScreenAct.png";        
 
         public ProcessorMapByText(ProcessingContext ctx)
         {
@@ -56,11 +56,25 @@ namespace ccVcontrol
             int nameTry = 0;
             var results = Utils.GetAppInfo();
             int numBuilders = NumBuilders(results);
+            bool gotFirstGold = false;
+            bool gotFirstEli = false;
+            bool trained = false;
             foreach (var loc in locations)
             {
                 if (numBuilders == 0 && !string.IsNullOrWhiteSpace(loc.name))
                 {
+                    if (loc.name == GoldMine && !gotFirstGold)
+                    {
+                        gotFirstGold = true;
+                        context.MoveMouseAndClick(loc.point.x, loc.point.y);
+                    }
+                    if (loc.name == ElixirCollector && !gotFirstEli)
+                    {
+                        gotFirstEli = true;
+                        context.MoveMouseAndClick(loc.point.x, loc.point.y);
+                    }
                     if (loc.name != TownHall && loc.name != Barracks) continue;
+                    if (loc.name == Barracks && trained) continue;
                 }
                 context.MoveMouseAndClick(loc.point.x, loc.point.y);
                 Thread.Sleep(1000);
@@ -90,8 +104,9 @@ namespace ccVcontrol
                 if (numBuilders == 0)
                 {
                     if (loc.name != TownHall && loc.name != Barracks) continue;
+                    if (loc.name == Barracks && trained) continue;
                 }
-                var actionItems = canUpgrade(tempImgName);
+                var actionItems = canUpgrade(context, tempImgName);
                 if (numBuilders > 0)
                 {
                     RetryAction(actionItems.upgrade, Upgraded);                    
@@ -104,7 +119,11 @@ namespace ccVcontrol
                             RetryAction(otherAct, () => CheckMatchAndAct("okcancel.png 3000 ", 300, 54));
                             break;
                         case "Train":
-                            RetryAction(otherAct, () => CheckMatchAndAct("buildwizardbutton.png 30 ", 54, 46, 10));
+                            if (!trained)
+                            {
+                                RetryAction(otherAct, () => CheckMatchAndAct("buildwizardbutton.png 30 ", 54, 46, 10));
+                                trained = true;
+                            }
                             break;
                     }
                 }
@@ -113,18 +132,25 @@ namespace ccVcontrol
             File.WriteAllText(fname, JsonConvert.SerializeObject(locations, Formatting.Indented));
         }
 
-        private void RetryAction(CommandInfo cmd, Func<bool> act)
+        private bool RetryAction(CommandInfo cmd, Func<bool> act)
         {
             if (cmd != null)
             {
                 context.MoveMouseAndClick(cmd.x + 20, cmd.y + 20);
+                bool gotit = false;
                 for (int retry = 0; retry < 3; retry++)
                 {
-                    if (act()) break;
+                    if (act())
+                    {
+                        gotit = true;
+                        break;
+                    }
                 }
                 var results = Utils.GetAppInfo();
                 context.DoStdClicks(results);
+                return gotit;
             }
+            return false;
         }
 
         private bool Upgraded()
@@ -140,6 +166,7 @@ namespace ccVcontrol
             if (btns.FirstOrDefault() != null)
             {
                 var btn = btns.First();
+                context.LogMatchAnalyst("-match upgradeWithEliButton.png 400", btn.cmpRes);
                 context.MoveMouseAndClick(btn.x + 20, btn.y + 20);
                 return true;
             }
@@ -158,15 +185,17 @@ namespace ccVcontrol
             if (btns.FirstOrDefault() != null)
             {
                 var btn = btns.First();
+                context.LogMatchAnalyst(sb.ToString(), btn.cmpRes);
+                context.MoveMouseAndClick(btn.x + offx, btn.y + offy);
                 while (repeat > 0)
                 {
-                    context.MoveMouseAndClick(btn.x + offx, btn.y + offy);
+                    context.MouseClick();
                     repeat--;
                     if (repeat != 0)
                     {
-                        btns = Utils.GetAppInfo(sb.ToString());
-                        btn = btns.FirstOrDefault(r => r.decision == "true");
-                        if (btn == null) break;
+                        //btns = Utils.GetAppInfo(sb.ToString());
+                        //btn = btns.FirstOrDefault(r => r.decision == "true");
+                        //if (btn == null) break;
                     }
                 }
                 return true;
@@ -244,7 +273,7 @@ namespace ccVcontrol
             public CommandInfo upgrade;
             public List<CommandInfo> other;
         }
-        public static UpgradeTrain canUpgrade(string imgName)
+        public static UpgradeTrain canUpgrade(ProcessingContext context, string imgName)
         {
             string[] resultTypes = new[] { "Good", "Bad" };
             string[] itemTypes = new[] { "Gold", "Eli" };
@@ -273,13 +302,26 @@ namespace ccVcontrol
                 r.x += actx;
                 r.y += acty;
             });
-            foreach (var r in res) Console.WriteLine("           DEBUGRM " + r);
+
+            if (context != null)
+                foreach (var r in res) context.DebugLog("           DEBUGRM " + r);
             res = res.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
+
+            if (context != null)
+            {
+                var upgrade = res.FirstOrDefault(r => r.extraInfo == "Good" || r.extraInfo == "Bad");
+                if (upgrade != null)
+                    context.LogMatchAnalyst(sb.ToString(), upgrade.cmpRes);
+            }
             var others = new List<CommandInfo>();
             foreach (var name in otherActs)
             {
                 var found = res.FirstOrDefault(r => r.extraInfo == name);
-                if (found != null) others.Add(found);
+                if (found != null)
+                {
+                    others.Add(found);
+                    context.LogMatchAnalyst(sb.ToString(), found.cmpRes);
+                }
             }
             return new UpgradeTrain
             {

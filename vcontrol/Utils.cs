@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace ccVcontrol
 {
     public class Utils
     {
+        static ILog Logger = LogManager.GetLogger("Util");
+        public const string vmname = "cctest";
         [DllImport("user32.dll")]
         static extern uint MapVirtualKeyEx(uint uCode, uint uMapType, IntPtr dwhkl);
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
@@ -101,7 +104,7 @@ namespace ccVcontrol
 
         public static void doScreenShoot(string fname)
         {
-            executeVBoxMngr("controlvm cctest screenshotpng " + fname);
+            executeVBoxMngr($"controlvm {vmname} screenshotpng {fname}");
         }
         public static string executeVBoxMngr(string arguments)
         {
@@ -166,6 +169,7 @@ namespace ccVcontrol
                     continue;
                 }
                 if (cmd.StartsWith("*")) continue;
+                Logger.Info($"  ***{cmd}");
                 try
                 {
                     if (cmd.StartsWith("RecoResult_"))
@@ -198,8 +202,8 @@ namespace ccVcontrol
                     res.Add(new CommandInfo { command = command, cmpRes = cmpRes, x = x, y = y, decision = decision, extraInfo = extraInfo });
                 } catch (Exception exc)
                 {
-                    Console.WriteLine("failed " + exc.Message + " " + cmd);
-                    Console.WriteLine(exc);
+                    Logger.Warn("failed " + exc.Message + " " + cmd);
+                    Logger.Error(exc);
                     throw exc;
                 }
                 

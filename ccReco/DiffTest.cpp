@@ -603,26 +603,27 @@ Mat doChecks(char * inputImage, const char * matchFileName, int matchThreadHold,
 		ImgChecksAndTags("justbootup.png", "PRMXYCLICK_STD_CheckJustBootedUp", Point(52,70)),
 		ImgChecksAndTags("clashofclanicon.png", "PRMXYCLICK_STD_StartGame", Point(44,44)),
 		ImgChecksAndTags("leftexpand.png", "PRMXYCLICK_ACT_LeftExpand", Point(20,66), 10),
-		ImgChecksAndTags("donatebutton.png", "INFO_DonateButtonFound", Point(51,19)),
-		ImgChecksAndTags("donatebutton1.png", "INFO_DonateButtonFound", Point(51,19)),
-		ImgChecksAndTags("donate_archer.png", "INFO_DonateArchier", Point(40,40), 10),
-		ImgChecksAndTags("donate_wizard.png", "INFO_DonateWizard", Point(40,40), 10),
+		//ImgChecksAndTags("donate_archer.png", "INFO_DonateArchier", Point(40,40), 10),
+		//ImgChecksAndTags("donate_wizard.png", "INFO_DonateWizard", Point(40,40), 10),
 		ImgChecksAndTags("chacha.png", "PRMXYCLICK_STD_Close", Point(12,14)),
 		ImgChecksAndTags("chacha_closeTrain.png", "PRMXYCLICK_STD_Close", Point(22,22)),
+		ImgChecksAndTags("upgradeFailedClose.png", "PRMXYCLICK_STD_Close", Point(22,22)),
 		ImgChecksAndTags("leftshrink.png", "PRMXYCLICK_STD_LeftShrink", Point(22,64), 10),
 
-		ImgChecksAndTags("upgrade.png", "INFO_UpgradeButton", Point(42,34), 5),
+		//ImgChecksAndTags("upgrade.png", "INFO_UpgradeButton", Point(42,34), 5),
 		ImgChecksAndTags("traintroops.png", "PRMXYCLICK_ACT_TrainTroops", Point(45,45), 5),
 
-		ImgChecksAndTags("buildwizardbutton.png", "INFO_BuildWizard", Point(32,52), 10),
-		ImgChecksAndTags("buildArchierButton.png", "INFO_BuildArcher", Point(54,45), 10),
+		//ImgChecksAndTags("buildwizardbutton.png", "INFO_BuildWizard", Point(32,52), 10),
+		//ImgChecksAndTags("buildArchierButton.png", "INFO_BuildArcher", Point(54,45), 10),
 
-		ImgChecksAndTags("rearmall.png", "PRMXYCLICK_ACT_RearmAll", Point(50,40), 10),
+		//ImgChecksAndTags("rearmall.png", "PRMXYCLICK_ACT_RearmAll", Point(50,40), 10),
 
 		ImgChecksAndTags("chacha_settings.png", "PRMXYCLICK_STD_CloseSettings", Point(22,22), 10),
 		ImgChecksAndTags("anyoneThere.png", "PRMXYCLICK_STD_AnyoneThere", Point(63,119), 5000),
 
 		ImgChecksAndTags("connectionError.png", "PRMXYCLICK_STD_ConnectionError", Point(53,121), 400),
+		ImgChecksAndTags("returnHomeAfterFight.png", "PRMXYCLICK_STD_ReturnHome", Point(50,50), 40),
+		
 		
 	};
 	
@@ -636,8 +637,8 @@ Mat doChecks(char * inputImage, const char * matchFileName, int matchThreadHold,
 	int thd = 220;
 	int PAD = 2;
 	vector<BlockInfo> chkBlocks = {
-		BlockInfo(Rect(780,  21,-1, 30), thd, "INFO_Gold"),
-		BlockInfo(Rect(780, 84,-1, 30), thd,"INFO_Elixir"),
+		//BlockInfo(Rect(780,  21,-1, 30), thd, "INFO_Gold"),
+		//BlockInfo(Rect(780, 84,-1, 30), thd,"INFO_Elixir"),
 		BlockInfo(Rect(378, 23, 60, 28), thd,"INFO_Builders"),
 		BlockInfo(Rect(280, 584, -1,45 + PAD), thd, "INFO_Bottom")
 	};

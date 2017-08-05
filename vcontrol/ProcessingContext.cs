@@ -8,10 +8,23 @@ using VirtualBox;
 
 namespace ccVcontrol
 {
+    public interface IVDController
+    {
+        bool canContinue();
+        void NotifyStartingAccount(int act);
+        void Log(string type, string msg);
+    }
     public class ProcessingContext
     {
         public IMouse mouse;
         public IKeyboard keyboard;
+        public IVDController vdcontroller;
+        public ProcessingContext(IMouse m, IKeyboard k, IVDController c)
+        {
+            mouse = m;
+            keyboard = k;
+            vdcontroller = c;
+        }
         public virtual void SendString(string str)
         {
             Utils.SendString(keyboard, str);
@@ -19,11 +32,13 @@ namespace ccVcontrol
 
         public void DebugLog(string str)
         {
-            Console.WriteLine(" " + str);
+            vdcontroller.Log("debug", str);
+            //Console.WriteLine(" " + str);
         }
         public void InfoLog(string str)
         {
-            Console.WriteLine("=>" + str);
+            vdcontroller.Log("info", str);
+            //Console.WriteLine("=>" + str);
         }
 
         public void LogMatchAnalyst(string str, decimal res)
@@ -39,7 +54,8 @@ namespace ccVcontrol
                     var parts = nnn.Split(' ');
                     var fname = parts[1];
                     var matchres = parts[2];
-                    InfoLog($"  LogMatchAnalyst==>{fname} {res.ToString("0")}/{matchres}");
+                    //InfoLog($"  LogMatchAnalyst==>{fname} {res.ToString("0")}/{matchres}");
+                    vdcontroller.Log("matchAnalyst", $"{fname} {res.ToString("0")}/{matchres}");
                 } catch (Exception exc)
                 {
                     InfoLog($"Bad format exc for LogMatchAnalyst {str}");
@@ -51,6 +67,7 @@ namespace ccVcontrol
         }
         public int DoStdClicks(List<CommandInfo> clicks)
         {
+            MouseMouseTo(0, 0);
             int count = 0;
             foreach (var cmd in clicks)
             {
@@ -110,6 +127,7 @@ namespace ccVcontrol
                     DebugLog("MainLoop, CheckEntrance.FoundLoaded");
                     return cmds;
                 }
+                Thread.Sleep(5000);
             }
         }
     }

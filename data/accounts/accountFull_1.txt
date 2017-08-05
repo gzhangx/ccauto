@@ -1,1 +1,128 @@
-[{"name":"","point":{"x":656,"y":286}},{"name":"","point":{"x":605,"y":325}},{"name":"","point":{"x":550,"y":287}},{"name":"","point":{"x":675,"y":352}},{"name":"","point":{"x":582,"y":177}},{"name":"","point":{"x":550,"y":363}},{"name":"","point":{"x":460,"y":377}},{"name":"","point":{"x":393,"y":338}},{"name":"","point":{"x":344,"y":298}},{"name":"","point":{"x":269,"y":187}},{"name":"","point":{"x":479,"y":477}},{"name":"","point":{"x":417,"y":443}},{"name":"","point":{"x":281,"y":271}},{"name":"","point":{"x":215,"y":221}},{"name":"","point":{"x":416,"y":247}},{"name":"","point":{"x":496,"y":315}},{"name":"","point":{"x":288,"y":406}},{"name":"","point":{"x":231,"y":369}},{"name":"","point":{"x":180,"y":333}}]
+[
+  {
+    "name": "GoldMine",
+    "point": {
+      "x": 656,
+      "y": 286
+    }
+  },
+  {
+    "name": "GoldMine",
+    "point": {
+      "x": 605,
+      "y": 325
+    }
+  },
+  {
+    "name": "GoldMine",
+    "point": {
+      "x": 550,
+      "y": 287
+    }
+  },
+  {
+    "name": "GoldMine",
+    "point": {
+      "x": 675,
+      "y": 352
+    }
+  },
+  {
+    "name": "GoldMine",
+    "point": {
+      "x": 582,
+      "y": 177
+    }
+  },
+  {
+    "name": "ElixirCollector",
+    "point": {
+      "x": 550,
+      "y": 363
+    }
+  },
+  {
+    "name": "ElixirCollector",
+    "point": {
+      "x": 460,
+      "y": 377
+    }
+  },
+  {
+    "name": "ElixirCollector",
+    "point": {
+      "x": 393,
+      "y": 338
+    }
+  },
+  {
+    "name": "ElixirCollector",
+    "point": {
+      "x": 344,
+      "y": 298
+    }
+  },
+  {
+    "name": "ElixirCollector",
+    "point": {
+      "x": 269,
+      "y": 187
+    }
+  },
+  {
+    "name": "GoldStorage",
+    "point": {
+      "x": 479,
+      "y": 477
+    }
+  },
+  {
+    "name": "GoldStorage",
+    "point": {
+      "x": 417,
+      "y": 443
+    }
+  },
+  {
+    "name": "ElixirStorage",
+    "point": {
+      "x": 281,
+      "y": 271
+    }
+  },
+  {
+    "name": "TownHall",
+    "point": {
+      "x": 416,
+      "y": 247
+    }
+  },
+  {
+    "name": "ClanCastle",
+    "point": {
+      "x": 496,
+      "y": 315
+    }
+  },
+  {
+    "name": "Barracks",
+    "point": {
+      "x": 288,
+      "y": 406
+    }
+  },
+  {
+    "name": "Barracks",
+    "point": {
+      "x": 231,
+      "y": 369
+    }
+  },
+  {
+    "name": "Barracks",
+    "point": {
+      "x": 180,
+      "y": 333
+    }
+  }
+]
