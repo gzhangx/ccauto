@@ -121,7 +121,7 @@ namespace ccVcontrol
                         case "Train":
                             if (!trained)
                             {
-                                RetryAction(otherAct, () => CheckMatchAndAct("buildwizardbutton.png 30 ", 54, 46, 10));
+                                RetryAction(otherAct, () => CheckMatchAndAct("buildwizardbutton.png 100 ", 54, 46, 10));
                                 trained = true;
                             }
                             break;
