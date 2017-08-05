@@ -60,7 +60,7 @@ namespace ccVcontrol
         private static  void DoDonate(ProcessingContext context)
         {
             var cmds = context.GetToEntrance();
-            var cmd = cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand");
+            var cmd = cmds.FirstOrDefault(c => c.extraInfo == "PRMXYCLICK_ACT_LeftExpand");
             if (cmd != null)
             {
                 ProcessDonate(context, cmd);
