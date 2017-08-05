@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ccVcontrol
 {
-    public class SwitchAccount : BaseProcessor
+    public class SwitchAccount : BaseProcessor, IAccountControl
     {
         public const string acctNameRect = "100,27";
         public const string acctNameCorpRect = "101,28";
@@ -112,6 +112,13 @@ namespace ccVcontrol
             context.Sleep(1000);
             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff);
         }
+
+        void IAccountControl.SwitchAccount(int act)
+        {
+            CurAccount = act + 1;
+            Process();
+        }
+
         List<StepInfo> switchSteps;
 
     }

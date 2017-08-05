@@ -11,9 +11,15 @@ namespace ccVcontrol
     public interface IVDController
     {
         bool canContinue();
-        void NotifyStartingAccount(int act);
+        void NotifyStartingAccount(IAccountControl act);
         void Log(string type, string msg);
         void Sleep(int ms);
+    }
+
+    public interface IAccountControl
+    {
+        int CurAccount { get; set; }
+        void SwitchAccount(int act);
     }
     public class ProcessingContext
     {

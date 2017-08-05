@@ -53,10 +53,10 @@ namespace ccVcontrol
             }
         }
 
-        public void NotifyStartingAccount(int act)
+        public void NotifyStartingAccount(IAccountControl act)
         {
-            accountStartCounts[act - 1]++;
-            Logger.Info($"=======================> Starting account {act}");
+            accountStartCounts[act.CurAccount - 1]++;
+            Logger.Info($"=======================> Starting account {act.CurAccount}");
         }
 
         public void Sleep(int ms)

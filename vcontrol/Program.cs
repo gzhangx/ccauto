@@ -27,7 +27,7 @@ namespace ccVcontrol
             while (context.vdcontroller.canContinue())
             {
                 context.GetToEntrance();
-                context.Sleep(4000);
+                context.Sleep(2000);
                 int acct = SwitchAccount.CheckAccount();
                 if (acct <= 0)
                 {
@@ -38,7 +38,7 @@ namespace ccVcontrol
                 switchAccount.CurAccount = acct;
                 context.InfoLog($"===>Step gen acct pic {acct}");
                 GenerateAccountPics(context, switchAccount.CurAccount);
-                context.vdcontroller.NotifyStartingAccount(acct);
+                context.vdcontroller.NotifyStartingAccount(switchAccount);
                 context.InfoLog("===>Step Donate");
                 //cmds = Utils.GetAppInfo();                
                 ProcessDonate(context, context.GetToEntrance());
