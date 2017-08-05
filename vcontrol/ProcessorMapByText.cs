@@ -81,6 +81,13 @@ namespace ccVcontrol
                 if (string.IsNullOrWhiteSpace(loc.name))
                 {
                     loc.name = GetStructureName(loc, results);
+                    if (string.IsNullOrEmpty(loc.name))
+                    {
+                        //try one more time
+                        context.DebugLog("Trying to get name one more time");
+                        Utils.doScreenShoot(tempImgName);
+                        results = context.GetAppInfo();
+                    }
                     context.DebugLog($"     FOUND {loc.name}");
                     if (string.IsNullOrWhiteSpace(loc.name))
                     {
