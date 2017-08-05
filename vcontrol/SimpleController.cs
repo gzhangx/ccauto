@@ -53,6 +53,33 @@ namespace ccVcontrol
             }
         }
 
+        public void LogMatchAnalyst(string str, decimal res)
+        {
+            Log("debug",$"...LogMatchAnalyst {str}/{res}");
+            //format  -input tstimgs\chk_act_6cnf.png -match data\check\confirm.bmp 10000/8038.000000
+            int ind = str.IndexOf("-match");
+            if (ind > 0)
+            {
+                try
+                {
+                    var nnn = str.Substring(ind);
+                    var parts = nnn.Split(' ');
+                    var fname = parts[1];
+                    var matchres = parts[2];
+                    //InfoLog($"  LogMatchAnalyst==>{fname} {res.ToString("0")}/{matchres}");
+                    Log("matchAnalyst", $"{fname} {res.ToString("0")}/{matchres}");
+                }
+                catch (Exception exc)
+                {
+                    Log("error",$"Bad format exc for LogMatchAnalyst {str} {exc}");
+                }
+            }
+            else
+            {
+                Log("error","Bad format for LogMatchAnalyst " + str);
+            }
+        }
+
         public void NotifyStartingAccount(IAccountControl act)
         {
             accountStartCounts[act.CurAccount - 1]++;
@@ -61,7 +88,7 @@ namespace ccVcontrol
 
         public void Sleep(int ms)
         {
-            Logger.Debug($"               Sleeping {ms}");
+            //Logger.Debug($"               Sleeping {ms}");
             Thread.Sleep(ms);
         }
     }

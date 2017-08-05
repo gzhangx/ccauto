@@ -13,6 +13,7 @@ namespace ccVcontrol
         bool canContinue();
         void NotifyStartingAccount(IAccountControl act);
         void Log(string type, string msg);
+        void LogMatchAnalyst(string str, decimal res);
         void Sleep(int ms);
     }
 
@@ -57,27 +58,7 @@ namespace ccVcontrol
 
         public void LogMatchAnalyst(string str, decimal res)
         {
-            DebugLog($"...LogMatchAnalyst {str}/{res}");
-            //format  -input tstimgs\chk_act_6cnf.png -match data\check\confirm.bmp 10000/8038.000000
-            int ind = str.IndexOf("-match");
-            if (ind > 0)
-            {
-                try
-                {
-                    var nnn = str.Substring(ind);
-                    var parts = nnn.Split(' ');
-                    var fname = parts[1];
-                    var matchres = parts[2];
-                    //InfoLog($"  LogMatchAnalyst==>{fname} {res.ToString("0")}/{matchres}");
-                    vdcontroller.Log("matchAnalyst", $"{fname} {res.ToString("0")}/{matchres}");
-                } catch (Exception exc)
-                {
-                    InfoLog($"Bad format exc for LogMatchAnalyst {str} {exc}");
-                }
-            }else
-            {
-                InfoLog("Bad format for LogMatchAnalyst " + str);
-            }
+            vdcontroller.LogMatchAnalyst(str, res);
         }
 
         internal List<CommandInfo> GetAppInfo(string argument = "-check")
