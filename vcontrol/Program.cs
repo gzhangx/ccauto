@@ -26,17 +26,13 @@ namespace ccVcontrol
             context.DoShift();            
             while (context.vdcontroller.canContinue())
             {                
-                //cmds = Utils.GetAppInfo();
-                context.GetToEntrance();
-                DoDonate(context);
+                //cmds = Utils.GetAppInfo();                
+                ProcessDonate(context, context.GetToEntrance());
                 context.GetToEntrance();
                 int acct = SwitchAccount.CheckAccount();
                 context.vdcontroller.NotifyStartingAccount(acct);
                 new ProcessorMapByText(context).ProcessCommand(acct);
-                context.GetToEntrance();
                 switchAccount.Process();
-
-                context.GetToEntrance();
                 Thread.Sleep(100);
                 
                 GenerateAccountPics(context, switchAccount.CurAccount);
@@ -57,19 +53,12 @@ namespace ccVcontrol
             //Utils.GetAppInfo($"-name data\\accounts\\img_act{who}.png -input {fullImg} {SwitchAccount.acctNameMatchRect} -imagecorp");
         }
 
-        private static  void DoDonate(ProcessingContext context)
+    
+        private static void ProcessDonate(ProcessingContext context, List<CommandInfo> cmds)
         {
-            var cmds = context.GetToEntrance();
             var cmd = cmds.FirstOrDefault(c => c.extraInfo == "PRMXYCLICK_ACT_LeftExpand");
             if (cmd != null)
-            {
-                ProcessDonate(context, cmd);
-            }
-        }
-    
-        private static void ProcessDonate(ProcessingContext context, CommandInfo cmd)
-        {
-            new ProcessorDonation(context).ProcessDonate(cmd);
+                new ProcessorDonation(context).ProcessDonate(cmd);
         }
 
 
