@@ -93,7 +93,6 @@ namespace ccVcontrol
 
         private void SwitchAccountAction(CommandInfo found, StepInfo cur, StepContext stepContext)
         {
-            account++;
             if (account >= MAXACCOUNT || account < 0) account = 0;
 
             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff + (account* ACCOUNTSPACING));
