@@ -29,7 +29,14 @@ namespace ccVcontrol
                 //cmds = Utils.GetAppInfo();                
                 ProcessDonate(context, context.GetToEntrance());
                 context.GetToEntrance();
+                Thread.Sleep(4000);
                 int acct = SwitchAccount.CheckAccount();
+                if (acct <= 0)
+                {
+                    context.InfoLog("failed to get account, try again");
+                    Thread.Sleep(4000);
+                    acct = SwitchAccount.CheckAccount();
+                }
                 context.vdcontroller.NotifyStartingAccount(acct);
                 new ProcessorMapByText(context).ProcessCommand(acct);
                 switchAccount.Process();

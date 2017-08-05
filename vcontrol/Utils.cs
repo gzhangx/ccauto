@@ -169,7 +169,7 @@ namespace ccVcontrol
                     continue;
                 }
                 if (cmd.StartsWith("*")) continue;
-                Logger.Info($"  ***{cmd}");
+                Logger.Debug($"  ***{cmd}");
                 try
                 {
                     if (cmd.StartsWith("RecoResult_"))

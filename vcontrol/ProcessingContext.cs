@@ -61,7 +61,7 @@ namespace ccVcontrol
                     vdcontroller.Log("matchAnalyst", $"{fname} {res.ToString("0")}/{matchres}");
                 } catch (Exception exc)
                 {
-                    InfoLog($"Bad format exc for LogMatchAnalyst {str}");
+                    InfoLog($"Bad format exc for LogMatchAnalyst {str} {exc}");
                 }
             }else
             {

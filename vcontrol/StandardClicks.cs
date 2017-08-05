@@ -77,7 +77,7 @@ namespace ccVcontrol
             new ImgChecksAndTags("chacha_closeTrain.png", "PRMXYCLICK_STD_Close"),//, Point(22, 22)
             new ImgChecksAndTags("upgradeFailedClose.png", "PRMXYCLICK_STD_Close"),//, Point(22, 22)
             new ImgChecksAndTags("leftshrink.png", "PRMXYCLICK_STD_LeftShrink", null, 10),//Point(22, 64)
-            new ImgChecksAndTags("chacha_settings.png", "PRMXYCLICK_STD_CloseSettings", null, 10),//Point(22, 22)
+            new ImgChecksAndTags("chacha_settings.png", "PRMXYCLICK_STD_CloseSettings", null, 20),//Point(22, 22)
             new ImgChecksAndTags("anyoneThere.png", "PRMXYCLICK_STD_AnyoneThere", new ccPoint(63, 119), 5000),
             new ImgChecksAndTags("connectionError.png", "PRMXYCLICK_STD_ConnectionError", new ccPoint(53, 121), 400),
             new ImgChecksAndTags("returnHomeAfterFight.png", "PRMXYCLICK_STD_ReturnHome", null, 40), //Point(50, 50)
