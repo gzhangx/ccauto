@@ -25,9 +25,7 @@ namespace ccVcontrol
             context.DebugLog("Do shift");
             context.DoShift();            
             while (context.vdcontroller.canContinue())
-            {                
-                //cmds = Utils.GetAppInfo();                
-                ProcessDonate(context, context.GetToEntrance());
+            {
                 context.GetToEntrance();
                 Thread.Sleep(4000);
                 int acct = SwitchAccount.CheckAccount();
@@ -37,13 +35,22 @@ namespace ccVcontrol
                     Thread.Sleep(4000);
                     acct = SwitchAccount.CheckAccount();
                 }
+                switchAccount.CurAccount = acct;
+                context.InfoLog($"===>Step gen acct pic {acct}");
+                GenerateAccountPics(context, switchAccount.CurAccount);
                 context.vdcontroller.NotifyStartingAccount(acct);
+                context.InfoLog("===>Step Donate");
+                //cmds = Utils.GetAppInfo();                
+                ProcessDonate(context, context.GetToEntrance());
+                context.InfoLog("===>Step textmap");
                 new ProcessorMapByText(context).ProcessCommand(acct);
+                context.InfoLog("===>Step SwitchAccount");
                 switchAccount.Process();
+                context.InfoLog("===>Step get to entrance");
                 context.GetToEntrance();
                 Thread.Sleep(4000);
                 
-                GenerateAccountPics(context, switchAccount.CurAccount);
+                
 
                 //DoDonate(context, cmds);
                 //Console.WriteLine("press enter to countinue");

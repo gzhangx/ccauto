@@ -19,6 +19,7 @@ namespace ccVcontrol
         public int CurAccount
         {
             get { return account; }
+            set { account = value; }
         }
         static int MAXACCOUNT = 6;
         public SwitchAccount(ProcessingContext ctx) : base(ctx)
@@ -84,7 +85,6 @@ namespace ccVcontrol
 
         public override StepContext Process()
         {
-            account = CheckAccount() - 1;
             context.InfoLog($"Trying to find SINGLEMATCH for settings button account ----- {account}");
             switchSteps.First(r => r.name == "SwitchAccount").Act = SwitchAccountAction;
             var res = DoSteps(switchSteps);            
