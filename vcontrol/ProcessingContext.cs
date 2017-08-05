@@ -113,12 +113,12 @@ namespace ccVcontrol
         {
             while (true)
             {                
-                DebugLog("MainLoop CheckEntrance");
+                DebugLog(" CheckEntrance");
                 var cmds = DoStdClicks();
-                DebugLog("MainLoop, CheckEntrance.getAppInfo");
+                DebugLog(" CheckEntrance.getAppInfo");
                 if (CheckFound(cmds, "PRMXYCLICK_ACT_LeftExpand"))
                 {
-                    DebugLog("MainLoop, CheckEntrance.FoundLoaded");
+                    DebugLog(" CheckEntrance.FoundLoaded");                    
                     return cmds;
                 }
                 Thread.Sleep(5000);

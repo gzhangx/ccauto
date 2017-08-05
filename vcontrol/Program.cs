@@ -33,7 +33,8 @@ namespace ccVcontrol
                 context.vdcontroller.NotifyStartingAccount(acct);
                 new ProcessorMapByText(context).ProcessCommand(acct);
                 switchAccount.Process();
-                Thread.Sleep(100);
+                context.GetToEntrance();
+                Thread.Sleep(4000);
                 
                 GenerateAccountPics(context, switchAccount.CurAccount);
 
@@ -46,7 +47,7 @@ namespace ccVcontrol
 
         private static void GenerateAccountPics(ProcessingContext context, int who)
         {
-            context.DebugLog("Generate account pics");
+            context.DebugLog("------------------Generate account pics");
             context.GetToEntrance();
             var fullImg = $"tstimgs\\accountFull_{who}.png";
             Utils.doScreenShoot(fullImg);

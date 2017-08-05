@@ -217,18 +217,7 @@ namespace ccVcontrol
             return null;
         }
 
-        public void InitGame(string name)
-        {
-            //var cmds = Utils.GetAppInfo();            
-            while (true)
-            {
-                var cmds = context.DoStdClicks();
-                //cmds = Utils.GetAppInfo();
-                if (cmds.FirstOrDefault(c => c.extraInfo == "PRMXYCLICK_ACT_LeftExpand") != null) break;
-            }
-            Thread.Sleep(1000);
-            //Utils.GetAppInfo($"-name {name} -matchRect 79,32,167,22_200 -screenshoot");
-        }
+        
         
         public abstract StepContext Process();
     }

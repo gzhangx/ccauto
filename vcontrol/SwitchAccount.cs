@@ -87,8 +87,7 @@ namespace ccVcontrol
             account = CheckAccount() - 1;
             context.InfoLog($"Trying to find SINGLEMATCH for settings button account ----- {account}");
             switchSteps.First(r => r.name == "SwitchAccount").Act = SwitchAccountAction;
-            var res = DoSteps(switchSteps);
-            InitGame("Account_" + account);
+            var res = DoSteps(switchSteps);            
             return res;
         }
 

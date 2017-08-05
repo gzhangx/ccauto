@@ -165,7 +165,8 @@ namespace ccVcontrol
             if (btns.FirstOrDefault() != null)
             {
                 var btn = btns.First();
-                context.LogMatchAnalyst("-match upgradeWithEliButton.png 400", btn.cmpRes);
+                var fname = btn.extraInfo == "g1" ? "upgradeWithEliButton.png" : "upgradeWithGoldButton.png";
+                context.LogMatchAnalyst($"UPGRADING -match {fname} 400", btn.cmpRes);
                 context.MoveMouseAndClick(btn.x + 20, btn.y + 20);
                 return true;
             }
