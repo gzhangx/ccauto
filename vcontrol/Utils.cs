@@ -24,13 +24,13 @@ namespace ccVcontrol
         const string vboxman = "\"C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe\"";
         const int YOFF = 0;// 21;
 
-        public static void MouseMouseTo(IMouse mouse, int x, int y)
+        public static void MouseMouseTo(IMouse mouse, int x, int y, ProcessingContext context)
         {
             y -= YOFF;
             for (int i = 0; i < 5; i++)
             {
                 mouse.PutMouseEvent(-200, -200, 0, 0, 0);
-                Thread.Sleep(100);
+                context.Sleep(100);
             }
 
             const int MAX = 200;
@@ -41,7 +41,7 @@ namespace ccVcontrol
                 int my = y > MAX ? MAX : y;
                 y -= my;
                 mouse.PutMouseEvent(mx, my, 0, 0, 0);
-                Thread.Sleep(100);
+                context.Sleep(100);
             }
             mouse.PutMouseEvent(x, y, 0, 0, 0);
         }
@@ -52,19 +52,19 @@ namespace ccVcontrol
             mouse.PutMouseEvent(x, y, 0, 0, 0);
             Thread.Sleep(100);
         }
-        public static void MouseClick(IMouse mouse)
+        public static void MouseClick(IMouse mouse, ProcessingContext context)
         {
-            Thread.Sleep(100);
+            context.Sleep(100);
             mouse.PutMouseEvent(0, 0, 0, 0, 1);
-            Thread.Sleep(200);
+            context.Sleep(200);
             mouse.PutMouseEvent(0, 0, 0, 0, 0);
-            Thread.Sleep(100);
+            context.Sleep(100);
         }
 
-        public static void MoveMouseAndClick(IMouse mouse, int x, int y)
+        public static void MoveMouseAndClick(IMouse mouse, int x, int y, ProcessingContext context)
         {
-            MouseMouseTo(mouse, x, y);
-            MouseClick(mouse);
+            MouseMouseTo(mouse, x, y, context);
+            MouseClick(mouse, context);
         }
 
         public static uint GetScanCode(char c)
@@ -84,7 +84,7 @@ namespace ccVcontrol
             {'R',0x52 },
             {'M',0x4D },
         };
-        public static void SendString(IKeyboard keyboard, string str)
+        public static void SendString(IKeyboard keyboard, string str, ProcessingContext context)
         {
             var codes = new short[str.Length];
             Console.Write("writiting ");
@@ -95,9 +95,9 @@ namespace ccVcontrol
                 codes[i] = (short)GetScanCode(str[i]);
                 Console.Write(str[i]);
                 keyboard.PutScancode((int)codes[i]);
-                Thread.Sleep(200);
+                context.Sleep(200);
                 keyboard.PutScancode((int)codes[i] | 0x80);
-                Thread.Sleep(300);
+                context.Sleep(300);
             }
             Console.WriteLine();
         }
@@ -157,7 +157,7 @@ namespace ccVcontrol
             }
         }
 
-        public static List<CommandInfo> GetAppInfo(string arguments = "-check")
+        public static List<CommandInfo> GetAppInfo(string arguments, ProcessingContext context)
         {
             var res = new List<CommandInfo>();
             foreach (var cmd in Utils.runApp(arguments).Split(new char[]{ '\r','\n'}))
@@ -165,11 +165,11 @@ namespace ccVcontrol
                 if (cmd.Length < 2) continue;
                 if (cmd.StartsWith("ERR:"))
                 {
-                    Console.WriteLine($"{cmd.Trim()} arg={arguments}");
+                    context.DebugLog($"{cmd.Trim()} arg={arguments}");
                     continue;
                 }
                 if (cmd.StartsWith("*")) continue;
-                Logger.Debug($"  ***{cmd}");
+                context.DebugLog($"  ***{cmd}");
                 try
                 {
                     if (cmd.StartsWith("RecoResult_"))
@@ -202,8 +202,8 @@ namespace ccVcontrol
                     res.Add(new CommandInfo { command = command, cmpRes = cmpRes, x = x, y = y, decision = decision, extraInfo = extraInfo });
                 } catch (Exception exc)
                 {
-                    Logger.Warn("failed " + exc.Message + " " + cmd);
-                    Logger.Error(exc);
+                    context.InfoLog("failed " + exc.Message + " " + cmd);
+                    context.InfoLog("StackTrace:" + exc.ToString());
                     throw exc;
                 }
                 

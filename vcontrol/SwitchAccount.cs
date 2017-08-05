@@ -37,12 +37,12 @@ namespace ccVcontrol
             };
         }
 
-        public static int CheckAccount()
+        public int CheckAccount()
         {
             const string tempName = "tstimgs\\tempFullScreen.png";            
             Utils.doScreenShoot(tempName);
             const string tempPartName = "tstimgs\\tempName.png";
-            Utils.GetAppInfo($"-name {tempPartName} -input {tempName} {acctNameMatchRect} -imagecorp");            
+            context.GetAppInfo($"-name {tempPartName} -input {tempName} {acctNameMatchRect} -imagecorp");            
             return CheckAccountWithImage(tempPartName);
         }
         public static IEnumerable<string> GetAccountFiles(out string imgStart)
@@ -52,7 +52,7 @@ namespace ccVcontrol
             var files = System.IO.Directory.GetFiles(accoungImagDir).Where(f => f.StartsWith(actImgNameStart));
             return files;
         }
-        public static int CheckAccountWithImage(string screenName)
+        public int CheckAccountWithImage(string screenName)
         {
             var actImgNameStart = accoungImagDir + "img_act";
             var files = GetAccountFiles(out actImgNameStart);
@@ -66,7 +66,7 @@ namespace ccVcontrol
                 actname = actname.Substring(0, actname.IndexOf("."));
                 sb.Append($" -name {actname} -match {f} 96876875");                
             }
-            var res = Utils.GetAppInfo(sb.ToString());
+            var res = context.GetAppInfo(sb.ToString());
             foreach (var r in res)
             {
                 if (good == null) good = r;

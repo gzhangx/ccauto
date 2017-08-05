@@ -28,12 +28,12 @@ namespace ccVcontrol
             {
                 context.GetToEntrance();
                 context.Sleep(2000);
-                int acct = SwitchAccount.CheckAccount();
+                int acct = switchAccount.CheckAccount();
                 if (acct <= 0)
                 {
                     context.InfoLog("failed to get account, try again");
                     context.Sleep(4000);
-                    acct = SwitchAccount.CheckAccount();
+                    acct = switchAccount.CheckAccount();
                 }
                 switchAccount.CurAccount = acct;
                 context.InfoLog($"===>Step gen acct pic {acct}");
@@ -82,7 +82,7 @@ namespace ccVcontrol
             Utils.doScreenShoot("tstimgs\\tmptesttest.png");
             var actr = ProcessorMapByText.canUpgrade(context, "tstimgs\\tmptesttest.png");
             Console.WriteLine(actr.upgrade);
-            return;
+            /*
             for (int i = 1; i <= 4; i++)
             {
                 //generate mask
@@ -92,12 +92,13 @@ namespace ccVcontrol
             {
                 //generate mask
                 //Utils.GetAppInfo($"-name data\\accounts\\img_act{i}.png -input tstimgs\\full_act_full_{i}.png -matchRect 80,30,100,27_200 -imagecorp");
-                var res = Utils.GetAppInfo($"-name cmpact{i} -input tstimgs\\accountFull_1.png {SwitchAccount.acctNameMatchRect} -match data\\accounts\\img_act{i}.png 10000");
+                var res = context.GetAppInfo($"-name cmpact{i} -input tstimgs\\accountFull_1.png {SwitchAccount.acctNameMatchRect} -match data\\accounts\\img_act{i}.png 10000");
                 foreach (var r in res)
                 {
                     Console.WriteLine(r);
                 }
             }
+            */
         }
         public static void Start(IVDController controller)
         {

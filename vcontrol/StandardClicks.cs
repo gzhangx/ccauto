@@ -25,7 +25,7 @@ namespace ccVcontrol
             {
                 sb.Append($"-name {clk.Desc} -match {clk.ImageName} {clk.Threadshold} ");
             }
-            var results = Utils.GetAppInfo(sb.ToString());
+            var results = context.GetAppInfo(sb.ToString());
             var topMatch = results.Where(r => r.decision == "true" 
             && r.extraInfo != null 
             && r.extraInfo.StartsWith("PRMXYCLICK_STD_")).OrderBy(r => r.cmpRes).FirstOrDefault();

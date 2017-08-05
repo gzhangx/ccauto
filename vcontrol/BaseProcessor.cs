@@ -201,7 +201,7 @@ namespace ccVcontrol
             for (int retryi = 0; retryi < retry; retryi++)
             {
                 context.DebugLog($"{printDebug}Trying to find SINGLEMATCH for {name}");
-                var cmds = Utils.GetAppInfo(name);
+                var cmds = Utils.GetAppInfo(name, context);
                 var found = cmds.FirstOrDefault(cmd => cmd.command == "SINGLEMATCH");
                 if (found != null && found.decision == "true")
                 {

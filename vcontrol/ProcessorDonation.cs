@@ -34,7 +34,7 @@ namespace ccVcontrol
                 //-matchRect 227,102,140,600_200
                 const int donateRectx = 227;
                 const int donateRecty = 102;
-                var results = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name donate -matchRect {donateRectx},{donateRecty},140,600_200 -top 5  -match data\\check\\donatebutton.png 350");                
+                var results = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name donate -matchRect {donateRectx},{donateRecty},140,600_200 -top 5  -match data\\check\\donatebutton.png 350", context);                
                 foreach (var donate in results)
                 {
                     if (donate.decision == "true")
@@ -51,7 +51,7 @@ namespace ccVcontrol
                         for (int dwretry = 0; dwretry < 2; dwretry++)
                         {
                             Utils.doScreenShoot(ProcessorMapByText.tempImgName);                            
-                            var dw = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name dw  -match data\\check\\donate_wizard.png 300");
+                            var dw = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name dw  -match data\\check\\donate_wizard.png 300", context);
                             var dwbtn = dw.FirstOrDefault(dwf => dwf.decision == "true");
                             if (dwbtn != null)
                             {

@@ -52,7 +52,7 @@ namespace ccVcontrol
 
             var badLocs = new List<PosInfo>();
             int nameTry = 0;
-            var results = Utils.GetAppInfo();
+            var results = context.GetAppInfo();
             int numBuilders = NumBuilders(results);
             bool gotFirstGold = false;
             bool gotFirstEli = false;
@@ -77,7 +77,7 @@ namespace ccVcontrol
                 context.MoveMouseAndClick(loc.point.x, loc.point.y);
                 context.Sleep(1000);
                 Utils.doScreenShoot(tempImgName);
-                results = Utils.GetAppInfo();
+                results = context.GetAppInfo();
                 if (string.IsNullOrWhiteSpace(loc.name))
                 {
                     loc.name = GetStructureName(loc, results);
@@ -87,7 +87,7 @@ namespace ccVcontrol
                         nameTry++;
                         context.MoveMouseAndClick(loc.point.x, loc.point.y);
                         context.Sleep(1000);
-                        results = Utils.GetAppInfo();
+                        results = context.GetAppInfo();
                         loc.name = GetStructureName(loc, results);
                         if (string.IsNullOrWhiteSpace(loc.name))
                         {
@@ -157,7 +157,7 @@ namespace ccVcontrol
             sb.Append($"-input {tempImgName} ");
             sb.Append($"-name g1 -match data\\check\\upgradeWithEliButton.png 400 ");
             sb.Append($" -name g2 -match data\\check\\upgradeWithGoldButton.png 400 ");
-            var btns = Utils.GetAppInfo(sb.ToString());
+            var btns = context.GetAppInfo(sb.ToString());
             foreach (var btn in btns) context.DebugLog("           check train button " + btn);
             btns = btns.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
             if (btns.FirstOrDefault() != null)
@@ -177,7 +177,7 @@ namespace ccVcontrol
             var sb = new StringBuilder();
             sb.Append($"-input {tempImgName} ");
             sb.Append($"-name g1 -match data\\check\\{img} ");
-            var btns = Utils.GetAppInfo(sb.ToString());
+            var btns = context.GetAppInfo(sb.ToString());
             foreach (var btn in btns) context.DebugLog("           check rearmall " + btn);
             btns = btns.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
             if (btns.FirstOrDefault() != null)
@@ -203,7 +203,7 @@ namespace ccVcontrol
 
         private void Test()
         {
-            var results = Utils.GetAppInfo();
+            var results = context.GetAppInfo();
             //"RecoResult_INFO_Builders"
             //int num = NumBuilders(results);
             //context.InfoLog("Number of builders " + num);
@@ -294,7 +294,7 @@ namespace ccVcontrol
             };
             foreach (var name in otherActs)
                 sb.Append($" -name {name} -matchRect {actx},{acty},650,105_200 -match {otherImgs[name]} ");            
-            var res = Utils.GetAppInfo(sb.ToString());            
+            var res = context.GetAppInfo(sb.ToString());            
             res.ForEach(r =>
             {
                 r.x += actx;

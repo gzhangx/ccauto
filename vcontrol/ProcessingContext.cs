@@ -41,7 +41,7 @@ namespace ccVcontrol
         }
         public virtual void SendString(string str)
         {
-            Utils.SendString(keyboard, str);
+            Utils.SendString(keyboard, str, this);
         }
 
         public void DebugLog(string str)
@@ -79,6 +79,12 @@ namespace ccVcontrol
                 InfoLog("Bad format for LogMatchAnalyst " + str);
             }
         }
+
+        internal List<CommandInfo> GetAppInfo(string argument = "-check")
+        {
+            return Utils.GetAppInfo(argument, this);
+        }
+
         public List<CommandInfo> DoStdClicks()
         {
             MouseMouseTo(0, 0);
@@ -88,7 +94,7 @@ namespace ccVcontrol
 
         public virtual void MouseMouseTo(int x, int y)
         {
-            Utils.MouseMouseTo(mouse, x, y);
+            Utils.MouseMouseTo(mouse, x, y, this);
         }
 
         public virtual void MouseMouseRelative(int x, int y)
@@ -97,12 +103,12 @@ namespace ccVcontrol
         }
         public virtual void MouseClick()
         {
-            Utils.MouseClick(mouse);
+            Utils.MouseClick(mouse, this);
         }
 
         public virtual void MoveMouseAndClick(int x, int y)
         {
-            Utils.MoveMouseAndClick(mouse, x, y);
+            Utils.MoveMouseAndClick(mouse, x, y, this);
         }
 
         public void DoShift()
