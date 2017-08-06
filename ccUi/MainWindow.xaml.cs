@@ -111,7 +111,7 @@ namespace ccUi
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
             var fname = curFileName.Replace(".png", ".txt");
-            File.WriteAllText(fname, JsonConvert.SerializeObject(points));
+            File.WriteAllText(fname, JsonConvert.SerializeObject(points, Formatting.Indented));
         }
     }
 }
