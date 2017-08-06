@@ -16,6 +16,7 @@ namespace ccVcontrol
         void LogMatchAnalyst(string str, decimal res);
         void Sleep(int ms);
         void CustomAction(ProcessingContext context);
+        void Init();
     }
 
     public class SwitchProcessingActionException: Exception

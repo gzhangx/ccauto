@@ -25,6 +25,7 @@ namespace ccVcontrol
             context.DebugLog("Do shift");
             context.DoShift();
             var controller = context.vdcontroller;
+            controller.Init();
             while (controller.canContinue())
             {
                 try

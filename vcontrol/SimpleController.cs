@@ -10,7 +10,7 @@ namespace ccVcontrol
 {
     public class SimpleController : IVDController
     {
-        public int[] accountStartCounts;
+        protected int[] accountStartCounts;
         protected ILog Logger;
         public Action<ProcessingContext> CustomAct;
         public SimpleController()
@@ -96,6 +96,11 @@ namespace ccVcontrol
         {
             //Logger.Debug($"               Sleeping {ms}");
             Thread.Sleep(ms);
+        }
+
+        public void Init()
+        {
+            accountStartCounts = new int[accountStartCounts.Length];
         }
     }
 }
