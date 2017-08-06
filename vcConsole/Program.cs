@@ -13,15 +13,22 @@ namespace vcConsole
     {
         static void Main(string[] args)
         {
-            ILog Logger = LogManager.GetLogger("main");        
+            ILog Logger = LogManager.GetLogger("main");
+            var controller = new SimpleController();
             while (true)
             {
                 DateTime startTime = DateTime.UtcNow;
                 Logger.Info("Starting");
-                ccVcontrol.Program.Start(new SimpleController());
-                Logger.Info($"Sleeping, run time = {DateTime.UtcNow.Subtract(startTime).TotalSeconds.ToString("0.00")}s");
-                Thread.Sleep(1000 * 60 * 10);
-                Logger.Info("Done Sleeping");
+                try
+                {
+                    ccVcontrol.Program.Start(controller);
+                    Logger.Info($"Sleeping, run time = {DateTime.UtcNow.Subtract(startTime).TotalSeconds.ToString("0.00")}s");
+                    controller.Sleep(1000 * 60 * 10);
+                    Logger.Info("Done Sleeping");
+                } catch (SwitchProcessingActionException exc)
+                {
+                    controller.Log("info", "switching action " + exc.Message);
+                }
             }
         }
     }

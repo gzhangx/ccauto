@@ -17,47 +17,54 @@ namespace ccVcontrol
         static void checkLoop(ProcessingContext context)
         {
             //Utils.doScreenShoot("tstimgs\\full.png");
-            var switchAccount = new SwitchAccount(context);
+            
             context.DebugLog("Getting app info");            
             //cmds = Utils.GetAppInfo("-name allfull -screenshoot");
             //cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");            
             context.GetToEntrance();
             context.DebugLog("Do shift");
-            context.DoShift();            
-            while (context.vdcontroller.canContinue())
+            context.DoShift();
+            var controller = context.vdcontroller;
+            while (controller.canContinue())
             {
-                context.GetToEntrance();
-                context.Sleep(2000);
-                int acct = switchAccount.CheckAccount();
-                if (acct <= 0)
+                try
                 {
-                    context.InfoLog("failed to get account, try again");
-                    context.Sleep(4000);
-                    acct = switchAccount.CheckAccount();
+                    controller.CustomAction(context);
+                    DoProcess(context);
+                } catch (SwitchProcessingActionException swa)
+                {
+                    controller.Log("info", "switch action " + swa.Message);
                 }
-                switchAccount.CurAccount = acct;
-                context.InfoLog($"===>Step gen acct pic {acct}");
-                GenerateAccountPics(context, switchAccount.CurAccount);
-                context.vdcontroller.NotifyStartingAccount(switchAccount);
-                context.InfoLog("===>Step Donate");
-                //cmds = Utils.GetAppInfo();                
-                ProcessDonate(context, context.GetToEntrance());
-                context.GetToEntrance();
-                context.InfoLog("===>Step textmap");
-                new ProcessorMapByText(context).ProcessCommand(acct);
-                context.InfoLog("===>Step SwitchAccount");
-                switchAccount.Process();
-                context.InfoLog("===>Step get to entrance");
-                context.GetToEntrance();
-                context.Sleep(4000);
-                
-                
-
-                //DoDonate(context, cmds);
-                //Console.WriteLine("press enter to countinue");
-                //Console.ReadLine();
-
             }
+        }
+
+        private static void DoProcess(ProcessingContext context)
+        {
+            var switchAccount = new SwitchAccount(context);
+            context.GetToEntrance();
+            context.Sleep(2000);
+            int acct = switchAccount.CheckAccount();
+            if (acct <= 0)
+            {
+                context.InfoLog("failed to get account, try again");
+                context.Sleep(4000);
+                acct = switchAccount.CheckAccount();
+            }
+            switchAccount.CurAccount = acct;
+            context.InfoLog($"===>Step gen acct pic {acct}");
+            GenerateAccountPics(context, switchAccount.CurAccount);
+            context.vdcontroller.NotifyStartingAccount(switchAccount);
+            context.InfoLog("===>Step Donate");
+            //cmds = Utils.GetAppInfo();                
+            ProcessDonate(context, context.GetToEntrance());
+            context.GetToEntrance();
+            context.InfoLog("===>Step textmap");
+            new ProcessorMapByText(context).ProcessCommand(acct);
+            context.InfoLog("===>Step SwitchAccount");
+            switchAccount.Process();
+            context.InfoLog("===>Step get to entrance");
+            context.GetToEntrance();
+            context.Sleep(4000);
         }
 
         private static void GenerateAccountPics(ProcessingContext context, int who)
@@ -116,14 +123,14 @@ namespace ccVcontrol
             var session = vboxclient.Session;            
             try
             {
-                Console.WriteLine("found machine, lock machine");
+                controller.Log("info", "found machine, lock machine");
                 machine.LockMachine(session, LockType.LockType_Shared);
                 var console = session.Console;
                 IEventSource es = console.EventSource;
                 var listener = es.CreateListener();
                 Array listenTYpes = new VBoxEventType[] { VBoxEventType.VBoxEventType_InputEvent };
                 es.RegisterListener(listener, listenTYpes, 0);
-                Console.WriteLine("locked machine, entry try");
+                controller.Log("info", "locked machine, entry try");
                 try
                 {
                     //session.Console.Display.SetSeamlessMode(1);
@@ -132,7 +139,7 @@ namespace ccVcontrol
                     int xorig, yorig;
                     GuestMonitorStatus gmstat;
                     display.GetScreenResolution(0, out sw, out sh, out bpp, out xorig, out yorig, out gmstat);
-                    Console.WriteLine($"sw={sw} {sh} bpp {bpp} xorig={xorig} yorig={yorig}");
+                    //Console.WriteLine($"sw={sw} {sh} bpp {bpp} xorig={xorig} yorig={yorig}");
 
                     byte[] buf = new byte[sw * sh * bpp / 8];
                     //display.TakeScreenShot(0, ref buf[0], sw, sh, BitmapFormat.BitmapFormat_PNG);
@@ -143,7 +150,7 @@ namespace ccVcontrol
                     //MouseClick(mouse);
                     //MouseMouseTo(mouse, 360, 156);
                     //MouseClick(mouse);
-                    Console.WriteLine("main loop");
+                    controller.Log("info","main loop");
                     checkLoop(new ProcessingContext(mouse, keyboard, controller));                    
                 }
                 finally
@@ -162,7 +169,8 @@ namespace ccVcontrol
                     session.UnlockMachine();
             }
 
-            Console.WriteLine(machine.VideoCaptureWidth);
+            //Console.WriteLine(machine.VideoCaptureWidth);
+            controller.Log("info", "powering off");
             Utils.executeVBoxMngr($"controlvm {Utils.vmname} poweroff");
         }
     }

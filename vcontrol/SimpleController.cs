@@ -12,6 +12,7 @@ namespace ccVcontrol
     {
         public int[] accountStartCounts;
         protected ILog Logger;
+        public Action<ProcessingContext> CustomAct;
         public SimpleController()
         {
             log4net.Config.XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo("log4net.conf"));
@@ -32,6 +33,11 @@ namespace ccVcontrol
                 }
             }
             return keepGoing;
+        }
+
+        public virtual void CustomAction(ProcessingContext context)
+        {
+            if (CustomAct != null) CustomAct(context);
         }
 
         public void Log(string type, string msg)

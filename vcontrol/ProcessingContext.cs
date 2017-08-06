@@ -15,6 +15,12 @@ namespace ccVcontrol
         void Log(string type, string msg);
         void LogMatchAnalyst(string str, decimal res);
         void Sleep(int ms);
+        void CustomAction(ProcessingContext context);
+    }
+
+    public class SwitchProcessingActionException: Exception
+    {
+        public SwitchProcessingActionException(string msg) : base(msg) { }
     }
 
     public interface IAccountControl
