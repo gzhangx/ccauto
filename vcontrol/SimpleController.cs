@@ -13,6 +13,7 @@ namespace ccVcontrol
         protected int[] accountStartCounts;
         protected ILog Logger;
         public Action<ProcessingContext> CustomAct;
+        public Action<string, string> EventNotify;
         public SimpleController()
         {
             log4net.Config.XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo("log4net.conf"));
@@ -89,6 +90,7 @@ namespace ccVcontrol
         public void NotifyStartingAccount(IAccountControl act)
         {
             accountStartCounts[act.CurAccount - 1]++;
+            EventNotify?.Invoke("startingAccount", act.CurAccount.ToString());
             Logger.Info($"=======================> Starting account {act.CurAccount}");
         }
 
@@ -119,9 +121,11 @@ namespace ccVcontrol
             }
         }
 
+        protected int switchingToAccount = -1;
         public void ChangeToNewAccount(int act)
         {
             CurState = ProcessState.SwitchAccount;
+            switchingToAccount = act;
             InterruptProcessing("Chaning account");            
         }
 
@@ -141,6 +145,15 @@ namespace ccVcontrol
         public void DoneCurProcessing()
         {
             CurState = ProcessState.Normal;
+            switchingToAccount = -1;
+        }
+        public int CheckSetCurAccount(int act)
+        {
+            if (CurState == ProcessState.SwitchAccount)
+            {
+                return switchingToAccount;
+            }
+            return act;
         }
     }
 }

@@ -28,12 +28,21 @@ namespace vcAppUi
         {            
             InitializeComponent();
             ctrl.Start();
+            ctrl.controller.EventNotify = (what, val) =>
+            {
+                Logger.Info($"UI: {what} ==> {val}");
+                switch (what)
+                {
+                    case "startingAccount":
+                        break;
+                }
+            };
         }
 
         private void Button_Click_SwitchAccount(object sender, RoutedEventArgs e)
         {
             var act = ((ComboBoxItem)cmbAccount.SelectedValue).Content.ToString();
-            ctrl.controller.ChangeToNewAccount(Int32.Parse(act));
+            ctrl.controller.ChangeToNewAccount(Int32.Parse(act)- 1);
         }
     }
 }
