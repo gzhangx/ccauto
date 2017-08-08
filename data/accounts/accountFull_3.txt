@@ -7,6 +7,20 @@
     }
   },
   {
+    "name": "ElixirCollector",
+    "point": {
+      "x": 768,
+      "y": 230
+    }
+  },
+  {
+    "name": "GoldMine",
+    "point": {
+      "x": 816,
+      "y": 263
+    }
+  },
+  {
     "name": "ClanCastle",
     "point": {
       "x": 599,
