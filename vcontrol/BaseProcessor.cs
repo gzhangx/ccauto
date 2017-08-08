@@ -165,7 +165,7 @@ namespace ccVcontrol
             {
                 if  (cur.delay > 0)
                 {
-                    Thread.Sleep(cur.delay);
+                    context.Sleep(cur.delay);
                 }
                 return true;
             }
@@ -179,7 +179,7 @@ namespace ccVcontrol
                         return true;
                     }
                     if (FoundOtherGoodAlts(stepCtx, nextStep)) return true;
-                    Thread.Sleep(1000);
+                    context.Sleep(1000);
                 }
             }
 
@@ -201,7 +201,7 @@ namespace ccVcontrol
             for (int retryi = 0; retryi < retry; retryi++)
             {
                 context.DebugLog($"{printDebug}Trying to find SINGLEMATCH for {name}");
-                var cmds = Utils.GetAppInfo(name);
+                var cmds = Utils.GetAppInfo(name, context);
                 var found = cmds.FirstOrDefault(cmd => cmd.command == "SINGLEMATCH");
                 if (found != null && found.decision == "true")
                 {
@@ -212,23 +212,12 @@ namespace ccVcontrol
                 {
                     context.InfoLog($"{printDebug}matching {name} NOT found {found.cmpRes} {found.decision}");
                 }
-                Thread.Sleep(1000);
+                context.Sleep(1000);
             }
             return null;
         }
 
-        public void InitGame(string name)
-        {
-            var cmds = Utils.GetAppInfo();            
-            while (true)
-            {
-                context.DoStdClicks(cmds);
-                cmds = Utils.GetAppInfo();
-                if (cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand") != null) break;
-            }
-            Thread.Sleep(1000);
-            //Utils.GetAppInfo($"-name {name} -matchRect 79,32,167,22_200 -screenshoot");
-        }
+        
         
         public abstract StepContext Process();
     }

@@ -6,8 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Linq;
 
 namespace ccVcontrol
 {
@@ -26,7 +24,7 @@ namespace ccVcontrol
         private ProcessingContext context;
         DateTime lastProcessDate = DateTime.Now.AddMinutes(-1000);
 
-        public const string tempImgName = "tstimgs\\tempFullScreenAct.png";        
+        public const string tempImgName = StandardClicks.tempImgName;        
 
         public ProcessorMapByText(ProcessingContext ctx)
         {
@@ -54,7 +52,7 @@ namespace ccVcontrol
 
             var badLocs = new List<PosInfo>();
             int nameTry = 0;
-            var results = Utils.GetAppInfo();
+            var results = context.GetAppInfo();
             int numBuilders = NumBuilders(results);
             bool gotFirstGold = false;
             bool gotFirstEli = false;
@@ -77,19 +75,26 @@ namespace ccVcontrol
                     if (loc.name == Barracks && trained) continue;
                 }
                 context.MoveMouseAndClick(loc.point.x, loc.point.y);
-                Thread.Sleep(1000);
+                context.Sleep(1000);
                 Utils.doScreenShoot(tempImgName);
-                results = Utils.GetAppInfo();
+                results = context.GetAppInfo();
                 if (string.IsNullOrWhiteSpace(loc.name))
                 {
                     loc.name = GetStructureName(loc, results);
+                    if (string.IsNullOrEmpty(loc.name))
+                    {
+                        //try one more time
+                        context.DebugLog("Trying to get name one more time");
+                        Utils.doScreenShoot(tempImgName);
+                        results = context.GetAppInfo();
+                    }
                     context.DebugLog($"     FOUND {loc.name}");
                     if (string.IsNullOrWhiteSpace(loc.name))
                     {
                         nameTry++;
                         context.MoveMouseAndClick(loc.point.x, loc.point.y);
-                        Thread.Sleep(1000);
-                        results = Utils.GetAppInfo();
+                        context.Sleep(1000);
+                        results = context.GetAppInfo();
                         loc.name = GetStructureName(loc, results);
                         if (string.IsNullOrWhiteSpace(loc.name))
                         {
@@ -121,7 +126,7 @@ namespace ccVcontrol
                         case "Train":
                             if (!trained)
                             {
-                                RetryAction(otherAct, () => CheckMatchAndAct("buildwizardbutton.png 30 ", 54, 46, 10));
+                                RetryAction(otherAct, () => CheckMatchAndAct("buildwizardbutton.png 100 ", 54, 46, 10));
                                 trained = true;
                             }
                             break;
@@ -145,9 +150,8 @@ namespace ccVcontrol
                         gotit = true;
                         break;
                     }
-                }
-                var results = Utils.GetAppInfo();
-                context.DoStdClicks(results);
+                }                
+                context.DoStdClicks();
                 return gotit;
             }
             return false;
@@ -160,13 +164,14 @@ namespace ccVcontrol
             sb.Append($"-input {tempImgName} ");
             sb.Append($"-name g1 -match data\\check\\upgradeWithEliButton.png 400 ");
             sb.Append($" -name g2 -match data\\check\\upgradeWithGoldButton.png 400 ");
-            var btns = Utils.GetAppInfo(sb.ToString());
+            var btns = context.GetAppInfo(sb.ToString());
             foreach (var btn in btns) context.DebugLog("           check train button " + btn);
             btns = btns.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
             if (btns.FirstOrDefault() != null)
             {
                 var btn = btns.First();
-                context.LogMatchAnalyst("-match upgradeWithEliButton.png 400", btn.cmpRes);
+                var fname = btn.extraInfo == "g1" ? "upgradeWithEliButton.png" : "upgradeWithGoldButton.png";
+                context.LogMatchAnalyst($"UPGRADING -match {fname} 400", btn.cmpRes);
                 context.MoveMouseAndClick(btn.x + 20, btn.y + 20);
                 return true;
             }
@@ -179,7 +184,7 @@ namespace ccVcontrol
             var sb = new StringBuilder();
             sb.Append($"-input {tempImgName} ");
             sb.Append($"-name g1 -match data\\check\\{img} ");
-            var btns = Utils.GetAppInfo(sb.ToString());
+            var btns = context.GetAppInfo(sb.ToString());
             foreach (var btn in btns) context.DebugLog("           check rearmall " + btn);
             btns = btns.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
             if (btns.FirstOrDefault() != null)
@@ -205,7 +210,7 @@ namespace ccVcontrol
 
         private void Test()
         {
-            var results = Utils.GetAppInfo();
+            var results = context.GetAppInfo();
             //"RecoResult_INFO_Builders"
             //int num = NumBuilders(results);
             //context.InfoLog("Number of builders " + num);
@@ -296,7 +301,7 @@ namespace ccVcontrol
             };
             foreach (var name in otherActs)
                 sb.Append($" -name {name} -matchRect {actx},{acty},650,105_200 -match {otherImgs[name]} ");            
-            var res = Utils.GetAppInfo(sb.ToString());            
+            var res = context.GetAppInfo(sb.ToString());            
             res.ForEach(r =>
             {
                 r.x += actx;

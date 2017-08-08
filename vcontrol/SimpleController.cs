@@ -3,14 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ccVcontrol
 {
     public class SimpleController : IVDController
     {
-        public int[] accountStartCounts;
+        protected int[] accountStartCounts;
         protected ILog Logger;
+        public Action<ProcessingContext> CustomAct;
+        public Action<string, string> EventNotify;
         public SimpleController()
         {
             log4net.Config.XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo("log4net.conf"));
@@ -33,6 +36,11 @@ namespace ccVcontrol
             return keepGoing;
         }
 
+        public virtual void CustomAction(ProcessingContext context)
+        {
+            if (CustomAct != null) CustomAct(context);
+        }
+
         public void Log(string type, string msg)
         {
             switch (type)
@@ -52,10 +60,100 @@ namespace ccVcontrol
             }
         }
 
-        public void NotifyStartingAccount(int act)
+        public void LogMatchAnalyst(string str, decimal res)
         {
-            accountStartCounts[act - 1]++;
-            Logger.Info($"=======================> Starting account {act}");
+            Log("debug",$"...LogMatchAnalyst {str}/{res}");
+            //format  -input tstimgs\chk_act_6cnf.png -match data\check\confirm.bmp 10000/8038.000000
+            int ind = str.IndexOf("-match");
+            if (ind > 0)
+            {
+                try
+                {
+                    var nnn = str.Substring(ind);
+                    var parts = nnn.Split(' ');
+                    var fname = parts[1];
+                    var matchres = parts[2];
+                    //InfoLog($"  LogMatchAnalyst==>{fname} {res.ToString("0")}/{matchres}");
+                    Log("matchAnalyst", $"{fname} {res.ToString("0")}/{matchres}");
+                }
+                catch (Exception exc)
+                {
+                    Log("error",$"Bad format exc for LogMatchAnalyst {str} {exc}");
+                }
+            }
+            else
+            {
+                Log("error","Bad format for LogMatchAnalyst " + str);
+            }
+        }
+
+        public void NotifyStartingAccount(IAccountControl act)
+        {
+            accountStartCounts[act.CurAccount - 1]++;
+            EventNotify?.Invoke("startingAccount", act.CurAccount.ToString());
+            Logger.Info($"=======================> Starting account {act.CurAccount}");
+        }
+
+        protected object syncObj = new object();
+        protected string doInterrupt = null;
+        public void Sleep(int ms)
+        {
+            //Logger.Debug($"               Sleeping {ms}");
+            lock (syncObj)
+            {
+                Monitor.Wait(syncObj, ms);
+                if (doInterrupt != null)
+                {
+                    doInterrupt = null;
+                    throw new SwitchProcessingActionException(doInterrupt);
+                }
+            }
+        }
+
+        public ProcessState CurState { get; set; }
+
+        protected void InterruptProcessing(string reason)
+        {
+            lock(syncObj)
+            {
+                doInterrupt = reason;
+                Monitor.PulseAll(syncObj);
+            }
+        }
+
+        protected int switchingToAccount = -1;
+        public void ChangeToNewAccount(int act)
+        {
+            CurState = ProcessState.SwitchAccount;
+            switchingToAccount = act;
+            InterruptProcessing("Chaning account");            
+        }
+
+        public void Init()
+        {
+            accountStartCounts = new int[accountStartCounts.Length];
+        }
+
+        public bool DoDonate()
+        {
+            return CurState == ProcessState.Normal;
+        }
+        public bool DoBuilds()
+        {
+            return CurState == ProcessState.Normal;
+        }
+        public void DoneCurProcessing()
+        {
+            CurState = ProcessState.Normal;
+            switchingToAccount = -1;
+        }
+        public int CheckSetCurAccount(int act)
+        {
+            if (CurState == ProcessState.SwitchAccount)
+            {
+                return switchingToAccount;
+            }
+            return act;
         }
     }
 }

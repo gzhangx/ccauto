@@ -17,59 +17,80 @@ namespace ccVcontrol
         static void checkLoop(ProcessingContext context)
         {
             //Utils.doScreenShoot("tstimgs\\full.png");
-            var switchAccount = new SwitchAccount(context);
+            
             context.DebugLog("Getting app info");            
             //cmds = Utils.GetAppInfo("-name allfull -screenshoot");
             //cmds = Utils.GetAppInfo("-name c5 -matchRect 79,32,167,22_200 -screenshoot");            
             context.GetToEntrance();
             context.DebugLog("Do shift");
-            context.DoShift();            
-            while (context.vdcontroller.canContinue())
-            {                
-                //cmds = Utils.GetAppInfo();
-                context.GetToEntrance();
-                DoDonate(context);
-                context.GetToEntrance();
-                int acct = SwitchAccount.CheckAccount();
-                context.vdcontroller.NotifyStartingAccount(acct);
-                new ProcessorMapByText(context).ProcessCommand(acct);
-                context.GetToEntrance();
-                switchAccount.Process();
-
-                context.GetToEntrance();
-                Thread.Sleep(100);
-                
-                GenerateAccountPics(context, switchAccount.CurAccount);
-
-                //DoDonate(context, cmds);
-                //Console.WriteLine("press enter to countinue");
-                //Console.ReadLine();
-
+            context.DoShift();
+            var controller = context.vdcontroller;
+            controller.Init();
+            while (controller.canContinue())
+            {
+                try
+                {
+                    controller.CustomAction(context);
+                    DoProcess(context);
+                } catch (SwitchProcessingActionException swa)
+                {
+                    controller.Log("info", "switch action " + swa.Message);
+                }
             }
+        }
+
+        private static void DoProcess(ProcessingContext context)
+        {
+            var controller = context.vdcontroller;
+            var switchAccount = new SwitchAccount(context);
+            context.GetToEntrance();
+            context.Sleep(2000);
+            int acct = switchAccount.CheckAccount();
+            if (acct <= 0)
+            {
+                context.InfoLog("failed to get account, try again");
+                context.Sleep(4000);
+                acct = switchAccount.CheckAccount();
+            }
+            switchAccount.CurAccount = controller.CheckSetCurAccount(acct);
+            context.InfoLog($"===>Step gen acct pic {acct}");
+            GenerateAccountPics(context, switchAccount.CurAccount);
+            context.vdcontroller.NotifyStartingAccount(switchAccount);
+            if (controller.DoDonate())
+            {
+                context.InfoLog("===>Step Donate");
+                //cmds = Utils.GetAppInfo();                
+                ProcessDonate(context, context.GetToEntrance());
+                context.GetToEntrance();
+            }
+            if (controller.DoBuilds())
+            {
+                context.InfoLog("===>Step textmap");
+                new ProcessorMapByText(context).ProcessCommand(acct);
+            }
+            context.InfoLog("===>Step SwitchAccount");
+            switchAccount.Process();
+            context.InfoLog("===>Step get to entrance");
+            context.GetToEntrance();
+            context.Sleep(4000);
+            controller.DoneCurProcessing();
         }
 
         private static void GenerateAccountPics(ProcessingContext context, int who)
         {
-            context.DebugLog("Generate account pics");
+            context.DebugLog("------------------Generate account pics");
             context.GetToEntrance();
             var fullImg = $"tstimgs\\accountFull_{who}.png";
             Utils.doScreenShoot(fullImg);
             //Utils.GetAppInfo($"-name data\\accounts\\img_act{who}.png -input {fullImg} {SwitchAccount.acctNameMatchRect} -imagecorp");
         }
 
-        private static  void DoDonate(ProcessingContext context)
-        {
-            var cmds = context.GetToEntrance();
-            var cmd = cmds.FirstOrDefault(c => c.command == "PRMXYCLICK_ACT_LeftExpand");
-            if (cmd != null)
-            {
-                ProcessDonate(context, cmd);
-            }
-        }
     
-        private static void ProcessDonate(ProcessingContext context, CommandInfo cmd)
+        private static void ProcessDonate(ProcessingContext context, List<CommandInfo> cmds)
         {
-            new ProcessorDonation(context).ProcessDonate(cmd);
+            var cmd = cmds.FirstOrDefault(c => c.extraInfo == "PRMXYCLICK_ACT_LeftExpand");
+            if (cmd != null)
+                new ProcessorDonation(context).ProcessDonate(cmd);
         }
 
 
@@ -78,7 +99,7 @@ namespace ccVcontrol
             Utils.doScreenShoot("tstimgs\\tmptesttest.png");
             var actr = ProcessorMapByText.canUpgrade(context, "tstimgs\\tmptesttest.png");
             Console.WriteLine(actr.upgrade);
-            return;
+            /*
             for (int i = 1; i <= 4; i++)
             {
                 //generate mask
@@ -88,12 +109,13 @@ namespace ccVcontrol
             {
                 //generate mask
                 //Utils.GetAppInfo($"-name data\\accounts\\img_act{i}.png -input tstimgs\\full_act_full_{i}.png -matchRect 80,30,100,27_200 -imagecorp");
-                var res = Utils.GetAppInfo($"-name cmpact{i} -input tstimgs\\accountFull_1.png {SwitchAccount.acctNameMatchRect} -match data\\accounts\\img_act{i}.png 10000");
+                var res = context.GetAppInfo($"-name cmpact{i} -input tstimgs\\accountFull_1.png {SwitchAccount.acctNameMatchRect} -match data\\accounts\\img_act{i}.png 10000");
                 foreach (var r in res)
                 {
                     Console.WriteLine(r);
                 }
             }
+            */
         }
         public static void Start(IVDController controller)
         {
@@ -101,23 +123,23 @@ namespace ccVcontrol
             //SwitchAccount.CheckAccount();
             //TestAccounts(); //TODO DEBUG REMOVE THIS 
             //return;
-            Console.WriteLine("Starting vm");
+            controller.Log("info","Starting vm");
             Utils.executeVBoxMngr($"startvm {Utils.vmname}");
-            Console.WriteLine("VmStarted, allocate machine");
+            controller.Log("info", "VmStarted, allocate machine");
             var vbox = new VirtualBox.VirtualBox();
             VirtualBox.IMachine machine = vbox.FindMachine(Utils.vmname);
             VirtualBoxClient vboxclient = new VirtualBoxClient();
             var session = vboxclient.Session;            
             try
             {
-                Console.WriteLine("found machine, lock machine");
+                controller.Log("info", "found machine, lock machine");
                 machine.LockMachine(session, LockType.LockType_Shared);
                 var console = session.Console;
                 IEventSource es = console.EventSource;
                 var listener = es.CreateListener();
                 Array listenTYpes = new VBoxEventType[] { VBoxEventType.VBoxEventType_InputEvent };
                 es.RegisterListener(listener, listenTYpes, 0);
-                Console.WriteLine("locked machine, entry try");
+                controller.Log("info", "locked machine, entry try");
                 try
                 {
                     //session.Console.Display.SetSeamlessMode(1);
@@ -126,7 +148,7 @@ namespace ccVcontrol
                     int xorig, yorig;
                     GuestMonitorStatus gmstat;
                     display.GetScreenResolution(0, out sw, out sh, out bpp, out xorig, out yorig, out gmstat);
-                    Console.WriteLine($"sw={sw} {sh} bpp {bpp} xorig={xorig} yorig={yorig}");
+                    //Console.WriteLine($"sw={sw} {sh} bpp {bpp} xorig={xorig} yorig={yorig}");
 
                     byte[] buf = new byte[sw * sh * bpp / 8];
                     //display.TakeScreenShot(0, ref buf[0], sw, sh, BitmapFormat.BitmapFormat_PNG);
@@ -137,8 +159,18 @@ namespace ccVcontrol
                     //MouseClick(mouse);
                     //MouseMouseTo(mouse, 360, 156);
                     //MouseClick(mouse);
-                    Console.WriteLine("main loop");
-                    checkLoop(new ProcessingContext(mouse, keyboard, controller));                    
+                    controller.Log("info","main loop");
+                    while (true)
+                    {
+                        try
+                        {
+                            checkLoop(new ProcessingContext(mouse, keyboard, controller));
+                        } catch (SwitchProcessingActionException)
+                        {
+                            continue;
+                        }
+                        break;
+                    }
                 }
                 finally
                 {
@@ -147,7 +179,7 @@ namespace ccVcontrol
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                controller.Log("error", e.ToString());
 
             }
             finally
@@ -156,7 +188,8 @@ namespace ccVcontrol
                     session.UnlockMachine();
             }
 
-            Console.WriteLine(machine.VideoCaptureWidth);
+            //Console.WriteLine(machine.VideoCaptureWidth);
+            controller.Log("info", "powering off");
             Utils.executeVBoxMngr($"controlvm {Utils.vmname} poweroff");
         }
     }

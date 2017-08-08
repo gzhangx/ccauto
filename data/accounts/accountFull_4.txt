@@ -1,5 +1,12 @@
 [
   {
+    "name": "TownHall",
+    "point": {
+      "x": 573,
+      "y": 256
+    }
+  },
+  {
     "name": "GoldMine",
     "point": {
       "x": 520,

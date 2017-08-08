@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ccVcontrol
 {
-    public class SwitchAccount : BaseProcessor
+    public class SwitchAccount : BaseProcessor, IAccountControl
     {
         public const string acctNameRect = "100,27";
         public const string acctNameCorpRect = "101,28";
@@ -19,6 +19,7 @@ namespace ccVcontrol
         public int CurAccount
         {
             get { return account; }
+            set { account = value; }
         }
         static int MAXACCOUNT = 6;
         public SwitchAccount(ProcessingContext ctx) : base(ctx)
@@ -31,17 +32,17 @@ namespace ccVcontrol
                 new StepInfo { inputName= "chk_act_4als.png", cmd = "-match accountlist.png 6000", maxRetry = 5, name = "SwitchAccount", xoff = 107, yoff = 89, Act = SwitchAccountAction , delay = 15000},
 
 
-                new StepInfo { inputName= "chk_act_5ldv.png", cmd = "-match loadVillage.png 1000", maxRetry = 5, name = "LoadVillage", xoff = 298, yoff = 44, delay=5000 },
+                new StepInfo { inputName= "chk_act_5ldv.png", cmd = "-match loadVillage.png 2000", maxRetry = 5, name = "LoadVillage", xoff = 298, yoff = 44, delay=5000 },
                 new StepInfo { inputName= "chk_act_6cnf.png", cmd = "-match confirm.bmp 10000", maxRetry = 5, name = "ConfirmLoadVillage", xoff = 310, yoff = 22, Act= ConfirmLoadVillage },          
             };
         }
 
-        public static int CheckAccount()
+        public int CheckAccount()
         {
             const string tempName = "tstimgs\\tempFullScreen.png";            
             Utils.doScreenShoot(tempName);
             const string tempPartName = "tstimgs\\tempName.png";
-            Utils.GetAppInfo($"-name {tempPartName} -input {tempName} {acctNameMatchRect} -imagecorp");            
+            context.GetAppInfo($"-name {tempPartName} -input {tempName} {acctNameMatchRect} -imagecorp");            
             return CheckAccountWithImage(tempPartName);
         }
         public static IEnumerable<string> GetAccountFiles(out string imgStart)
@@ -51,7 +52,7 @@ namespace ccVcontrol
             var files = System.IO.Directory.GetFiles(accoungImagDir).Where(f => f.StartsWith(actImgNameStart));
             return files;
         }
-        public static int CheckAccountWithImage(string screenName)
+        public int CheckAccountWithImage(string screenName)
         {
             var actImgNameStart = accoungImagDir + "img_act";
             var files = GetAccountFiles(out actImgNameStart);
@@ -65,7 +66,7 @@ namespace ccVcontrol
                 actname = actname.Substring(0, actname.IndexOf("."));
                 sb.Append($" -name {actname} -match {f} 96876875");                
             }
-            var res = Utils.GetAppInfo(sb.ToString());
+            var res = context.GetAppInfo(sb.ToString());
             foreach (var r in res)
             {
                 if (good == null) good = r;
@@ -84,17 +85,14 @@ namespace ccVcontrol
 
         public override StepContext Process()
         {
-            account = CheckAccount() - 1;
             context.InfoLog($"Trying to find SINGLEMATCH for settings button account ----- {account}");
             switchSteps.First(r => r.name == "SwitchAccount").Act = SwitchAccountAction;
-            var res = DoSteps(switchSteps);
-            InitGame("Account_" + account);
+            var res = DoSteps(switchSteps);            
             return res;
         }
 
         private void SwitchAccountAction(CommandInfo found, StepInfo cur, StepContext stepContext)
         {
-            account++;
             if (account >= MAXACCOUNT || account < 0) account = 0;
 
             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff + (account* ACCOUNTSPACING));
@@ -108,11 +106,18 @@ namespace ccVcontrol
             context.mouse.PutMouseEvent(-200, 0, 0, 0, 0);
             context.MouseClick();
             context.MouseMouseTo(0, 0);
-            Thread.Sleep(1000);
+            context.Sleep(1000);
             context.SendString("CONFIRM");
-            Thread.Sleep(1000);
+            context.Sleep(1000);
             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff);
         }
+
+        void IAccountControl.SwitchAccount(int act)
+        {
+            CurAccount = act + 1;
+            Process();
+        }
+
         List<StepInfo> switchSteps;
 
     }

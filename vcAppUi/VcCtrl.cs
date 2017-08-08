@@ -7,14 +7,18 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace vcConsole
+namespace vcAppUi
 {
-    class Program
+    public class VcCtrl
     {
-        static void Main(string[] args)
+        public SimpleController controller = new SimpleController();
+        ILog Logger = LogManager.GetLogger("main");
+        public void Start()
         {
-            ILog Logger = LogManager.GetLogger("main");
-            var controller = new SimpleController();
+            new Thread(Run).Start();
+        }
+        protected void Run()
+        {            
             while (true)
             {
                 DateTime startTime = DateTime.UtcNow;
@@ -25,12 +29,12 @@ namespace vcConsole
                     Logger.Info($"Sleeping, run time = {DateTime.UtcNow.Subtract(startTime).TotalSeconds.ToString("0.00")}s");
                     controller.Sleep(1000 * 60 * 10);
                     Logger.Info("Done Sleeping");
-                } catch (SwitchProcessingActionException exc)
+                }
+                catch (SwitchProcessingActionException exc)
                 {
                     controller.Log("info", "switching action " + exc.Message);
                 }
             }
         }
     }
-
 }
