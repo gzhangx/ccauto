@@ -17,6 +17,17 @@ namespace ccVcontrol
         void Sleep(int ms);
         void CustomAction(ProcessingContext context);
         void Init();
+
+        ProcessState CurState { get; }
+        void DoneCurProcessing();
+        bool DoDonate();
+        bool DoBuilds();
+    }
+
+    public enum ProcessState
+    {
+        Normal,
+        SwitchAccount,
     }
 
     public class SwitchProcessingActionException: Exception

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ccVcontrol;
+using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +22,18 @@ namespace vcAppUi
     /// </summary>
     public partial class MainWindow : Window
     {
+        ILog Logger = LogManager.GetLogger("main");
+        VcCtrl ctrl = new VcCtrl();
         public MainWindow()
-        {
+        {            
             InitializeComponent();
+            ctrl.Start();
+        }
+
+        private void Button_Click_SwitchAccount(object sender, RoutedEventArgs e)
+        {
+            var act = ((ComboBoxItem)cmbAccount.SelectedValue).Content.ToString();
+            ctrl.controller.ChangeToNewAccount(Int32.Parse(act));
         }
     }
 }

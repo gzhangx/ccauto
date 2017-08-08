@@ -92,15 +92,55 @@ namespace ccVcontrol
             Logger.Info($"=======================> Starting account {act.CurAccount}");
         }
 
+        protected object syncObj = new object();
+        protected string doInterrupt = null;
         public void Sleep(int ms)
         {
             //Logger.Debug($"               Sleeping {ms}");
-            Thread.Sleep(ms);
+            lock (syncObj)
+            {
+                Monitor.Wait(syncObj, ms);
+                if (doInterrupt != null)
+                {
+                    doInterrupt = null;
+                    throw new SwitchProcessingActionException(doInterrupt);
+                }
+            }
+        }
+
+        public ProcessState CurState { get; set; }
+
+        protected void InterruptProcessing(string reason)
+        {
+            lock(syncObj)
+            {
+                doInterrupt = reason;
+                Monitor.PulseAll(syncObj);
+            }
+        }
+
+        public void ChangeToNewAccount(int act)
+        {
+            CurState = ProcessState.SwitchAccount;
+            InterruptProcessing("Chaning account");            
         }
 
         public void Init()
         {
             accountStartCounts = new int[accountStartCounts.Length];
+        }
+
+        public bool DoDonate()
+        {
+            return CurState == ProcessState.Normal;
+        }
+        public bool DoBuilds()
+        {
+            return CurState == ProcessState.Normal;
+        }
+        public void DoneCurProcessing()
+        {
+            CurState = ProcessState.Normal;
         }
     }
 }

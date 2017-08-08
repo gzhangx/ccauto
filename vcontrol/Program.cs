@@ -41,6 +41,7 @@ namespace ccVcontrol
 
         private static void DoProcess(ProcessingContext context)
         {
+            var controller = context.vdcontroller;
             var switchAccount = new SwitchAccount(context);
             context.GetToEntrance();
             context.Sleep(2000);
@@ -55,17 +56,24 @@ namespace ccVcontrol
             context.InfoLog($"===>Step gen acct pic {acct}");
             GenerateAccountPics(context, switchAccount.CurAccount);
             context.vdcontroller.NotifyStartingAccount(switchAccount);
-            context.InfoLog("===>Step Donate");
-            //cmds = Utils.GetAppInfo();                
-            ProcessDonate(context, context.GetToEntrance());
-            context.GetToEntrance();
-            context.InfoLog("===>Step textmap");
-            new ProcessorMapByText(context).ProcessCommand(acct);
+            if (controller.DoDonate())
+            {
+                context.InfoLog("===>Step Donate");
+                //cmds = Utils.GetAppInfo();                
+                ProcessDonate(context, context.GetToEntrance());
+                context.GetToEntrance();
+            }
+            if (controller.DoBuilds())
+            {
+                context.InfoLog("===>Step textmap");
+                new ProcessorMapByText(context).ProcessCommand(acct);
+            }
             context.InfoLog("===>Step SwitchAccount");
             switchAccount.Process();
             context.InfoLog("===>Step get to entrance");
             context.GetToEntrance();
             context.Sleep(4000);
+            controller.DoneCurProcessing();
         }
 
         private static void GenerateAccountPics(ProcessingContext context, int who)
@@ -115,9 +123,9 @@ namespace ccVcontrol
             //SwitchAccount.CheckAccount();
             //TestAccounts(); //TODO DEBUG REMOVE THIS 
             //return;
-            Console.WriteLine("Starting vm");
+            controller.Log("info","Starting vm");
             Utils.executeVBoxMngr($"startvm {Utils.vmname}");
-            Console.WriteLine("VmStarted, allocate machine");
+            controller.Log("info", "VmStarted, allocate machine");
             var vbox = new VirtualBox.VirtualBox();
             VirtualBox.IMachine machine = vbox.FindMachine(Utils.vmname);
             VirtualBoxClient vboxclient = new VirtualBoxClient();
@@ -152,7 +160,17 @@ namespace ccVcontrol
                     //MouseMouseTo(mouse, 360, 156);
                     //MouseClick(mouse);
                     controller.Log("info","main loop");
-                    checkLoop(new ProcessingContext(mouse, keyboard, controller));                    
+                    while (true)
+                    {
+                        try
+                        {
+                            checkLoop(new ProcessingContext(mouse, keyboard, controller));
+                        } catch (SwitchProcessingActionException)
+                        {
+                            continue;
+                        }
+                        break;
+                    }
                 }
                 finally
                 {
@@ -161,7 +179,7 @@ namespace ccVcontrol
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                controller.Log("error", e.ToString());
 
             }
             finally

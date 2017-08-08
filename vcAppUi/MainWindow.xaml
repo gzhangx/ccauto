@@ -4,9 +4,34 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:vcAppUi"
+        xmlns:toolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="40px"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30px"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <StackPanel Orientation="Horizontal">
+                <toolkit:AutoCompleteBox x:Name="txtName" Width="200" ></toolkit:AutoCompleteBox>
+                <ComboBox x:Name="cmbAccount">
+                    <ComboBoxItem>1</ComboBoxItem>
+                    <ComboBoxItem>2</ComboBoxItem>
+                    <ComboBoxItem>3</ComboBoxItem>
+                    <ComboBoxItem>4</ComboBoxItem>
+                    <ComboBoxItem>5</ComboBoxItem>
+                    <ComboBoxItem>6</ComboBoxItem>
+                </ComboBox>
+                <Button Click="Button_Click_SwitchAccount">Switch</Button>
+
+                <TextBlock x:Name="info" Width="300"></TextBlock>
+            </StackPanel>
+        </Grid>
+        <Canvas x:Name="canvas" Grid.Row="1" Grid.Column="0"></Canvas>
     </Grid>
 </Window>
