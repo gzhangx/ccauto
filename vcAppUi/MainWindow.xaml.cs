@@ -44,5 +44,11 @@ namespace vcAppUi
             var act = ((ComboBoxItem)cmbAccount.SelectedValue).Content.ToString();
             ctrl.controller.ChangeToNewAccount(Int32.Parse(act)- 1);
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+            Environment.Exit(0);
+        }
     }
 }
