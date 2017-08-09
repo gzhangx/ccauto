@@ -89,6 +89,7 @@ namespace ccVcontrol
 
         public void NotifyStartingAccount(IAccountControl act)
         {
+            if (act.CurAccount < 1) return;
             accountStartCounts[act.CurAccount - 1]++;
             EventNotify?.Invoke("startingAccount", act.CurAccount.ToString());
             Logger.Info($"=======================> Starting account {act.CurAccount}");

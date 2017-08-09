@@ -34,6 +34,9 @@ namespace vcAppUi
                 switch (what)
                 {
                     case "startingAccount":
+                        this.Dispatcher.BeginInvoke(new Action(()=> {
+                            cmbAccount.SelectedIndex = Int32.Parse(val) - 1;
+                        }));
                         break;
                 }
             };
@@ -42,7 +45,7 @@ namespace vcAppUi
         private void Button_Click_SwitchAccount(object sender, RoutedEventArgs e)
         {
             var act = ((ComboBoxItem)cmbAccount.SelectedValue).Content.ToString();
-            ctrl.controller.ChangeToNewAccount(Int32.Parse(act)- 1);
+            ctrl.controller.ChangeToNewAccount(Int32.Parse(act) - 1);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

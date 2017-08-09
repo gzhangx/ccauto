@@ -39,7 +39,7 @@ namespace ccVcontrol
     public interface IAccountControl
     {
         int CurAccount { get; set; }
-        void SwitchAccount(int act);
+        //void SwitchAccount(int act);
     }
     public class ProcessingContext
     {

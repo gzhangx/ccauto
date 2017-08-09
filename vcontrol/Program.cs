@@ -52,10 +52,10 @@ namespace ccVcontrol
                 context.Sleep(4000);
                 acct = switchAccount.CheckAccount();
             }
-            switchAccount.CurAccount = controller.CheckSetCurAccount(acct);
             context.InfoLog($"===>Step gen acct pic {acct}");
-            GenerateAccountPics(context, switchAccount.CurAccount);
-            context.vdcontroller.NotifyStartingAccount(switchAccount);
+            GenerateAccountPics(context, switchAccount.CurAccount);            
+            context.InfoLog($"===>Step Using account {switchAccount.CurAccount}");
+            context.vdcontroller.NotifyStartingAccount(switchAccount);            
             if (controller.DoDonate())
             {
                 context.InfoLog("===>Step Donate");
@@ -68,6 +68,7 @@ namespace ccVcontrol
                 context.InfoLog("===>Step textmap");
                 new ProcessorMapByText(context).ProcessCommand(acct);
             }
+            switchAccount.CurAccount = controller.CheckSetCurAccount(acct);
             context.InfoLog("===>Step SwitchAccount");
             switchAccount.Process();
             context.InfoLog("===>Step get to entrance");
