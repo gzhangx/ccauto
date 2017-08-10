@@ -124,7 +124,7 @@ namespace ccVcontrol
                             RetryAction(otherAct, () => CheckMatchAndAct("okcancel.png 3000 ", 300, 54));
                             break;
                         case "Train":
-                            if (!trained)
+                            if (!trained && context.vdcontroller.doDonate)
                             {
                                 RetryAction(otherAct, () => CheckMatchAndAct("buildwizardbutton.png 100 ", 54, 46, 10));
                                 trained = true;
