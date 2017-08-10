@@ -10,12 +10,14 @@ namespace ccVcontrol
 {
     public class SimpleController : IVDController
     {
+        public bool doUpgrades { get; set; }
         protected int[] accountStartCounts;
         protected ILog Logger;
         public Action<ProcessingContext> CustomAct;
         public Action<string, string> EventNotify;
         public SimpleController()
         {
+            doUpgrades = true;
             log4net.Config.XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo("log4net.conf"));
             Logger = LogManager.GetLogger("ccVcontrol");
             string tmp;

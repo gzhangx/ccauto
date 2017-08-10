@@ -10,6 +10,7 @@ namespace ccVcontrol
 {
     public interface IVDController
     {
+        bool doUpgrades { get; }
         bool canContinue();
         void NotifyStartingAccount(IAccountControl act);
         void Log(string type, string msg);

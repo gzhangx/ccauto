@@ -106,7 +106,7 @@ namespace ccVcontrol
                 //"RecoResult_INFO_Builders"
                 numBuilders = NumBuilders(results);
                 context.InfoLog($"Number of builders available {numBuilders}");
-                if (numBuilders == 0)
+                if (numBuilders == 0 || !context.vdcontroller.doUpgrades)
                 {
                     if (loc.name != TownHall && loc.name != Barracks) continue;
                     if (loc.name == Barracks && trained) continue;
