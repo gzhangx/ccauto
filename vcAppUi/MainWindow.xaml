@@ -28,7 +28,7 @@
                     <ComboBoxItem>6</ComboBoxItem>
                 </ComboBox>
                 <Button Click="Button_Click_SwitchAccount">Switch</Button>
-
+                <Button Click="Button_Click">Sleep</Button>
                 <TextBlock x:Name="info" Width="300"></TextBlock>
             </StackPanel>
         </Grid>

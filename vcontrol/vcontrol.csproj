@@ -58,6 +58,7 @@
     <Compile Include="BaseProcessor.cs" />
     <Compile Include="CommandInfo.cs" />
     <Compile Include="lcs.cs" />
+    <Compile Include="PcWakeup.cs" />
     <Compile Include="ProcessingContext.cs" />
     <Compile Include="ProcessorMapByText.cs" />
     <Compile Include="ProcessorTrain.cs" />
