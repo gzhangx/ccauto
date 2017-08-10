@@ -11,6 +11,7 @@ namespace ccVcontrol
     public class SimpleController : IVDController
     {
         public bool doUpgrades { get; set; }
+        public bool doDonate { get; set; }
         protected int[] accountStartCounts;
         protected ILog Logger;
         public Action<ProcessingContext> CustomAct;
@@ -18,6 +19,7 @@ namespace ccVcontrol
         public SimpleController()
         {
             doUpgrades = true;
+            doDonate = true;
             log4net.Config.XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo("log4net.conf"));
             Logger = LogManager.GetLogger("ccVcontrol");
             string tmp;

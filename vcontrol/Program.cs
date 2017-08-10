@@ -56,7 +56,7 @@ namespace ccVcontrol
             GenerateAccountPics(context, switchAccount.CurAccount);            
             context.InfoLog($"===>Step Using account {switchAccount.CurAccount}");
             context.vdcontroller.NotifyStartingAccount(switchAccount);            
-            if (controller.DoDonate())
+            if (controller.DoDonate() && controller.doDonate)
             {
                 context.InfoLog("===>Step Donate");
                 //cmds = Utils.GetAppInfo();                
