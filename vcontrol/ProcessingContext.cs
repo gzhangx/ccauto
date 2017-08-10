@@ -14,7 +14,7 @@ namespace ccVcontrol
         void NotifyStartingAccount(IAccountControl act);
         void Log(string type, string msg);
         void LogMatchAnalyst(string str, decimal res);
-        void Sleep(int ms);
+        void Sleep(int ms, bool deep = false);
         void CustomAction(ProcessingContext context);
         void Init();
 

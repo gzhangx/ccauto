@@ -27,7 +27,7 @@ namespace vcAppUi
         public MainWindow()
         {            
             InitializeComponent();
-            //ctrl.Start();
+            ctrl.Start();
             ctrl.controller.EventNotify = (what, val) =>
             {
                 Logger.Info($"UI: {what} ==> {val}");
@@ -56,8 +56,7 @@ namespace vcAppUi
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            PcWakeup.SetWaitForWakeUpTime(ctrl.controller, 10000, true);
-            
+            //PcWakeup.SetWaitForWakeUpTime(ctrl.controller, 10000, true);   
         }
     }
 }

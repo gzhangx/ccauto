@@ -97,8 +97,13 @@ namespace ccVcontrol
 
         protected object syncObj = new object();
         protected string doInterrupt = null;
-        public void Sleep(int ms)
+        public void Sleep(int ms, bool deep = false)
         {
+            if (deep)
+            {
+                PcWakeup.SetWaitForWakeUpTime(this, ms, true);
+                return;
+            }
             //Logger.Debug($"               Sleeping {ms}");
             lock (syncObj)
             {
