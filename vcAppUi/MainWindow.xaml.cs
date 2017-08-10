@@ -54,9 +54,15 @@ namespace vcAppUi
             Environment.Exit(0);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+
+        private void CheckBoxUpgrade_Checked(object sender, RoutedEventArgs e)
         {
-            //PcWakeup.SetWaitForWakeUpTime(ctrl.controller, 10000, true);   
+            ctrl.controller.doUpgrades = ((CheckBox)sender).IsChecked.GetValueOrDefault();
+        }
+
+        private void CheckBoxDonate_Checked(object sender, RoutedEventArgs e)
+        {
+            ctrl.controller.doDonate = ((CheckBox)sender).IsChecked.GetValueOrDefault();
         }
     }
 }
