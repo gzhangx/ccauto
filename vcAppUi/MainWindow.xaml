@@ -28,8 +28,8 @@
                     <ComboBoxItem>6</ComboBoxItem>
                 </ComboBox>
                 <Button Click="Button_Click_SwitchAccount">Switch</Button>
-                <CheckBox Checked="CheckBoxUpgrade_Checked" IsChecked="True">Upgrade</CheckBox>
-                <CheckBox Checked="CheckBoxDonate_Checked" IsChecked="True">Donate</CheckBox>
+                <CheckBox Checked="CheckBoxUpgrade_Checked" Unchecked="CheckBoxUpgrade_Checked" IsChecked="True">Upgrade</CheckBox>
+                <CheckBox Checked="CheckBoxDonate_Checked" Unchecked="CheckBoxDonate_Checked" IsChecked="True">Donate</CheckBox>
                 <TextBlock x:Name="info" Width="300"></TextBlock>
             </StackPanel>
         </Grid>
