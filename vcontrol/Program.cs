@@ -53,6 +53,7 @@ namespace ccVcontrol
                 acct = switchAccount.CheckAccount();
             }
             context.InfoLog($"===>Step gen acct pic {acct}");
+            switchAccount.CurAccount = acct;
             GenerateAccountPics(context, switchAccount.CurAccount);            
             context.InfoLog($"===>Step Using account {switchAccount.CurAccount}");
             context.vdcontroller.NotifyStartingAccount(switchAccount);            
