@@ -33,6 +33,9 @@ namespace vcAppUi
                 catch (SwitchProcessingActionException exc)
                 {
                     controller.Log("info", "switching action " + exc.Message);
+                }catch (Exception exc)
+                {
+                    controller.Log("error", "Error in vctrl " + exc.ToString());
                 }
             }
         }

@@ -128,6 +128,7 @@ namespace ccVcontrol
         }
         public List<CommandInfo> GetToEntrance()
         {
+            DateTime start = DateTime.Now;
             while (true)
             {                
                 DebugLog(" CheckEntrance");
@@ -139,6 +140,13 @@ namespace ccVcontrol
                     return cmds;
                 }
                 Sleep(5000);
+                var elapsed = DateTime.Now.Subtract(start).TotalMinutes;
+                if (elapsed > 5)
+                {
+                    var errStr = "Waiting for entracne too long " + elapsed.ToString("0.00");
+                    vdcontroller.Log("error", errStr);
+                    throw new TimeoutException(errStr);
+                }
             }
         }
     }
