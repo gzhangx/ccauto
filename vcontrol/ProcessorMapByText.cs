@@ -104,7 +104,7 @@ namespace ccVcontrol
                     }
                 }
                 //"RecoResult_INFO_Builders"
-                numBuilders = NumBuilders(results);
+                numBuilders = context.vdcontroller.doUpgrades? NumBuilders(results) : 0;
                 context.InfoLog($"Number of builders available {numBuilders}");
                 if (numBuilders == 0 || !context.vdcontroller.doUpgrades)
                 {
@@ -112,7 +112,7 @@ namespace ccVcontrol
                     if (loc.name == Barracks && trained) continue;
                 }
                 var actionItems = canUpgrade(context, tempImgName);
-                if (numBuilders > 0)
+                if (numBuilders > 0 && context.vdcontroller.doUpgrades)
                 {
                     RetryAction(actionItems.upgrade, Upgraded);                    
                 }
