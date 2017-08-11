@@ -165,5 +165,15 @@ namespace ccVcontrol
             }
             return act;
         }
+
+
+        public void RefreshNetwork()
+        {
+            string res = Utils.runAnyApp("netsh", "interface set interface \"Ethernet 2\" admin=disable");
+            Log("info", "Disable network " + res);
+            res = Utils.runAnyApp("netsh", "interface set interface \"Ethernet 2\" admin=enable");
+            Log("info", "Enable network " + res);
+            Sleep(4000);
+        }
     }
 }

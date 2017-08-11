@@ -25,6 +25,7 @@ namespace vcAppUi
                 Logger.Info("Starting");
                 try
                 {
+                    controller.RefreshNetwork();
                     ccVcontrol.Program.Start(controller);
                     Logger.Info($"Sleeping, run time = {DateTime.UtcNow.Subtract(startTime).TotalSeconds.ToString("0.00")}s");
                     controller.Sleep(1000 * 60 * 20, true);
