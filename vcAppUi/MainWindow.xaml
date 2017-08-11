@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:vcAppUi"
         xmlns:toolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="525" Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -20,7 +20,7 @@
             <StackPanel Orientation="Horizontal">
                 <toolkit:AutoCompleteBox x:Name="txtName" Width="200" ></toolkit:AutoCompleteBox>
                 <ComboBox x:Name="cmbAccount">
-                    <ComboBoxItem>1</ComboBoxItem>
+                    <ComboBoxItem IsSelected="True">1</ComboBoxItem>
                     <ComboBoxItem>2</ComboBoxItem>
                     <ComboBoxItem>3</ComboBoxItem>
                     <ComboBoxItem>4</ComboBoxItem>
@@ -28,7 +28,8 @@
                     <ComboBoxItem>6</ComboBoxItem>
                 </ComboBox>
                 <Button Click="Button_Click_SwitchAccount">Switch</Button>
-
+                <CheckBox Checked="CheckBoxUpgrade_Checked" Unchecked="CheckBoxUpgrade_Checked" IsChecked="True">Upgrade</CheckBox>
+                <CheckBox Checked="CheckBoxDonate_Checked" Unchecked="CheckBoxDonate_Checked" IsChecked="True">Donate</CheckBox>
                 <TextBlock x:Name="info" Width="300"></TextBlock>
             </StackPanel>
         </Grid>

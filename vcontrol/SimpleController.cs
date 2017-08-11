@@ -10,12 +10,16 @@ namespace ccVcontrol
 {
     public class SimpleController : IVDController
     {
+        public bool doUpgrades { get; set; }
+        public bool doDonate { get; set; }
         protected int[] accountStartCounts;
         protected ILog Logger;
         public Action<ProcessingContext> CustomAct;
         public Action<string, string> EventNotify;
         public SimpleController()
         {
+            doUpgrades = true;
+            doDonate = true;
             log4net.Config.XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo("log4net.conf"));
             Logger = LogManager.GetLogger("ccVcontrol");
             string tmp;
@@ -89,6 +93,7 @@ namespace ccVcontrol
 
         public void NotifyStartingAccount(IAccountControl act)
         {
+            if (act.CurAccount < 1) return;
             accountStartCounts[act.CurAccount - 1]++;
             EventNotify?.Invoke("startingAccount", act.CurAccount.ToString());
             Logger.Info($"=======================> Starting account {act.CurAccount}");
@@ -96,8 +101,13 @@ namespace ccVcontrol
 
         protected object syncObj = new object();
         protected string doInterrupt = null;
-        public void Sleep(int ms)
+        public void Sleep(int ms, bool deep = false)
         {
+            if (deep)
+            {
+                PcWakeup.SetWaitForWakeUpTime(this, ms, true);
+                return;
+            }
             //Logger.Debug($"               Sleeping {ms}");
             lock (syncObj)
             {
@@ -154,6 +164,16 @@ namespace ccVcontrol
                 return switchingToAccount;
             }
             return act;
+        }
+
+
+        public void RefreshNetwork()
+        {
+            string res = Utils.runAnyApp("netsh", "interface set interface \"Ethernet 2\" admin=disable");
+            Log("info", "Disable network " + res);
+            res = Utils.runAnyApp("netsh", "interface set interface \"Ethernet 2\" admin=enable");
+            Log("info", "Enable network " + res);
+            Sleep(4000);
         }
     }
 }

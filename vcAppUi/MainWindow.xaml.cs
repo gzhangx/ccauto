@@ -34,6 +34,9 @@ namespace vcAppUi
                 switch (what)
                 {
                     case "startingAccount":
+                        this.Dispatcher.BeginInvoke(new Action(()=> {
+                            cmbAccount.SelectedIndex = Int32.Parse(val) - 1;
+                        }));
                         break;
                 }
             };
@@ -42,7 +45,24 @@ namespace vcAppUi
         private void Button_Click_SwitchAccount(object sender, RoutedEventArgs e)
         {
             var act = ((ComboBoxItem)cmbAccount.SelectedValue).Content.ToString();
-            ctrl.controller.ChangeToNewAccount(Int32.Parse(act)- 1);
+            ctrl.controller.ChangeToNewAccount(Int32.Parse(act) - 1);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+            Environment.Exit(0);
+        }
+
+
+        private void CheckBoxUpgrade_Checked(object sender, RoutedEventArgs e)
+        {
+            ctrl.controller.doUpgrades = ((CheckBox)sender).IsChecked.GetValueOrDefault();
+        }
+
+        private void CheckBoxDonate_Checked(object sender, RoutedEventArgs e)
+        {
+            ctrl.controller.doDonate = ((CheckBox)sender).IsChecked.GetValueOrDefault();
         }
     }
 }

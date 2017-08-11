@@ -157,6 +157,32 @@ namespace ccVcontrol
             }
         }
 
+
+        public static string runAnyApp(string app, string arguments)
+        {
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.Arguments = arguments;
+            start.FileName = app;
+            start.WorkingDirectory = curDir;
+            // Do you want to show a console window?
+            start.WindowStyle = ProcessWindowStyle.Normal;
+            start.CreateNoWindow = true;
+            start.RedirectStandardOutput = true;
+            start.UseShellExecute = false;
+            int exitCode;
+
+
+            // Run the external process & wait for it to finish
+            using (Process proc = Process.Start(start))
+            {
+                var result = proc.StandardOutput.ReadToEnd();
+                proc.WaitForExit();
+                // Retrieve the app's exit code
+                exitCode = proc.ExitCode;
+                return result;
+            }
+        }
+
         public static List<CommandInfo> GetAppInfo(string arguments, ProcessingContext context)
         {
             var res = new List<CommandInfo>();

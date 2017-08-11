@@ -94,6 +94,7 @@ namespace ccVcontrol
         private void SwitchAccountAction(CommandInfo found, StepInfo cur, StepContext stepContext)
         {
             if (account >= MAXACCOUNT || account < 0) account = 0;
+            context.InfoLog($"Switching Account ----- {account}");
 
             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff + (account* ACCOUNTSPACING));
             context.MouseMouseTo(0, 0);
@@ -112,11 +113,11 @@ namespace ccVcontrol
             context.MoveMouseAndClick(found.x + cur.xoff, found.y + cur.yoff);
         }
 
-        void IAccountControl.SwitchAccount(int act)
-        {
-            CurAccount = act + 1;
-            Process();
-        }
+        //void IAccountControl.SwitchAccount(int act)
+        //{
+        //    CurAccount = act + 1;
+        //    Process();
+        //}
 
         List<StepInfo> switchSteps;
 

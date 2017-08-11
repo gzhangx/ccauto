@@ -25,14 +25,18 @@ namespace vcAppUi
                 Logger.Info("Starting");
                 try
                 {
+                    controller.RefreshNetwork();
                     ccVcontrol.Program.Start(controller);
                     Logger.Info($"Sleeping, run time = {DateTime.UtcNow.Subtract(startTime).TotalSeconds.ToString("0.00")}s");
-                    controller.Sleep(1000 * 60 * 10);
+                    controller.Sleep(1000 * 60 * 20, true);
                     Logger.Info("Done Sleeping");
                 }
                 catch (SwitchProcessingActionException exc)
                 {
                     controller.Log("info", "switching action " + exc.Message);
+                }catch (Exception exc)
+                {
+                    controller.Log("error", "Error in vctrl " + exc.ToString());
                 }
             }
         }

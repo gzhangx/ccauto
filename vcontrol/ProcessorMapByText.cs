@@ -104,15 +104,15 @@ namespace ccVcontrol
                     }
                 }
                 //"RecoResult_INFO_Builders"
-                numBuilders = NumBuilders(results);
+                numBuilders = context.vdcontroller.doUpgrades? NumBuilders(results) : 0;
                 context.InfoLog($"Number of builders available {numBuilders}");
-                if (numBuilders == 0)
+                if (numBuilders == 0 || !context.vdcontroller.doUpgrades)
                 {
                     if (loc.name != TownHall && loc.name != Barracks) continue;
                     if (loc.name == Barracks && trained) continue;
                 }
                 var actionItems = canUpgrade(context, tempImgName);
-                if (numBuilders > 0)
+                if (numBuilders > 0 && context.vdcontroller.doUpgrades)
                 {
                     RetryAction(actionItems.upgrade, Upgraded);                    
                 }
@@ -124,7 +124,7 @@ namespace ccVcontrol
                             RetryAction(otherAct, () => CheckMatchAndAct("okcancel.png 3000 ", 300, 54));
                             break;
                         case "Train":
-                            if (!trained)
+                            if (!trained && context.vdcontroller.doDonate)
                             {
                                 RetryAction(otherAct, () => CheckMatchAndAct("buildwizardbutton.png 100 ", 54, 46, 10));
                                 trained = true;

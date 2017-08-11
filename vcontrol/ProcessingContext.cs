@@ -10,11 +10,13 @@ namespace ccVcontrol
 {
     public interface IVDController
     {
+        bool doUpgrades { get; }
+        bool doDonate { get; }
         bool canContinue();
         void NotifyStartingAccount(IAccountControl act);
         void Log(string type, string msg);
         void LogMatchAnalyst(string str, decimal res);
-        void Sleep(int ms);
+        void Sleep(int ms, bool deep = false);
         void CustomAction(ProcessingContext context);
         void Init();
 
@@ -39,7 +41,7 @@ namespace ccVcontrol
     public interface IAccountControl
     {
         int CurAccount { get; set; }
-        void SwitchAccount(int act);
+        //void SwitchAccount(int act);
     }
     public class ProcessingContext
     {
@@ -128,6 +130,7 @@ namespace ccVcontrol
         }
         public List<CommandInfo> GetToEntrance()
         {
+            DateTime start = DateTime.Now;
             while (true)
             {                
                 DebugLog(" CheckEntrance");
@@ -139,6 +142,13 @@ namespace ccVcontrol
                     return cmds;
                 }
                 Sleep(5000);
+                var elapsed = DateTime.Now.Subtract(start).TotalMinutes;
+                if (elapsed > 5)
+                {
+                    var errStr = "Waiting for entracne too long " + elapsed.ToString("0.00");
+                    vdcontroller.Log("error", errStr);
+                    throw new TimeoutException(errStr);
+                }
             }
         }
     }
