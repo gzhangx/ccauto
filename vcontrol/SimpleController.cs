@@ -47,6 +47,7 @@ namespace ccVcontrol
 
         public void Log(string type, string msg)
         {
+            EventNotify?.Invoke(type, msg);
             switch (type)
             {
                 case "debug":
