@@ -37,6 +37,7 @@ namespace vcAppUi
                 }catch (Exception exc)
                 {
                     controller.Log("error", "Error in vctrl " + exc.ToString());
+                    controller.Sleep(1000 * 60 * 20, true);
                 }
             }
         }
