@@ -25,6 +25,7 @@ namespace ccVcontrol
         bool DoDonate();
         bool DoBuilds();
         int CheckSetCurAccount(int act);
+        void KillVBox();
     }
 
     public enum ProcessState

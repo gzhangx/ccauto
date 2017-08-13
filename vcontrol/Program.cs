@@ -193,6 +193,7 @@ namespace ccVcontrol
             //Console.WriteLine(machine.VideoCaptureWidth);
             controller.Log("info", "powering off");
             Utils.executeVBoxMngr($"controlvm {Utils.vmname} poweroff");
+            controller.KillVBox();
         }
     }
 }
