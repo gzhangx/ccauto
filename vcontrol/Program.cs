@@ -188,12 +188,11 @@ namespace ccVcontrol
             {                
                 if (session.State == SessionState.SessionState_Locked)
                     session.UnlockMachine();
+                controller.Log("info", "powering off");
+                Utils.executeVBoxMngr($"controlvm {Utils.vmname} poweroff");
+                controller.KillVBox();
             }
-
-            //Console.WriteLine(machine.VideoCaptureWidth);
-            controller.Log("info", "powering off");
-            Utils.executeVBoxMngr($"controlvm {Utils.vmname} poweroff");
-            controller.KillVBox();
+            //Console.WriteLine(machine.VideoCaptureWidth);            
         }
     }
 }
