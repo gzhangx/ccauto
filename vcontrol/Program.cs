@@ -64,7 +64,7 @@ namespace ccVcontrol
                 ProcessDonate(context, context.GetToEntrance());
                 context.GetToEntrance();
             }
-            if (controller.DoBuilds())
+            if (controller.DoBuilds() && !controller.switchAccountOnly)
             {
                 context.InfoLog("===>Step textmap");
                 new ProcessorMapByText(context).ProcessCommand(acct);
