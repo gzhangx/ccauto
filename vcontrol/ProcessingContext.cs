@@ -10,6 +10,7 @@ namespace ccVcontrol
 {
     public interface IVDController
     {
+        bool switchAccountOnly { get; }
         bool doUpgrades { get; }
         bool doDonate { get; }
         bool canContinue();
@@ -25,6 +26,7 @@ namespace ccVcontrol
         bool DoDonate();
         bool DoBuilds();
         int CheckSetCurAccount(int act);
+        void KillVBox();
     }
 
     public enum ProcessState

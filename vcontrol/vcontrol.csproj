@@ -69,6 +69,7 @@
     <Compile Include="StandardClicks.cs" />
     <Compile Include="SwitchAccount.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="VcCtrl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

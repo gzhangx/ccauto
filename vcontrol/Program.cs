@@ -64,7 +64,7 @@ namespace ccVcontrol
                 ProcessDonate(context, context.GetToEntrance());
                 context.GetToEntrance();
             }
-            if (controller.DoBuilds())
+            if (controller.DoBuilds() && !controller.switchAccountOnly)
             {
                 context.InfoLog("===>Step textmap");
                 new ProcessorMapByText(context).ProcessCommand(acct);
@@ -188,11 +188,11 @@ namespace ccVcontrol
             {                
                 if (session.State == SessionState.SessionState_Locked)
                     session.UnlockMachine();
+                controller.Log("info", "powering off");
+                Utils.executeVBoxMngr($"controlvm {Utils.vmname} poweroff");
+                controller.KillVBox();
             }
-
-            //Console.WriteLine(machine.VideoCaptureWidth);
-            controller.Log("info", "powering off");
-            Utils.executeVBoxMngr($"controlvm {Utils.vmname} poweroff");
+            //Console.WriteLine(machine.VideoCaptureWidth);            
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace vcAppUi
+namespace ccVcontrol
 {
     public class VcCtrl
     {
@@ -37,6 +37,15 @@ namespace vcAppUi
                 }catch (Exception exc)
                 {
                     controller.Log("error", "Error in vctrl " + exc.ToString());
+                    controller.Sleep(1000 * 60 * 60, true);
+                }
+                try
+                {
+                    Utils.executeVBoxMngr($"controlvm {Utils.vmname} poweroff");
+                    controller.KillVBox();
+                } catch (Exception exc)
+                {
+                    controller.Log("important", "VcCtrl: failed " + exc.ToString());
                 }
             }
         }

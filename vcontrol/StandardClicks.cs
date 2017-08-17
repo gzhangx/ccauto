@@ -80,6 +80,7 @@ namespace ccVcontrol
             new ImgChecksAndTags("chacha_settings.png", "PRMXYCLICK_STD_CloseSettings", null, 20),//Point(22, 22)
             new ImgChecksAndTags("anyoneThere.png", "PRMXYCLICK_STD_AnyoneThere", new ccPoint(63, 119), 5000),
             new ImgChecksAndTags("connectionError.png", "PRMXYCLICK_STD_ConnectionError", new ccPoint(53, 121), 400),
+            new ImgChecksAndTags("connectionTryAgain.png","PRMXYCLICK_STD_ConnectionError", new ccPoint(46, 16), 400),
             new ImgChecksAndTags("returnHomeAfterFight.png", "PRMXYCLICK_STD_ReturnHome", null, 4000), //Point(50, 50)
             new ImgChecksAndTags("returnHomeAfterVisit.png", "PRMXYCLICK_STD_ReturnHomeVisit", null, 6000), //Point(50, 50)
         };

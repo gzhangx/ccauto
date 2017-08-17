@@ -64,5 +64,9 @@ namespace vcAppUi
         {
             ctrl.controller.doDonate = ((CheckBox)sender).IsChecked.GetValueOrDefault();
         }
+        private void CheckBoxSwitchOnly_Checked(object sender, RoutedEventArgs e)
+        {
+            ctrl.controller.switchAccountOnly = ((CheckBox)sender).IsChecked.GetValueOrDefault();
+        }
     }
 }

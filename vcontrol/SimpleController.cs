@@ -1,6 +1,7 @@
 ﻿using log4net;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -10,6 +11,7 @@ namespace ccVcontrol
 {
     public class SimpleController : IVDController
     {
+        public bool switchAccountOnly { get; set; }
         public bool doUpgrades { get; set; }
         public bool doDonate { get; set; }
         protected int[] accountStartCounts;
@@ -47,6 +49,7 @@ namespace ccVcontrol
 
         public void Log(string type, string msg)
         {
+            EventNotify?.Invoke(type, msg);
             switch (type)
             {
                 case "debug":
@@ -174,6 +177,22 @@ namespace ccVcontrol
             res = Utils.runAnyApp("netsh", "interface set interface \"Ethernet 2\" admin=enable");
             Log("info", "Enable network " + res);
             Sleep(4000);
+        }
+
+        public void KillVBox()
+        {
+            var procs = Process.GetProcessesByName("VirtualBox");
+            foreach (var proc in procs)
+            {
+                Log("important", "Killing vbox " + proc.ProcessName);
+                try
+                {
+                    proc.Kill();
+                } catch (Exception exc)
+                {
+                    Log("important", "Killing vbox failed " + proc.ProcessName);
+                }
+            }
         }
     }
 }
