@@ -14,6 +14,7 @@ namespace ccVcontrol
         public bool switchAccountOnly { get; set; }
         public bool doUpgrades { get; set; }
         public bool doDonate { get; set; }
+        public bool dontSleepOrShutdown { get; set; }
         protected int[] accountStartCounts;
         protected ILog Logger;
         public Action<ProcessingContext> CustomAct;
@@ -30,6 +31,7 @@ namespace ccVcontrol
         }
         public bool canContinue()
         {
+            if (dontSleepOrShutdown) return true;
             bool keepGoing = false;
             for (var i = 0; i < accountStartCounts.Length;i++)
             {
@@ -106,7 +108,7 @@ namespace ccVcontrol
         protected string doInterrupt = null;
         public void Sleep(int ms, bool deep = false)
         {
-            if (deep)
+            if (deep && !dontSleepOrShutdown)
             {
                 PcWakeup.SetWaitForWakeUpTime(this, ms, true);
                 return;

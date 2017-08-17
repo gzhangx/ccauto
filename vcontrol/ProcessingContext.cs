@@ -10,6 +10,7 @@ namespace ccVcontrol
 {
     public interface IVDController
     {
+        bool dontSleepOrShutdown { get; set; }
         bool switchAccountOnly { get; }
         bool doUpgrades { get; }
         bool doDonate { get; }
