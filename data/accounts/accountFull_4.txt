@@ -2,148 +2,57 @@
   {
     "name": "TownHall",
     "point": {
-      "x": 573,
-      "y": 256
+      "x": 575,
+      "y": 243
     }
   },
   {
     "name": "GoldMine",
     "point": {
-      "x": 520,
-      "y": 109
-    }
-  },
-  {
-    "name": "GoldMine",
-    "point": {
-      "x": 574,
-      "y": 154
-    }
-  },
-  {
-    "name": "GoldMine",
-    "point": {
-      "x": 684,
-      "y": 234
-    }
-  },
-  {
-    "name": "GoldMine",
-    "point": {
-      "x": 424,
-      "y": 506
-    }
-  },
-  {
-    "name": "ElixirCollector",
-    "point": {
-      "x": 525,
-      "y": 305
-    }
-  },
-  {
-    "name": "ElixirCollector",
-    "point": {
-      "x": 574,
-      "y": 336
-    }
-  },
-  {
-    "name": "ElixirCollector",
-    "point": {
-      "x": 621,
-      "y": 371
-    }
-  },
-  {
-    "name": "ElixirCollector",
-    "point": {
-      "x": 579,
-      "y": 416
-    }
-  },
-  {
-    "name": "ElixirCollector",
-    "point": {
-      "x": 542,
-      "y": 583
-    }
-  },
-  {
-    "name": "GoldStorage",
-    "point": {
-      "x": 462,
-      "y": 153
-    }
-  },
-  {
-    "name": "GoldStorage",
-    "point": {
-      "x": 411,
-      "y": 186
+      "x": 534,
+      "y": 119
     }
   },
   {
     "name": "ElixirStorage",
     "point": {
-      "x": 469,
-      "y": 340
+      "x": 482,
+      "y": 319
     }
   },
   {
-    "name": "ElixirStorage",
+    "name": "ElixirCollector",
     "point": {
-      "x": 526,
-      "y": 379
+      "x": 708,
+      "y": 424
     }
   },
   {
-    "name": "Barracks",
+    "name": "GoldMine",
     "point": {
-      "x": 665,
-      "y": 306
-    }
-  },
-  {
-    "name": "Barracks",
-    "point": {
-      "x": 711,
-      "y": 329
+      "x": 758,
+      "y": 389
     }
   },
   {
     "name": "Barracks",
     "point": {
-      "x": 776,
-      "y": 300
+      "x": 660,
+      "y": 287
     }
   },
   {
-    "name": "ArmyCamp",
+    "name": "Barracks",
     "point": {
-      "x": 262,
-      "y": 313
+      "x": 710,
+      "y": 324
     }
   },
   {
-    "name": "ArmyCamp",
+    "name": "Barracks",
     "point": {
-      "x": 184,
-      "y": 370
-    }
-  },
-  {
-    "name": "ArmyCamp",
-    "point": {
-      "x": 409,
-      "y": 413
-    }
-  },
-  {
-    "name": "Laboratory",
-    "point": {
-      "x": 671,
-      "y": 507
+      "x": 753,
+      "y": 291
     }
   }
 ]
