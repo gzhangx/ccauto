@@ -10,6 +10,7 @@ namespace ccVcontrol
 {
     public interface IVDController
     {
+        bool humanMode { get; }
         bool dontSleepOrShutdown { get; set; }
         bool switchAccountOnly { get; }
         bool doUpgrades { get; }
@@ -150,7 +151,8 @@ namespace ccVcontrol
                 {
                     var errStr = "Waiting for entracne too long " + elapsed.ToString("0.00");
                     vdcontroller.Log("error", errStr);
-                    throw new TimeoutException(errStr);
+                    if (!vdcontroller.humanMode)
+                        throw new TimeoutException(errStr);
                 }
             }
         }

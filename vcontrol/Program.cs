@@ -42,6 +42,10 @@ namespace ccVcontrol
         private static void DoProcess(ProcessingContext context)
         {
             var controller = context.vdcontroller;
+            while(controller.humanMode && controller.CurState != ProcessState.SwitchAccount)
+            {
+                controller.Sleep(100);
+            }
             var switchAccount = new SwitchAccount(context);
             context.GetToEntrance();
             context.Sleep(2000);
