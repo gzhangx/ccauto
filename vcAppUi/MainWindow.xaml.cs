@@ -67,6 +67,7 @@ namespace vcAppUi
         private void CheckBoxSwitchOnly_Checked(object sender, RoutedEventArgs e)
         {
             ctrl.controller.switchAccountOnly = ((CheckBox)sender).IsChecked.GetValueOrDefault();
+            ctrl.controller.dontSleepOrShutdown = ctrl.controller.switchAccountOnly;
         }
     }
 }
