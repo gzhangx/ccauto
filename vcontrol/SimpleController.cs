@@ -11,6 +11,7 @@ namespace ccVcontrol
 {
     public class SimpleController : IVDController
     {
+        public bool humanMode { get; set; }
         public bool switchAccountOnly { get; set; }
         public bool doUpgrades { get; set; }
         public bool doDonate { get; set; }
@@ -31,7 +32,7 @@ namespace ccVcontrol
         }
         public bool canContinue()
         {
-            if (dontSleepOrShutdown) return true;
+            if (humanMode || dontSleepOrShutdown) return true;
             bool keepGoing = false;
             for (var i = 0; i < accountStartCounts.Length;i++)
             {
@@ -108,7 +109,7 @@ namespace ccVcontrol
         protected string doInterrupt = null;
         public void Sleep(int ms, bool deep = false)
         {
-            if (deep && !dontSleepOrShutdown)
+            if (deep && !dontSleepOrShutdown && !humanMode)
             {
                 PcWakeup.SetWaitForWakeUpTime(this, ms, true);
                 return;

@@ -68,6 +68,7 @@ namespace vcAppUi
         {
             ctrl.controller.switchAccountOnly = ((CheckBox)sender).IsChecked.GetValueOrDefault();
             ctrl.controller.dontSleepOrShutdown = ctrl.controller.switchAccountOnly;
+            ctrl.controller.humanMode = ((CheckBox)sender).IsChecked.GetValueOrDefault();
         }
     }
 }
