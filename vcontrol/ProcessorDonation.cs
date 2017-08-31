@@ -27,6 +27,7 @@ namespace ccVcontrol
             var processed = new List<CommandInfo>();
             for (int i = 0; i < 5; i++)
             {
+                if (context.vdcontroller.humanMode) break;
                 context.MoveMouseAndClick(cmd.x, cmd.y);            
                 bool found = false;
                 context.Sleep(2000);
@@ -38,6 +39,7 @@ namespace ccVcontrol
                 var results = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name donate -matchRect {donateRectx},{donateRecty},140,600_200 -top 5  -match data\\check\\donatebutton.png 900", context);
                 foreach (var donate in results)
                 {
+                    if (context.vdcontroller.humanMode) break;
                     if (donatedPos.Any(dp => dp.y == donate.y)) continue;
                     donatedPos.Add(donate);
                     if (donate.decision == "true")

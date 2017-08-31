@@ -59,6 +59,7 @@ namespace ccVcontrol
             bool trained = false;
             foreach (var loc in locations)
             {
+                if (context.vdcontroller.humanMode) break;
                 if (numBuilders == 0 && !string.IsNullOrWhiteSpace(loc.name))
                 {
                     if (loc.name == GoldMine && !gotFirstGold)
@@ -118,6 +119,7 @@ namespace ccVcontrol
                 }
                 foreach (var otherAct in actionItems.other)
                 {
+                    if (context.vdcontroller.humanMode) break;
                     switch (otherAct.extraInfo)
                     {
                         case "RearmAll":
