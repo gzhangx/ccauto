@@ -2,57 +2,92 @@
   {
     "name": "TownHall",
     "point": {
-      "x": 575,
-      "y": 243
+      "x": 592,
+      "y": 277
     }
   },
   {
     "name": "GoldMine",
     "point": {
-      "x": 534,
-      "y": 119
+      "x": 521,
+      "y": 151
     }
   },
   {
-    "name": "ElixirStorage",
+    "name": "GoldMine",
     "point": {
-      "x": 482,
-      "y": 319
+      "x": 555,
+      "y": 180
+    }
+  },
+  {
+    "name": "GoldMine",
+    "point": {
+      "x": 603,
+      "y": 212
+    }
+  },
+  {
+    "name": "GoldMine",
+    "point": {
+      "x": 641,
+      "y": 241
+    }
+  },
+  {
+    "name": "GoldMine",
+    "point": {
+      "x": 683,
+      "y": 268
+    }
+  },
+  {
+    "name": "GoldMine",
+    "point": {
+      "x": 728,
+      "y": 305
     }
   },
   {
     "name": "ElixirCollector",
     "point": {
-      "x": 708,
-      "y": 424
+      "x": 655,
+      "y": 315
     }
   },
   {
-    "name": "GoldMine",
+    "name": "ElixirCollector",
     "point": {
-      "x": 758,
-      "y": 389
+      "x": 700,
+      "y": 346
     }
   },
   {
-    "name": "Barracks",
+    "name": "ElixirCollector",
     "point": {
-      "x": 660,
-      "y": 287
+      "x": 630,
+      "y": 380
     }
   },
   {
-    "name": "Barracks",
+    "name": "ElixirCollector",
     "point": {
-      "x": 710,
-      "y": 324
+      "x": 589,
+      "y": 411
     }
   },
   {
-    "name": "Barracks",
+    "name": "ElixirCollector",
     "point": {
-      "x": 753,
-      "y": 291
+      "x": 590,
+      "y": 346
+    }
+  },
+  {
+    "name": "ElixirCollector",
+    "point": {
+      "x": 547,
+      "y": 313
     }
   }
 ]

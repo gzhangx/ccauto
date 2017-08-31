@@ -1,156 +1,142 @@
 [
   {
-    "name": "GoldMine",
+    "name": "ElixirCollector",
     "point": {
-      "x": 532,
-      "y": 230
+      "x": 738,
+      "y": 210
     }
   },
   {
     "name": "GoldMine",
     "point": {
-      "x": 585,
-      "y": 272
+      "x": 700,
+      "y": 183
     }
   },
   {
-    "name": "GoldMine",
+    "name": "ElixirCollector",
     "point": {
-      "x": 636,
-      "y": 314
+      "x": 529,
+      "y": 180
     }
   },
   {
-    "name": "GoldMine",
+    "name": "ElixirCollector",
     "point": {
-      "x": 569,
-      "y": 341
+      "x": 574,
+      "y": 215
     }
   },
   {
-    "name": "GoldMine",
+    "name": "ElixirCollector",
     "point": {
-      "x": 505,
+      "x": 613,
+      "y": 244
+    }
+  },
+  {
+    "name": "ElixirCollector",
+    "point": {
+      "x": 657,
+      "y": 279
+    }
+  },
+  {
+    "name": "ElixirCollector",
+    "point": {
+      "x": 690,
       "y": 302
     }
   },
   {
-    "name": "ElixirCollector",
+    "name": "GoldMine",
     "point": {
-      "x": 734,
-      "y": 282
+      "x": 627,
+      "y": 317
     }
   },
   {
-    "name": "ElixirCollector",
+    "name": "GoldMine",
     "point": {
-      "x": 671,
-      "y": 251
+      "x": 586,
+      "y": 288
     }
   },
   {
-    "name": "ElixirCollector",
+    "name": "GoldMine",
     "point": {
-      "x": 619,
-      "y": 214
+      "x": 550,
+      "y": 257
     }
   },
   {
-    "name": "ElixirCollector",
+    "name": "GoldMine",
     "point": {
-      "x": 566,
-      "y": 173
+      "x": 531,
+      "y": 304
     }
   },
   {
-    "name": "ElixirCollector",
+    "name": "GoldMine",
     "point": {
-      "x": 513,
-      "y": 132
-    }
-  },
-  {
-    "name": "GoldStorage",
-    "point": {
-      "x": 353,
-      "y": 170
-    }
-  },
-  {
-    "name": "GoldStorage",
-    "point": {
-      "x": 293,
-      "y": 214
-    }
-  },
-  {
-    "name": "ElixirStorage",
-    "point": {
-      "x": 384,
-      "y": 222
-    }
-  },
-  {
-    "name": "ElixirStorage",
-    "point": {
-      "x": 441,
-      "y": 252
+      "x": 571,
+      "y": 338
     }
   },
   {
     "name": "TownHall",
     "point": {
-      "x": 458,
-      "y": 190
+      "x": 485,
+      "y": 218
     }
   },
   {
-    "name": "ClanCastle",
+    "name": "GoldStorage",
     "point": {
-      "x": 455,
-      "y": 330
+      "x": 402,
+      "y": 213
+    }
+  },
+  {
+    "name": "GoldStorage",
+    "point": {
+      "x": 359,
+      "y": 239
+    }
+  },
+  {
+    "name": "ElixirStorage",
+    "point": {
+      "x": 468,
+      "y": 274
+    }
+  },
+  {
+    "name": "ElixirStorage",
+    "point": {
+      "x": 426,
+      "y": 245
     }
   },
   {
     "name": "Barracks",
     "point": {
-      "x": 328,
-      "y": 272
+      "x": 389,
+      "y": 279
     }
   },
   {
     "name": "Barracks",
     "point": {
-      "x": 306,
-      "y": 373
+      "x": 367,
+      "y": 351
     }
   },
   {
     "name": "Barracks",
     "point": {
-      "x": 399,
-      "y": 386
-    }
-  },
-  {
-    "name": "ArmyCamp",
-    "point": {
-      "x": 199,
-      "y": 316
-    }
-  },
-  {
-    "name": "ArmyCamp",
-    "point": {
-      "x": 350,
-      "y": 453
-    }
-  },
-  {
-    "name": "ArmyCamp",
-    "point": {
-      "x": 464,
-      "y": 508
+      "x": 444,
+      "y": 367
     }
   }
 ]
