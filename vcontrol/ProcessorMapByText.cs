@@ -112,7 +112,7 @@ namespace ccVcontrol
                     if (loc.name != TownHall && loc.name != Barracks) continue;
                     if (loc.name == Barracks && trained) continue;
                 }
-                var actionItems = canUpgrade(context, tempImgName);
+                var actionItems = canUpgrade(context, tempImgName, numBuilders);
                 if (numBuilders > 0 && context.vdcontroller.doUpgrades)
                 {
                     RetryAction(actionItems.upgrade, Upgraded);                    
@@ -280,7 +280,7 @@ namespace ccVcontrol
             public CommandInfo upgrade;
             public List<CommandInfo> other;
         }
-        public static UpgradeTrain canUpgrade(ProcessingContext context, string imgName)
+        public static UpgradeTrain canUpgrade(ProcessingContext context, string imgName, int numBuilders)
         {
             string[] resultTypes = new[] { "Good", "Bad" };
             string[] itemTypes = new[] { "Gold", "Eli" };
@@ -288,11 +288,14 @@ namespace ccVcontrol
             sb.Append($"-input {imgName} ");
             const int actx = 200;
             const int acty = 630;
-            foreach (var rt in resultTypes)
+            if (numBuilders > 0)
             {
-                foreach (var itm in itemTypes)
+                foreach (var rt in resultTypes)
                 {
-                    sb.Append($"-name {rt} -matchRect {actx},{acty},650,105_200 -match data\\check\\upgrade{itm}{rt}.png 40 ");
+                    foreach (var itm in itemTypes)
+                    {
+                        sb.Append($"-name {rt} -matchRect {actx},{acty},650,105_200 -match data\\check\\upgrade{itm}{rt}.png 40 ");
+                    }
                 }
             }
             var otherActs = new[] { "Train", "RearmAll" };

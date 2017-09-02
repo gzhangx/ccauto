@@ -103,7 +103,7 @@ namespace ccVcontrol
         static void TestAccounts(ProcessingContext context)
         {
             Utils.doScreenShoot("tstimgs\\tmptesttest.png");
-            var actr = ProcessorMapByText.canUpgrade(context, "tstimgs\\tmptesttest.png");
+            var actr = ProcessorMapByText.canUpgrade(context, "tstimgs\\tmptesttest.png",0);
             Console.WriteLine(actr.upgrade);
             /*
             for (int i = 1; i <= 4; i++)

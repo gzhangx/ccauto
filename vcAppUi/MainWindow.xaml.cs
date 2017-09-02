@@ -27,6 +27,8 @@ namespace vcAppUi
         public MainWindow()
         {            
             InitializeComponent();
+            ctrl.controller.doDonate = this.chkDonate.IsChecked.GetValueOrDefault();
+            ctrl.controller.doUpgrades = this.chkUpgrade.IsChecked.GetValueOrDefault();
             ctrl.Start();
             ctrl.controller.EventNotify = (what, val) =>
             {

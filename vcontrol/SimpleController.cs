@@ -22,7 +22,7 @@ namespace ccVcontrol
         public Action<string, string> EventNotify;
         public SimpleController()
         {
-            doUpgrades = true;
+            doUpgrades = false;
             doDonate = true;
             log4net.Config.XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo("log4net.conf"));
             Logger = LogManager.GetLogger("ccVcontrol");
