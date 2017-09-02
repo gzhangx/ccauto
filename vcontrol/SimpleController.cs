@@ -33,6 +33,7 @@ namespace ccVcontrol
         public bool canContinue()
         {
             if (humanMode || dontSleepOrShutdown) return true;
+            return false;
             bool keepGoing = false;
             for (var i = 0; i < accountStartCounts.Length;i++)
             {

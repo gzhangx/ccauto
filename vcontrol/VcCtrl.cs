@@ -23,10 +23,13 @@ namespace ccVcontrol
             {
                 DateTime startTime = DateTime.UtcNow;
                 Logger.Info("Starting");
+                bool vmKilled = false;
                 try
                 {
                     controller.RefreshNetwork();
                     ccVcontrol.Program.Start(controller);
+                    KillVm();
+                    vmKilled = true;
                     Logger.Info($"Sleeping, run time = {DateTime.UtcNow.Subtract(startTime).TotalSeconds.ToString("0.00")}s");
                     controller.Sleep(1000 * 60 * 20, true);
                     Logger.Info("Done Sleeping");
@@ -39,14 +42,20 @@ namespace ccVcontrol
                     controller.Log("error", "Error in vctrl " + exc.ToString());
                     controller.Sleep(1000 * 60 * 60, true);
                 }
-                try
-                {
-                    Utils.executeVBoxMngr($"controlvm {Utils.vmname} poweroff");
-                    controller.KillVBox();
-                } catch (Exception exc)
-                {
-                    controller.Log("important", "VcCtrl: failed " + exc.ToString());
-                }
+                if (!vmKilled) KillVm();
+            }
+        }
+
+        private void KillVm()
+        {
+            try
+            {
+                Utils.executeVBoxMngr($"controlvm {Utils.vmname} poweroff");
+                controller.KillVBox();
+            }
+            catch (Exception exc)
+            {
+                controller.Log("important", "VcCtrl: failed " + exc.ToString());
             }
         }
     }
