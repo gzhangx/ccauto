@@ -33,14 +33,14 @@ namespace ccVcontrol
         public bool canContinue()
         {
             if (humanMode || dontSleepOrShutdown) return true;
-            return false;
-            bool keepGoing = false;
+            bool keepGoing = true;
             for (var i = 0; i < accountStartCounts.Length;i++)
             {
                 Console.WriteLine($"for account {i} got {accountStartCounts[i]}");
-                if (accountStartCounts[i] == 0)
+                if (accountStartCounts[i] != 0)
                 {
-                    keepGoing = true;
+                    Log("info", "found one account processed, don't continue");
+                    keepGoing = false;
                 }
             }
             return keepGoing;
