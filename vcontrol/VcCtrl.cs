@@ -31,7 +31,7 @@ namespace ccVcontrol
                     KillVm();
                     vmKilled = true;
                     Logger.Info($"Sleeping, run time = {DateTime.UtcNow.Subtract(startTime).TotalSeconds.ToString("0.00")}s");
-                    controller.Sleep(1000 * 60 * 20, true);
+                    controller.Sleep(1000 * 60 * 10, true);
                     Logger.Info("Done Sleeping");
                 }
                 catch (SwitchProcessingActionException exc)
