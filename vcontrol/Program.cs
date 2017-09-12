@@ -195,6 +195,9 @@ namespace ccVcontrol
                 controller.Log("info", "powering off");
                 Utils.executeVBoxMngr($"controlvm {Utils.vmname} poweroff");
                 controller.KillVBox();
+                controller.Log("info", "sleeping 10s after kill vbox");
+                controller.Sleep(10000);
+                controller.Log("info", "vbox killed, poweroff");
             }
             //Console.WriteLine(machine.VideoCaptureWidth);            
         }
