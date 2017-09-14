@@ -1,93 +1,156 @@
 [
   {
-    "name": "TownHall",
+    "nameLevel": null,
     "point": {
-      "x": 592,
-      "y": 277
+      "x": 688,
+      "y": 357
     }
   },
   {
-    "name": "GoldMine",
+    "nameLevel": null,
     "point": {
-      "x": 521,
-      "y": 151
+      "x": 659,
+      "y": 329
     }
   },
   {
-    "name": "GoldMine",
+    "nameLevel": null,
     "point": {
-      "x": 555,
-      "y": 180
+      "x": 627,
+      "y": 385
     }
   },
   {
-    "name": "GoldMine",
+    "nameLevel": null,
+    "point": {
+      "x": 594,
+      "y": 407
+    }
+  },
+  {
+    "nameLevel": null,
+    "point": {
+      "x": 585,
+      "y": 351
+    }
+  },
+  {
+    "nameLevel": null,
+    "point": {
+      "x": 542,
+      "y": 325
+    }
+  },
+  {
+    "nameLevel": null,
+    "point": {
+      "x": 716,
+      "y": 312
+    }
+  },
+  {
+    "nameLevel": null,
+    "point": {
+      "x": 675,
+      "y": 288
+    }
+  },
+  {
+    "nameLevel": null,
+    "point": {
+      "x": 637,
+      "y": 257
+    }
+  },
+  {
+    "nameLevel": null,
     "point": {
       "x": 603,
-      "y": 212
+      "y": 229
     }
   },
   {
-    "name": "GoldMine",
+    "nameLevel": null,
     "point": {
-      "x": 641,
-      "y": 241
+      "x": 566,
+      "y": 200
     }
   },
   {
-    "name": "GoldMine",
+    "nameLevel": null,
     "point": {
-      "x": 683,
-      "y": 268
+      "x": 527,
+      "y": 177
     }
   },
   {
-    "name": "GoldMine",
+    "nameLevel": null,
     "point": {
-      "x": 728,
-      "y": 305
+      "x": 511,
+      "y": 219
     }
   },
   {
-    "name": "ElixirCollector",
+    "nameLevel": null,
     "point": {
-      "x": 655,
-      "y": 315
+      "x": 469,
+      "y": 243
     }
   },
   {
-    "name": "ElixirCollector",
+    "nameLevel": null,
     "point": {
-      "x": 700,
+      "x": 593,
+      "y": 276
+    }
+  },
+  {
+    "nameLevel": null,
+    "point": {
+      "x": 465,
+      "y": 320
+    }
+  },
+  {
+    "nameLevel": null,
+    "point": {
+      "x": 651,
+      "y": 461
+    }
+  },
+  {
+    "nameLevel": null,
+    "point": {
+      "x": 612,
+      "y": 485
+    }
+  },
+  {
+    "nameLevel": null,
+    "point": {
+      "x": 691,
+      "y": 427
+    }
+  },
+  {
+    "nameLevel": null,
+    "point": {
+      "x": 280,
+      "y": 261
+    }
+  },
+  {
+    "nameLevel": null,
+    "point": {
+      "x": 221,
+      "y": 298
+    }
+  },
+  {
+    "nameLevel": null,
+    "point": {
+      "x": 164,
       "y": 346
-    }
-  },
-  {
-    "name": "ElixirCollector",
-    "point": {
-      "x": 630,
-      "y": 380
-    }
-  },
-  {
-    "name": "ElixirCollector",
-    "point": {
-      "x": 589,
-      "y": 411
-    }
-  },
-  {
-    "name": "ElixirCollector",
-    "point": {
-      "x": 590,
-      "y": 346
-    }
-  },
-  {
-    "name": "ElixirCollector",
-    "point": {
-      "x": 547,
-      "y": 313
     }
   }
 ]
