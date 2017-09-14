@@ -39,6 +39,7 @@ namespace ccVcontrol
             var processed = new Dictionary<string, bool>();
             foreach (var l in locations)
             {
+                if (string.IsNullOrEmpty(l.Name())) continue;
                 if (processed.ContainsKey(l.Name())) continue;
                 var allNames = locations.FindAll(me => me.Name() == l.Name()).OrderBy(me => me.Level()).ToList();
                 results.AddRange(allNames);
