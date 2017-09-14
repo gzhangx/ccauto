@@ -10,6 +10,7 @@ using System.Threading;
 namespace ccVcontrol
 {
 
+
     public class ProcessorMapByText
     {
         const string GoldMine = "GoldMine";
@@ -46,8 +47,8 @@ namespace ccVcontrol
             }
             locations.ForEach(l =>
             {
-                Console.WriteLine("====>" + l.name + " " + l.point.x + "," + l.point.y);
-                if (context.vdcontroller.redoStructureNames) l.name = null;
+                Console.WriteLine("====>" + l.Name + " " + l.point.x + "," + l.point.y);
+                if (context.vdcontroller.redoStructureNames) l.nameLevel = null;
             });
 
 
@@ -61,44 +62,44 @@ namespace ccVcontrol
             foreach (var loc in locations)
             {
                 if (context.vdcontroller.humanMode) break;
-                if (numBuilders == 0 && !string.IsNullOrWhiteSpace(loc.name))
+                if (numBuilders == 0 && !string.IsNullOrWhiteSpace(loc.Name))
                 {
-                    if (loc.name == GoldMine && !gotFirstGold)
+                    if (loc.Name == GoldMine && !gotFirstGold)
                     {
                         gotFirstGold = true;
                         context.MoveMouseAndClick(loc.point.x, loc.point.y);
                     }
-                    if (loc.name == ElixirCollector && !gotFirstEli)
+                    if (loc.Name == ElixirCollector && !gotFirstEli)
                     {
                         gotFirstEli = true;
                         context.MoveMouseAndClick(loc.point.x, loc.point.y);
                     }
-                    if (loc.name != TownHall && loc.name != Barracks) continue;
-                    if (loc.name == Barracks && trained) continue;
+                    if (loc.Name != TownHall && loc.Name != Barracks) continue;
+                    if (loc.Name == Barracks && trained) continue;
                 }
                 context.MoveMouseAndClick(loc.point.x, loc.point.y);
                 context.Sleep(1000);
                 Utils.doScreenShoot(tempImgName);
                 results = context.GetAppInfo();
-                if (string.IsNullOrWhiteSpace(loc.name))
+                if (string.IsNullOrWhiteSpace(loc.Name))
                 {
-                    loc.name = GetStructureName(loc, results);
-                    if (string.IsNullOrEmpty(loc.name))
+                    loc.nameLevel = GetStructureName(loc, results);
+                    if (string.IsNullOrEmpty(loc.Name))
                     {
                         //try one more time
                         context.DebugLog("Trying to get name one more time");
                         Utils.doScreenShoot(tempImgName);
                         results = context.GetAppInfo();
                     }
-                    context.DebugLog($"     FOUND {loc.name}");
-                    if (string.IsNullOrWhiteSpace(loc.name))
+                    context.DebugLog($"     FOUND {loc.Name} level= {loc.Level}");
+                    if (string.IsNullOrWhiteSpace(loc.Name))
                     {
                         nameTry++;
                         context.MoveMouseAndClick(loc.point.x, loc.point.y);
                         context.Sleep(1000);
                         results = context.GetAppInfo();
-                        loc.name = GetStructureName(loc, results);
-                        if (string.IsNullOrWhiteSpace(loc.name))
+                        loc.nameLevel = GetStructureName(loc, results);
+                        if (loc.nameLevel == null)
                         {
                             badLocs.Add(loc);
                             context.DebugLog("     Removing bad loc");
@@ -110,8 +111,8 @@ namespace ccVcontrol
                 context.InfoLog($"Number of builders available {numBuilders}");
                 if (numBuilders == 0 || !context.vdcontroller.doUpgrades)
                 {
-                    if (loc.name != TownHall && loc.name != Barracks) continue;
-                    if (loc.name == Barracks && trained) continue;
+                    if (loc.Name != TownHall && loc.Name != Barracks) continue;
+                    if (loc.Name == Barracks && trained) continue;
                 }
                 var actionItems = canUpgrade(context, tempImgName, numBuilders);
                 if (numBuilders > 0 && context.vdcontroller.doUpgrades)
@@ -242,7 +243,7 @@ namespace ccVcontrol
             return 0;
         }
 
-        private string GetStructureName(PosInfo loc, List<CommandInfo> results)
+        private NameLevel GetStructureName(PosInfo loc, List<CommandInfo> results)
         {
             string[] tags = new string[] {
             GoldMine, ElixirCollector, TownHall, GoldStorage, ElixirStorage,
@@ -264,12 +265,24 @@ namespace ccVcontrol
                     }
                 }
                 int bestDiff = bestTag.Length - best.Length;
-                Console.WriteLine($" at {loc.point.x},{loc.point.y} got {bottom.command}:{bottom.Text} diff {bestDiff}");
+                context.vdcontroller.Log("info",$" at {loc.point.x},{loc.point.y} got {bottom.command}:{bottom.Text} diff {bestDiff}");
                 if (bestDiff < 2)
                 {
                     {
-                        Console.WriteLine("BESTTAG====> " + bestTag + " " + best);
-                        return bestTag;
+                        var fullTxt = bottom.Text;
+                        context.vdcontroller.Log("info", "BESTTAG====> " + bestTag + " " + best);
+                        int levelInd = fullTxt.IndexOf("level") + 5;
+                        int endInd = fullTxt.IndexOf(")", levelInd);
+                        string level = "";
+                        if (levelInd >0 && endInd > levelInd)
+                        {
+                            level = fullTxt.Substring(levelInd, endInd - levelInd);
+                        }
+                        return new NameLevel
+                        {
+                            name = bestTag,
+                            level = level,
+                        };                        
                     }
                 }
             }

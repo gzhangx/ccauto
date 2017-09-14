@@ -78,7 +78,7 @@ namespace ccUi
         List<GPInfo> gpInfo = new List<GPInfo>();
         private void canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            var data = new PosInfo { name = txtName.Text, point = new ccPoint((int)e.GetPosition(canvas).X, (int)e.GetPosition(canvas).Y) };
+            var data = new PosInfo { point = new ccPoint((int)e.GetPosition(canvas).X, (int)e.GetPosition(canvas).Y) };
             if (points.Any(p =>
             {
                 return Math.Abs(p.point.x - data.point.x) < 10
