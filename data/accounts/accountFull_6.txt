@@ -1,142 +1,218 @@
 [
   {
-    "name": "TownHall",
+    "nameLevel": {
+      "name": "TownHall",
+      "level": " 6"
+    },
     "point": {
       "x": 557,
       "y": 311
-    }
+    },
+    "Name": "TownHall",
+    "Level": 6
   },
   {
-    "name": "GoldMine",
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
     "point": {
       "x": 627,
       "y": 341
-    }
+    },
+    "Name": "GoldMine",
+    "Level": 10
   },
   {
-    "name": "GoldMine",
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
     "point": {
       "x": 589,
       "y": 367
-    }
+    },
+    "Name": "GoldMine",
+    "Level": 10
   },
   {
-    "name": "GoldMine",
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
     "point": {
       "x": 545,
       "y": 405
-    }
+    },
+    "Name": "GoldMine",
+    "Level": 10
   },
   {
-    "name": "GoldMine",
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
     "point": {
       "x": 441,
       "y": 500
-    }
+    },
+    "Name": "GoldMine",
+    "Level": 10
   },
   {
-    "name": "GoldMine",
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
     "point": {
       "x": 400,
       "y": 473
-    }
+    },
+    "Name": "GoldMine",
+    "Level": 10
   },
   {
-    "name": "ElixirCollector",
+    "nameLevel": {
+      "name": "ElixirCollector",
+      "level": " 10"
+    },
     "point": {
       "x": 362,
       "y": 429
-    }
+    },
+    "Name": "ElixirCollector",
+    "Level": 10
   },
   {
-    "name": "ElixirCollector",
+    "nameLevel": {
+      "name": "ElixirCollector",
+      "level": " 10"
+    },
     "point": {
       "x": 435,
       "y": 397
-    }
+    },
+    "Name": "ElixirCollector",
+    "Level": 10
   },
   {
-    "name": "ElixirCollector",
+    "nameLevel": {
+      "name": "ElixirCollector",
+      "level": " 10"
+    },
     "point": {
       "x": 405,
       "y": 360
-    }
+    },
+    "Name": "ElixirCollector",
+    "Level": 10
   },
   {
-    "name": "ElixirCollector",
+    "nameLevel": {
+      "name": "ElixirCollector",
+      "level": " 10"
+    },
     "point": {
       "x": 363,
       "y": 323
-    }
+    },
+    "Name": "ElixirCollector",
+    "Level": 10
   },
   {
-    "name": "ElixirCollector",
+    "nameLevel": {
+      "name": "ElixirCollector",
+      "level": " 10"
+    },
     "point": {
       "x": 398,
       "y": 292
-    }
+    },
+    "Name": "ElixirCollector",
+    "Level": 10
   },
   {
-    "name": "ElixirStorage",
+    "nameLevel": {
+      "name": "ElixirStorage",
+      "level": " 10"
+    },
     "point": {
       "x": 381,
       "y": 247
-    }
+    },
+    "Name": "ElixirStorage",
+    "Level": 10
   },
   {
-    "name": "ElixirStorage",
+    "nameLevel": {
+      "name": "ElixirStorage",
+      "level": " 9"
+    },
     "point": {
       "x": 418,
       "y": 219
-    }
+    },
+    "Name": "ElixirStorage",
+    "Level": 9
   },
   {
-    "name": "GoldStorage",
-    "point": {
-      "x": 379,
-      "y": 186
-    }
-  },
-  {
-    "name": "GoldStorage",
-    "point": {
-      "x": 334,
-      "y": 218
-    }
-  },
-  {
-    "name": "Barracks",
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
     "point": {
       "x": 567,
       "y": 476
-    }
+    },
+    "Name": "Barracks",
+    "Level": 7
   },
   {
-    "name": "Barracks",
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
     "point": {
       "x": 600,
       "y": 444
-    }
+    },
+    "Name": "Barracks",
+    "Level": 7
   },
   {
-    "name": "Barracks",
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
     "point": {
       "x": 638,
       "y": 412
-    }
+    },
+    "Name": "Barracks",
+    "Level": 7
   },
   {
-    "name": "ElixirCollector",
+    "nameLevel": {
+      "name": "ElixirCollector",
+      "level": " 10"
+    },
     "point": {
       "x": 473,
       "y": 108
-    }
+    },
+    "Name": "ElixirCollector",
+    "Level": 10
   },
   {
-    "name": "GoldMine",
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
     "point": {
       "x": 522,
       "y": 150
-    }
+    },
+    "Name": "GoldMine",
+    "Level": 10
   }
 ]

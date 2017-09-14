@@ -32,6 +32,19 @@ namespace ccVcontrol
             context = ctx;
         }
         List<PosInfo> locations = new List<PosInfo>();
+
+        protected static List<PosInfo> reorderLocation(List<PosInfo> locations)
+        {
+            var results = new List<PosInfo>();
+            var processed = new Dictionary<string, bool>();
+            foreach (var l in locations)
+            {
+                if (processed.ContainsKey(l.Name())) continue;
+                var allNames = locations.FindAll(me => me.Name() == l.Name()).OrderBy(me => me.Level()).ToList();
+                results.AddRange(allNames);
+            }
+            return results;
+        }
         public void ProcessCommand(int act)
         {
             //Test();
@@ -45,15 +58,31 @@ namespace ccVcontrol
             {
                 locations = JsonConvert.DeserializeObject<List<PosInfo>>(File.ReadAllText(fname));
             }
-            locations.ForEach(l =>
+            locations.ForEach(loc =>
             {
-                Console.WriteLine("====>" + l.Name + " " + l.point.x + "," + l.point.y);
-                if (context.vdcontroller.redoStructureNames) l.nameLevel = null;
+                Console.WriteLine("====>" + loc.Name() + " " + loc.point.x + "," + loc.point.y);
+                if (context.vdcontroller.redoStructureNames) loc.nameLevel = null;
+                for (int nameRetry = 0; nameRetry < 2; nameRetry++)
+                {
+                    if (loc.nameLevel == null)
+                    {
+                        context.MoveMouseAndClick(loc.point.x, loc.point.y);
+                        context.Sleep(1000);
+                        Utils.doScreenShoot(tempImgName);
+                        var res = context.GetAppInfo();
+                        loc.nameLevel = GetStructureName(loc, res);
+                        Console.WriteLine("====> After reco" + loc.Name() + " level=" + loc.Level());
+                    }
+                    else break;
+                }
             });
 
 
+
+            locations = reorderLocation(locations);
+
+
             var badLocs = new List<PosInfo>();
-            int nameTry = 0;
             var results = context.GetAppInfo();
             int numBuilders = NumBuilders(results);
             bool gotFirstGold = false;
@@ -62,57 +91,32 @@ namespace ccVcontrol
             foreach (var loc in locations)
             {
                 if (context.vdcontroller.humanMode) break;
-                if (numBuilders == 0 && !string.IsNullOrWhiteSpace(loc.Name))
+                if (numBuilders == 0 && !string.IsNullOrWhiteSpace(loc.Name()))
                 {
-                    if (loc.Name == GoldMine && !gotFirstGold)
+                    if (loc.Name() == GoldMine && !gotFirstGold)
                     {
                         gotFirstGold = true;
                         context.MoveMouseAndClick(loc.point.x, loc.point.y);
                     }
-                    if (loc.Name == ElixirCollector && !gotFirstEli)
+                    if (loc.Name() == ElixirCollector && !gotFirstEli)
                     {
                         gotFirstEli = true;
                         context.MoveMouseAndClick(loc.point.x, loc.point.y);
                     }
-                    if (loc.Name != TownHall && loc.Name != Barracks) continue;
-                    if (loc.Name == Barracks && trained) continue;
+                    if (loc.Name() != TownHall && loc.Name() != Barracks) continue;
+                    if (loc.Name() == Barracks && trained) continue;
                 }
                 context.MoveMouseAndClick(loc.point.x, loc.point.y);
                 context.Sleep(1000);
                 Utils.doScreenShoot(tempImgName);
                 results = context.GetAppInfo();
-                if (string.IsNullOrWhiteSpace(loc.Name))
-                {
-                    loc.nameLevel = GetStructureName(loc, results);
-                    if (string.IsNullOrEmpty(loc.Name))
-                    {
-                        //try one more time
-                        context.DebugLog("Trying to get name one more time");
-                        Utils.doScreenShoot(tempImgName);
-                        results = context.GetAppInfo();
-                    }
-                    context.DebugLog($"     FOUND {loc.Name} level= {loc.Level}");
-                    if (string.IsNullOrWhiteSpace(loc.Name))
-                    {
-                        nameTry++;
-                        context.MoveMouseAndClick(loc.point.x, loc.point.y);
-                        context.Sleep(1000);
-                        results = context.GetAppInfo();
-                        loc.nameLevel = GetStructureName(loc, results);
-                        if (loc.nameLevel == null)
-                        {
-                            badLocs.Add(loc);
-                            context.DebugLog("     Removing bad loc");
-                        }
-                    }
-                }
                 //"RecoResult_INFO_Builders"
                 numBuilders = context.vdcontroller.doUpgrades? NumBuilders(results) : 0;
                 context.InfoLog($"Number of builders available {numBuilders}");
                 if (numBuilders == 0 || !context.vdcontroller.doUpgrades)
                 {
-                    if (loc.Name != TownHall && loc.Name != Barracks) continue;
-                    if (loc.Name == Barracks && trained) continue;
+                    if (loc.Name() != TownHall && loc.Name() != Barracks) continue;
+                    if (loc.Name() == Barracks && trained) continue;
                 }
                 var actionItems = canUpgrade(context, tempImgName, numBuilders);
                 if (numBuilders > 0 && context.vdcontroller.doUpgrades)
