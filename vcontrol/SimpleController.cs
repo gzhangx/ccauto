@@ -15,6 +15,7 @@ namespace ccVcontrol
         public bool switchAccountOnly { get; set; }
         public bool doUpgrades { get; set; }
         public bool doDonate { get; set; }
+        public bool redoStructureNames { get; set; }
         public bool dontSleepOrShutdown { get; set; }
         protected int[] accountStartCounts;
         protected ILog Logger;

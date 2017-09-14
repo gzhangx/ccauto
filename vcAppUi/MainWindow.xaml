@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:vcAppUi"
         xmlns:toolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" Closing="Window_Closing">
+        Title="MainWindow" Height="350" Width="688.788" Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -31,6 +31,7 @@
                 <CheckBox x:Name="chkUpgrade" Checked="CheckBoxUpgrade_Checked" Unchecked="CheckBoxUpgrade_Checked" IsChecked="False">Upgrade</CheckBox>
                 <CheckBox x:Name="chkDonate" Checked="CheckBoxDonate_Checked" Unchecked="CheckBoxDonate_Checked" IsChecked="True">Donate</CheckBox>
                 <CheckBox Checked="CheckBoxSwitchOnly_Checked" Unchecked="CheckBoxSwitchOnly_Checked" IsChecked="False">HumanMode</CheckBox>
+                <CheckBox Checked="CheckBoxRedoName_Checked" Unchecked="CheckBoxRedoName_Checked" IsChecked="False" Content="ReDoName"/>
                 <TextBlock x:Name="info" Width="300"></TextBlock>
             </StackPanel>
         </Grid>

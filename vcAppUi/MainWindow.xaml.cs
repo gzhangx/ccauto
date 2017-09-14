@@ -72,5 +72,10 @@ namespace vcAppUi
             ctrl.controller.dontSleepOrShutdown = ctrl.controller.switchAccountOnly;
             ctrl.controller.humanMode = ((CheckBox)sender).IsChecked.GetValueOrDefault();
         }
+
+        private void CheckBoxRedoName_Checked(object sender, RoutedEventArgs e)
+        {
+            ctrl.controller.redoStructureNames = ((CheckBox)sender).IsChecked.GetValueOrDefault();            
+        }
     }
 }

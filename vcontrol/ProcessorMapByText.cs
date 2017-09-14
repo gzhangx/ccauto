@@ -47,6 +47,7 @@ namespace ccVcontrol
             locations.ForEach(l =>
             {
                 Console.WriteLine("====>" + l.name + " " + l.point.x + "," + l.point.y);
+                if (context.vdcontroller.redoStructureNames) l.name = null;
             });
 
 
