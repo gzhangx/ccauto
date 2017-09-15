@@ -41,6 +41,7 @@ namespace ccVcontrol
             {
                 if (string.IsNullOrEmpty(l.Name())) continue;
                 if (processed.ContainsKey(l.Name())) continue;
+                processed.Add(l.Name(), true);
                 var allNames = locations.FindAll(me => me.Name() == l.Name()).OrderBy(me => me.Level()).ToList();
                 results.AddRange(allNames);
             }
