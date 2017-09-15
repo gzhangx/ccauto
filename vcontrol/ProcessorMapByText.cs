@@ -33,7 +33,7 @@ namespace ccVcontrol
         }
         List<PosInfo> locations = new List<PosInfo>();
 
-        protected static List<PosInfo> reorderLocation(List<PosInfo> locations)
+        protected static List<PosInfo> reorderLocation(List<PosInfo> locations, IVDController controller)
         {
             var results = new List<PosInfo>();
             var processed = new Dictionary<string, bool>();
@@ -43,7 +43,16 @@ namespace ccVcontrol
                 if (processed.ContainsKey(l.Name())) continue;
                 processed.Add(l.Name(), true);
                 var allNames = locations.FindAll(me => me.Name() == l.Name()).OrderBy(me => me.Level()).ToList();
-                results.AddRange(allNames);
+                controller.Log("debug", $"before dup {l.Name()} has {allNames.Count} items");
+                var allDist = new List<PosInfo>();
+                allNames.ForEach(me =>
+                {
+                    if (allDist.FirstOrDefault(x=>x.point.x  == me.point.x && x.point.y == me.point.y) == null)
+                    {
+                        allDist.Add(me);
+                    }
+                });
+                results.AddRange(allDist);
             }
             return results;
         }
@@ -73,7 +82,7 @@ namespace ccVcontrol
                         Utils.doScreenShoot(tempImgName);
                         var res = context.GetAppInfo();
                         loc.nameLevel = GetStructureName(loc, res);
-                        Console.WriteLine("====> After reco" + loc.Name() + " level=" + loc.Level());
+                        context.vdcontroller.Log("info","====> After reco" + loc.Name() + " level=" + loc.Level());
                     }
                     else break;
                 }
@@ -81,7 +90,7 @@ namespace ccVcontrol
 
 
 
-            locations = reorderLocation(locations);
+            locations = reorderLocation(locations, context.vdcontroller);
 
 
             var badLocs = new List<PosInfo>();

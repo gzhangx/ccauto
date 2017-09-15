@@ -12682,21 +12682,41 @@
   {
     "nameLevel": {
       "name": "ElixirStorage",
-      "level": " 10"
+      "level": " 9"
     },
     "point": {
-      "x": 581,
-      "y": 242
+      "x": 549,
+      "y": 201
     }
   },
   {
     "nameLevel": {
       "name": "ElixirStorage",
-      "level": " 10"
+      "level": " 9"
     },
     "point": {
-      "x": 581,
-      "y": 242
+      "x": 549,
+      "y": 201
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "ElixirStorage",
+      "level": " 9"
+    },
+    "point": {
+      "x": 549,
+      "y": 201
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "ElixirStorage",
+      "level": " 9"
+    },
+    "point": {
+      "x": 549,
+      "y": 201
     }
   },
   {
@@ -12742,26 +12762,6 @@
   {
     "nameLevel": {
       "name": "ElixirStorage",
-      "level": " 9"
-    },
-    "point": {
-      "x": 549,
-      "y": 201
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "ElixirStorage",
-      "level": " 9"
-    },
-    "point": {
-      "x": 549,
-      "y": 201
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "ElixirStorage",
       "level": " 10"
     },
     "point": {
@@ -12782,21 +12782,21 @@
   {
     "nameLevel": {
       "name": "ElixirStorage",
-      "level": " 9"
+      "level": " 10"
     },
     "point": {
-      "x": 549,
-      "y": 201
+      "x": 581,
+      "y": 242
     }
   },
   {
     "nameLevel": {
       "name": "ElixirStorage",
-      "level": " 9"
+      "level": " 10"
     },
     "point": {
-      "x": 549,
-      "y": 201
+      "x": 581,
+      "y": 242
     }
   },
   {
@@ -13702,31 +13702,421 @@
   {
     "nameLevel": {
       "name": "Barracks",
-      "level": " 8"
+      "level": " 7"
     },
     "point": {
-      "x": 353,
-      "y": 467
+      "x": 315,
+      "y": 442
     }
   },
   {
     "nameLevel": {
       "name": "Barracks",
-      "level": " 8"
+      "level": " 7"
     },
     "point": {
-      "x": 353,
-      "y": 467
+      "x": 272,
+      "y": 403
     }
   },
   {
     "nameLevel": {
       "name": "Barracks",
-      "level": " 8"
+      "level": " 7"
     },
     "point": {
-      "x": 353,
-      "y": 467
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 315,
+      "y": 442
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
+    "point": {
+      "x": 272,
+      "y": 403
     }
   },
   {
@@ -13822,61 +14212,31 @@
   {
     "nameLevel": {
       "name": "Barracks",
-      "level": " 7"
+      "level": " 8"
     },
     "point": {
-      "x": 315,
-      "y": 442
+      "x": 353,
+      "y": 467
     }
   },
   {
     "nameLevel": {
       "name": "Barracks",
-      "level": " 7"
+      "level": " 8"
     },
     "point": {
-      "x": 272,
-      "y": 403
+      "x": 353,
+      "y": 467
     }
   },
   {
     "nameLevel": {
       "name": "Barracks",
-      "level": " 7"
+      "level": " 8"
     },
     "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
+      "x": 353,
+      "y": 467
     }
   },
   {
@@ -13912,61 +14272,31 @@
   {
     "nameLevel": {
       "name": "Barracks",
-      "level": " 7"
+      "level": " 8"
     },
     "point": {
-      "x": 315,
-      "y": 442
+      "x": 353,
+      "y": 467
     }
   },
   {
     "nameLevel": {
       "name": "Barracks",
-      "level": " 7"
+      "level": " 8"
     },
     "point": {
-      "x": 272,
-      "y": 403
+      "x": 353,
+      "y": 467
     }
   },
   {
     "nameLevel": {
       "name": "Barracks",
-      "level": " 7"
+      "level": " 8"
     },
     "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
+      "x": 353,
+      "y": 467
     }
   },
   {
@@ -14002,61 +14332,31 @@
   {
     "nameLevel": {
       "name": "Barracks",
-      "level": " 7"
+      "level": " 8"
     },
     "point": {
-      "x": 315,
-      "y": 442
+      "x": 353,
+      "y": 467
     }
   },
   {
     "nameLevel": {
       "name": "Barracks",
-      "level": " 7"
+      "level": " 8"
     },
     "point": {
-      "x": 272,
-      "y": 403
+      "x": 353,
+      "y": 467
     }
   },
   {
     "nameLevel": {
       "name": "Barracks",
-      "level": " 7"
+      "level": " 8"
     },
     "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
+      "x": 353,
+      "y": 467
     }
   },
   {
@@ -14092,66 +14392,6 @@
   {
     "nameLevel": {
       "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
       "level": " 8"
     },
     "point": {
@@ -14177,246 +14417,6 @@
     "point": {
       "x": 353,
       "y": 467
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 8"
-    },
-    "point": {
-      "x": 353,
-      "y": 467
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 8"
-    },
-    "point": {
-      "x": 353,
-      "y": 467
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 8"
-    },
-    "point": {
-      "x": 353,
-      "y": 467
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 8"
-    },
-    "point": {
-      "x": 353,
-      "y": 467
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 8"
-    },
-    "point": {
-      "x": 353,
-      "y": 467
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 8"
-    },
-    "point": {
-      "x": 353,
-      "y": 467
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 315,
-      "y": 442
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 7"
-    },
-    "point": {
-      "x": 272,
-      "y": 403
     }
   },
   {
