@@ -1,104 +1,119 @@
 [
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "TownHall",
+      "level": " 7"
+    },
     "point": {
       "x": 491,
       "y": 316
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "GoldStorage",
+      "level": " 10"
+    },
     "point": {
       "x": 572,
       "y": 216
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
     "point": {
       "x": 743,
       "y": 244
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
     "point": {
       "x": 777,
       "y": 271
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "ElixirCollector",
+      "level": " 11"
+    },
     "point": {
       "x": 834,
       "y": 330
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "ElixirCollector",
+      "level": " 11"
+    },
     "point": {
       "x": 778,
       "y": 368
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "ArmyCamp",
+      "level": " l"
+    },
     "point": {
       "x": 412,
       "y": 549
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " l"
+    },
     "point": {
       "x": 376,
       "y": 196
     }
   },
   {
-    "nameLevel": null,
-    "point": {
-      "x": 406,
-      "y": 170
-    }
-  },
-  {
-    "nameLevel": null,
-    "point": {
-      "x": 452,
-      "y": 142
-    }
-  },
-  {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 7"
+    },
     "point": {
       "x": 491,
       "y": 113
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 8"
+    },
     "point": {
-      "x": 413,
-      "y": 270
+      "x": 406,
+      "y": 170
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 8"
+    },
     "point": {
-      "x": 552,
-      "y": 456
+      "x": 452,
+      "y": 142
     }
   },
   {
-    "nameLevel": null,
-    "point": {
-      "x": 568,
-      "y": 295
-    }
-  },
-  {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "ClanCastle",
+      "level": " l"
+    },
     "point": {
       "x": 555,
       "y": 376

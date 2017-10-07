@@ -1,125 +1,159 @@
 [
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "TownHall",
+      "level": ""
+    },
     "point": {
       "x": 606,
       "y": 262
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "ElixirCollector",
+      "level": " 10"
+    },
     "point": {
       "x": 562,
       "y": 302
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "ElixirCollector",
+      "level": " 10"
+    },
     "point": {
       "x": 597,
       "y": 328
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "ElixirStorage",
+      "level": " l0"
+    },
     "point": {
       "x": 523,
       "y": 324
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "ElixirStorage",
+      "level": " 11"
+    },
     "point": {
       "x": 558,
       "y": 348
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "GoldStorage",
+      "level": " 11"
+    },
     "point": {
       "x": 492,
       "y": 220
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "GoldStorage",
+      "level": " 11"
+    },
     "point": {
       "x": 513,
       "y": 192
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
     "point": {
       "x": 537,
       "y": 141
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
     "point": {
       "x": 574,
       "y": 169
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
     "point": {
       "x": 649,
       "y": 230
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
     "point": {
       "x": 688,
       "y": 259
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
     "point": {
       "x": 733,
       "y": 287
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "ArmyCamp",
+      "level": ""
+    },
     "point": {
       "x": 261,
       "y": 371
     }
   },
   {
-    "nameLevel": null,
-    "point": {
-      "x": 495,
-      "y": 508
-    }
-  },
-  {
-    "nameLevel": null,
-    "point": {
-      "x": 453,
-      "y": 475
-    }
-  },
-  {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 8"
+    },
     "point": {
       "x": 630,
       "y": 463
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 8"
+    },
     "point": {
       "x": 673,
       "y": 428
     }
   },
   {
-    "nameLevel": null,
+    "nameLevel": {
+      "name": "Barracks",
+      "level": " 8"
+    },
     "point": {
       "x": 704,
       "y": 401
