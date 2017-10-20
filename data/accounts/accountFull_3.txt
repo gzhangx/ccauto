@@ -1,102 +1,72 @@
 [
   {
     "nameLevel": {
+      "name": "ElixirCollector",
+      "level": " 11"
+    },
+    "point": {
+      "x": 467,
+      "y": 218
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "ElixirCollector",
+      "level": " 11"
+    },
+    "point": {
+      "x": 540,
+      "y": 216
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
+    "point": {
+      "x": 694,
+      "y": 505
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
+    "point": {
+      "x": 731,
+      "y": 473
+    }
+  },
+  {
+    "nameLevel": {
+      "name": "GoldMine",
+      "level": " 10"
+    },
+    "point": {
+      "x": 768,
+      "y": 443
+    }
+  },
+  {
+    "nameLevel": {
       "name": "TownHall",
       "level": " 7"
     },
     "point": {
       "x": 467,
-      "y": 318
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "ElixirStorage",
-      "level": " 11"
-    },
-    "point": {
-      "x": 557,
-      "y": 356
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "GoldStorage",
-      "level": " 10"
-    },
-    "point": {
-      "x": 572,
-      "y": 305
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "ElixirCollector",
-      "level": " 11"
-    },
-    "point": {
-      "x": 541,
-      "y": 214
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "ElixirCollector",
-      "level": " 11"
-    },
-    "point": {
-      "x": 580,
-      "y": 243
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "GoldMine",
-      "level": " 10"
-    },
-    "point": {
-      "x": 747,
-      "y": 480
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "GoldMine",
-      "level": " 10"
-    },
-    "point": {
-      "x": 699,
-      "y": 507
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "GoldMine",
-      "level": " 10"
-    },
-    "point": {
-      "x": 782,
-      "y": 449
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "ArmyCamp",
-      "level": " 1"
-    },
-    "point": {
-      "x": 420,
-      "y": 129
+      "y": 320
     }
   },
   {
     "nameLevel": {
       "name": "Barracks",
-      "level": " 4"
+      "level": " 6"
     },
     "point": {
-      "x": 738,
-      "y": 276
+      "x": 728,
+      "y": 287
     }
   },
   {
@@ -105,28 +75,18 @@
       "level": " 7"
     },
     "point": {
-      "x": 700,
-      "y": 251
+      "x": 689,
+      "y": 256
     }
   },
   {
     "nameLevel": {
-      "name": "Barracks",
-      "level": " 8"
+      "name": "ArmyCamp",
+      "level": " 4"
     },
     "point": {
-      "x": 661,
-      "y": 223
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 8"
-    },
-    "point": {
-      "x": 620,
-      "y": 193
+      "x": 430,
+      "y": 139
     }
   }
 ]

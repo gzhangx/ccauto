@@ -2,71 +2,31 @@
   {
     "nameLevel": {
       "name": "TownHall",
-      "level": ""
+      "level": " 7"
     },
     "point": {
-      "x": 606,
-      "y": 262
+      "x": 565,
+      "y": 379
     }
   },
   {
     "nameLevel": {
       "name": "ElixirCollector",
-      "level": " 10"
+      "level": " 11"
     },
     "point": {
-      "x": 562,
-      "y": 302
+      "x": 689,
+      "y": 386
     }
   },
   {
     "nameLevel": {
       "name": "ElixirCollector",
-      "level": " 10"
-    },
-    "point": {
-      "x": 597,
-      "y": 328
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "ElixirStorage",
-      "level": " l0"
-    },
-    "point": {
-      "x": 523,
-      "y": 324
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "ElixirStorage",
       "level": " 11"
     },
     "point": {
-      "x": 558,
-      "y": 348
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "GoldStorage",
-      "level": " 11"
-    },
-    "point": {
-      "x": 492,
-      "y": 220
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "GoldStorage",
-      "level": " 11"
-    },
-    "point": {
-      "x": 513,
-      "y": 192
+      "x": 735,
+      "y": 349
     }
   },
   {
@@ -75,8 +35,8 @@
       "level": " 10"
     },
     "point": {
-      "x": 537,
-      "y": 141
+      "x": 785,
+      "y": 307
     }
   },
   {
@@ -85,8 +45,8 @@
       "level": " 10"
     },
     "point": {
-      "x": 574,
-      "y": 169
+      "x": 751,
+      "y": 277
     }
   },
   {
@@ -95,38 +55,18 @@
       "level": " 10"
     },
     "point": {
-      "x": 649,
-      "y": 230
+      "x": 595,
+      "y": 167
     }
   },
   {
     "nameLevel": {
-      "name": "GoldMine",
-      "level": " 10"
+      "name": "Barracks",
+      "level": " 1"
     },
     "point": {
-      "x": 688,
-      "y": 259
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "GoldMine",
-      "level": " 10"
-    },
-    "point": {
-      "x": 733,
-      "y": 287
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "ArmyCamp",
-      "level": ""
-    },
-    "point": {
-      "x": 261,
-      "y": 371
+      "x": 334,
+      "y": 438
     }
   },
   {
@@ -135,8 +75,8 @@
       "level": " 8"
     },
     "point": {
-      "x": 630,
-      "y": 463
+      "x": 446,
+      "y": 523
     }
   },
   {
@@ -145,18 +85,8 @@
       "level": " 8"
     },
     "point": {
-      "x": 673,
-      "y": 428
-    }
-  },
-  {
-    "nameLevel": {
-      "name": "Barracks",
-      "level": " 8"
-    },
-    "point": {
-      "x": 704,
-      "y": 401
+      "x": 409,
+      "y": 499
     }
   }
 ]
