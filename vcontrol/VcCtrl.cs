@@ -26,7 +26,7 @@ namespace ccVcontrol
                 bool vmKilled = false;
                 try
                 {
-                    controller.RefreshNetwork();
+                    //controller.RefreshNetwork();
                     ccVcontrol.Program.Start(controller);
                     KillVm();
                     vmKilled = true;
