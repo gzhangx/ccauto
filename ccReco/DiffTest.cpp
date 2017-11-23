@@ -233,10 +233,14 @@ public:
 
 vector<ImageDiffVal> GetTopXGoodones(Mat result, int max) {
 	vector<ImageDiffVal> vals;
+	double curmax = 9999999.0f;
 	for (int y = 0; y < result.rows; y++) {
 		float* current = result.ptr<float>(y);
 		for (int x = 0; x < result.cols; x++) {
 			float pt = current[x];			
+			if (vals.size() > max) {
+				if (pt >= curmax) continue;
+			}
 			auto elem = ImageDiffVal(x, y, pt);
 			vals.push_back(elem);
 			auto pos = upper_bound(vals.begin(), vals.end() - 1, elem);
@@ -244,6 +248,7 @@ vector<ImageDiffVal> GetTopXGoodones(Mat result, int max) {
 			*pos = elem;
 			//sort(vals.begin(), vals.end());
 			if (vals.size() > max) {
+				curmax = (vals.end()-1)->val;
 				vals.pop_back();
 			}
 		}
