@@ -21,6 +21,7 @@
                 <toolkit:AutoCompleteBox x:Name="txtName" Width="200" ></toolkit:AutoCompleteBox>
                 <Button Click="Button_Click">Open</Button>
                 <Button Click="ButtonSave_Click">Save</Button>
+                <Button Click="ButtonTest_Click">Test</Button>
                 <TextBlock x:Name="info" Width="300"></TextBlock>
             </StackPanel>
         </Grid>

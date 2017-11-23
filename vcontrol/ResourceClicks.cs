@@ -11,29 +11,33 @@ namespace ccVcontrol
 {
     public class ResourceClicks
     {
-        ProcessingContext context;
+        IHaveLog context;
         public static string tempImgName = StandardClicks.tempImgName;
-        public const string dataDir = "data\\check\\action\\res";
-        static ResourceClicks()
+        public const string dataDir = "data\\check\\action\\res\\";
+        static void tResourceClicks()
         {
-            var files = Directory.GetFiles(dataDir);
-            foreach (var f in files)
+            if (clicks.Count == 0)
             {
-                if (f.EndsWith(".png"))
+                var files = Directory.GetFiles(dataDir);
+                foreach (var f in files)
                 {
-                    clicks.Add(new ImgChecksAndTags(f));
+                    if (f.EndsWith(".png"))
+                    {
+                        clicks.Add(new ImgChecksAndTags(f));
+                    }
                 }
             }
         }
-        public ResourceClicks(ProcessingContext ctx)
+        public ResourceClicks(IHaveLog ctx)
         {
+            tResourceClicks();
             context = ctx;
         }
         public List<CommandInfo> Processing()
         {
             Utils.doScreenShoot(tempImgName);
             var sb = new StringBuilder();
-            sb.Append($"-input {tempImgName} -top 10 ");
+            sb.Append($"-input {tempImgName} -top 100 ");
             foreach(var clk in clicks)
             {
                 sb.Append($"-name {clk.ImageName} -match {clk.ImageName} {clk.Threadshold} ");
@@ -48,7 +52,7 @@ namespace ccVcontrol
             public decimal Threadshold;
             public ImgChecksAndTags(string imgName,  decimal threadshold = 200000)
             {
-                ImageName = "data\\check\\"+imgName;
+                ImageName = imgName;
                 Threadshold = threadshold;                
                 {
                     var img = new Bitmap(ImageName);

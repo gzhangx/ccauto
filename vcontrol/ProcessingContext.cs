@@ -48,7 +48,13 @@ namespace ccVcontrol
         int CurAccount { get; set; }
         //void SwitchAccount(int act);
     }
-    public class ProcessingContext
+
+    public interface IHaveLog
+    {
+        void DebugLog(string str);
+        void InfoLog(string str);
+    }
+    public class ProcessingContext: IHaveLog
     {
         public IMouse mouse;
         public IKeyboard keyboard;

@@ -183,7 +183,7 @@ namespace ccVcontrol
             }
         }
 
-        public static List<CommandInfo> GetAppInfo(string arguments, ProcessingContext context)
+        public static List<CommandInfo> GetAppInfo(string arguments, IHaveLog context)
         {
             var res = new List<CommandInfo>();
             foreach (var cmd in Utils.runApp(arguments).Split(new char[]{ '\r','\n'}))

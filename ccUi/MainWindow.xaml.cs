@@ -1,4 +1,5 @@
 ﻿using ccInfo;
+using ccVcontrol;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -112,6 +113,20 @@ namespace ccUi
         {
             var fname = curFileName.Replace(".png", ".txt");
             File.WriteAllText(fname, JsonConvert.SerializeObject(points, Formatting.Indented));
+        }
+
+        private void ButtonTest_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ResourceClicks.tempImgName = curFileName;
+                var clk = new ccVcontrol.ResourceClicks(new ccVcontrol.ProcessingContext(null, null, new SimpleController()));
+                var res = clk.Processing();
+                Console.WriteLine(res);
+            } catch (Exception exc)
+            {
+                Console.WriteLine(exc);
+            }
         }
     }
 }

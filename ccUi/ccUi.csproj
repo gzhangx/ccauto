@@ -117,6 +117,21 @@
       <Project>{d7acbd0c-3db3-48af-891e-f2a74895ed3a}</Project>
       <Name>ccInfo</Name>
     </ProjectReference>
+    <ProjectReference Include="..\vcontrol\vcontrol.csproj">
+      <Project>{564e0bde-c0e9-4eef-afdd-3b95740fd1fb}</Project>
+      <Name>vcontrol</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="VirtualBox">
+      <Guid>{D7569351-1750-46F0-936E-BD127D5BC264}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
