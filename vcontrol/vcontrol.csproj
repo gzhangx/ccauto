@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoResourceLoader.cs" />
     <Compile Include="BaseProcessor.cs" />
     <Compile Include="CommandInfo.cs" />
     <Compile Include="lcs.cs" />

@@ -119,9 +119,10 @@ namespace ccUi
         {
             try
             {
-                ResourceClicks.tempImgName = curFileName;
-                var clk = new ccVcontrol.ResourceClicks(new ccVcontrol.ProcessingContext(null, null, new SimpleController()));
-                var res = clk.Processing();
+                var ldr = new AutoResourceLoader(new ccVcontrol.ProcessingContext(null, null, new SimpleController()), 
+                    "tstimgs\\full.png", @"data\check\marks");
+                                
+                var res = ldr.Processing();
                 Console.WriteLine(res);
             } catch (Exception exc)
             {
