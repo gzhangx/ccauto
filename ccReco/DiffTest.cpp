@@ -234,12 +234,23 @@ public:
 vector<ImageDiffVal> GetTopXGoodones(Mat result, int max) {
 	vector<ImageDiffVal> vals;
 	double curmax = 9999999.0f;
+	double mmx = 0;
+	int skipcount = 0;
+	int total = 0;
+	int popped = 0;
 	for (int y = 0; y < result.rows; y++) {
 		float* current = result.ptr<float>(y);
 		for (int x = 0; x < result.cols; x++) {
-			float pt = current[x];			
-			if (vals.size() > max) {
-				if (pt >= curmax) continue;
+			float pt = current[x];		
+			if (pt > mmx) {
+				mmx = pt;				
+			}
+			total++;
+			if (vals.size() >= max) {
+				if (pt >= curmax) {
+					skipcount++;
+					continue;
+				}
 			}
 			auto elem = ImageDiffVal(x, y, pt);
 			vals.push_back(elem);
@@ -248,7 +259,11 @@ vector<ImageDiffVal> GetTopXGoodones(Mat result, int max) {
 			*pos = elem;
 			//sort(vals.begin(), vals.end());
 			if (vals.size() > max) {
-				curmax = (vals.end()-1)->val;
+				popped++;
+				auto memax = (vals.end()-1)->val;
+				if (memax < curmax) {
+					curmax = memax;
+				}
 				vals.pop_back();
 			}
 		}
@@ -358,6 +373,7 @@ vector<ImageRecoRes> DoReco(RecoList list, MatAndPos matAndPos, int blkNumber) {
 			sprintf_s(buf, "tstimgs\\blk%i.png", blkNumber);
 			imwrite(buf, img);
 		}
+		//printf("get good");
 		vector<ImageDiffVal> topvals = GetTopXGoodones(result, 5);
 
 		for (int y = 0; y < topvals.size(); y++) {
@@ -469,7 +485,7 @@ vector<ImageDiffVal> CheckImageMatch(Mat img, const char * fileName, double thre
 	}
 
 	
-
+	//printf("done match, get good\n");
 	if (topX <= 1) {
 		vector<ImageDiffVal> res;
 		double minVal; double maxVal; Point minLoc; Point maxLoc;
