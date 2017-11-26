@@ -186,7 +186,10 @@ namespace ccVcontrol
         public static List<CommandInfo> GetAppInfo(string arguments, IHaveLog context)
         {
             var res = new List<CommandInfo>();
-            foreach (var cmd in Utils.runApp(arguments).Split(new char[]{ '\r','\n'}))
+            context.DebugLog($"GetAppInfo.Running command {arguments}");
+            var unparsedArg = Utils.runApp(arguments);
+            context.DebugLog($"GetAppInfo: Above command got {unparsedArg}");
+            foreach (var cmd in unparsedArg.Split(new char[]{ '\r','\n'}))
             {
                 if (cmd.Length < 2) continue;
                 if (cmd.StartsWith("ERR:"))
