@@ -25,6 +25,10 @@ namespace ccVcontrol
             {
                 var yoff = 0;
                 if (clk.extraInfo.IndexOf("_drop") > 0) yoff = 10;
+                if (clk.x < 134 && clk.y < 633)
+                {
+                    context.InfoLog($"Bad click for {clk.extraInfo} {clk.x}/{clk.y}");
+                }
                 context.MoveMouseAndClick(clk.x, clk.y + yoff);
             }
             return res;
