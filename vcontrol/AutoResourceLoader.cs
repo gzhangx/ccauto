@@ -30,23 +30,9 @@ namespace ccVcontrol
             }
         }
 
-        public class ImgChecksAndTags
-        {
-            public string ImageName { get; private set; }
-            public ccPoint point;
-            public decimal Threadshold;
-            public ImgChecksAndTags(string imgName, decimal threadshold = 200000)
-            {
-                ImageName = imgName;
-                Threadshold = threadshold;
-                {
-                    var img = new Bitmap(ImageName);
-                    point = new ccPoint(img.Width / 2, img.Height / 2);
-                }
-            }
-        }
+        
 
-        public List<CommandInfo> Processing()
+        public List<CommandInfo> Processing(bool doCenter = true)
         {
             Utils.doScreenShoot(_imgName);
             var sb = new StringBuilder();
@@ -56,8 +42,17 @@ namespace ccVcontrol
                 sb.Append($"-name {clk.ImageName} -match {clk.ImageName} {clk.Threadshold} ");
             }
             var results = Utils.GetAppInfo(sb.ToString(), context);
+            results.ForEach(r =>
+            {
+                r.imgInfo = clicks.FirstOrDefault(c => c.ImageName == r.extraInfo);
+                if (r.imgInfo != null && doCenter)
+                {
+                    r.x = r.x + (r.imgInfo.center.x);
+                    r.y = r.y + (r.imgInfo.center.y);
+                }
+            });
             return results;
         }
-        private List<ImgChecksAndTags> clicks = new List<ImgChecksAndTags>();
+        public List<ImgChecksAndTags> clicks = new List<ImgChecksAndTags>();
     }
 }

@@ -42,6 +42,11 @@ namespace ccVcontrol
         private static void DoProcess(ProcessingContext context)
         {
             var controller = context.vdcontroller;
+
+            context.DebugLog("TODOREMOVETEMP");
+            new ResourceClicks(context).Processing();
+            context.DebugLog("ENDTODOREMOVETEMP");
+
             //while(controller.humanMode && controller.CurState != ProcessState.SwitchAccount)
             //{
             //    controller.Sleep(100);

@@ -195,7 +195,7 @@ namespace ccVcontrol
                     proc.Kill();
                 } catch (Exception exc)
                 {
-                    Log("important", "Killing vbox failed " + proc.ProcessName);
+                    Log("important", "Killing vbox failed " + proc.ProcessName+ " " + exc.Message);
                 }
             }
         }

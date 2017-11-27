@@ -11,16 +11,23 @@ namespace ccVcontrol
 {
     public class ResourceClicks
     {
-        IHaveLog context;
+        ProcessingContext context;
         AutoResourceLoader ldr;
-        public ResourceClicks(IHaveLog ctx)
+        public ResourceClicks(ProcessingContext ctx)
         {
-            ldr = new ccVcontrol.AutoResourceLoader(ctx, StandardClicks.tempImgName, "data\\check\\action\\res\\");            
+            ldr = new ccVcontrol.AutoResourceLoader(ctx, StandardClicks.tempImgName, "data\\check\\action\\res\\", 2);            
             context = ctx;
         }
         public List<CommandInfo> Processing()
         {
-            return ldr.Processing();
+            var res = ldr.Processing();
+            foreach (var clk in res)
+            {
+                var yoff = 0;
+                if (clk.extraInfo.IndexOf("_drop") > 0) yoff = 10;
+                context.MoveMouseAndClick(clk.x, clk.y + yoff);
+            }
+            return res;
         }
         
     }
