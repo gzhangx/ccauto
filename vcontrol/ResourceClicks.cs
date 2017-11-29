@@ -51,7 +51,15 @@ namespace ccVcontrol
             {
                 var yoff = 0;
                 if (clk.extraInfo.IndexOf("_drop") > 0) yoff = 10;
-                if (clk.x < 150 && clk.y < 650)
+                if (clk.extraInfo.Contains("primary_grave.png"))
+                {
+                    if (clk.x < 220 || clk.y > 650)
+                    {
+                        context.InfoLog($"Bad click for gravy {clk.extraInfo} {clk.x}/{clk.y}");
+                        continue;
+                    }
+                }
+                if (clk.x < 220)
                 {
                     context.InfoLog($"Bad click for {clk.extraInfo} {clk.x}/{clk.y}");
                     continue;
@@ -65,7 +73,7 @@ namespace ccVcontrol
         {
             for (int retry = 0; retry < 3; retry++)
             {
-                var baseInfo = baseMark.Processing();
+                var baseInfo = baseMark.Processing(img=>img.ImageName.Contains("base"));
                 if (baseInfo.Count == 0)
                 {
                     context.InfoLog($"Can't find primary nor secondary retry {retry}, sleep 5s");
@@ -99,7 +107,7 @@ namespace ccVcontrol
             context.Sleep(2000);            
             for (int retry = 0; retry < 3; retry++)
             {
-                var marks = baseMark.Processing();
+                var marks = baseMark.Processing(img => img.ImageName.Contains("boat"));
                 if (marks.Count == 0)
                 {
                     context.InfoLog($"Can't find primary nor secondary retry {retry}, sleep 5s");
@@ -131,7 +139,7 @@ namespace ccVcontrol
             context.Sleep(2000);
             for (int retry = 0; retry < 3; retry++)
             {
-                var marks = baseMark.Processing();
+                var marks = baseMark.Processing(img => img.ImageName.Contains("boat"));
                 if (marks.Count == 0)
                 {
                     context.InfoLog($"Can't find primary nor secondary retry {retry}, sleep 5s");
