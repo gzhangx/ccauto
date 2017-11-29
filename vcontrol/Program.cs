@@ -48,6 +48,7 @@ namespace ccVcontrol
             var baseType = resourceClick.PrimaryOrSecondary();
             bool skipProcessing = TryForceMoveToPrimary(resourceClick, context);
             resourceClick.Processing(baseType);
+            skipProcessing = TryForceMoveToPrimary(resourceClick, context);
             context.DebugLog("ENDTODOREMOVETEMP");
 
             //while(controller.humanMode && controller.CurState != ProcessState.SwitchAccount)
