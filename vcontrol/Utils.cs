@@ -61,6 +61,33 @@ namespace ccVcontrol
             context.Sleep(100);
         }
 
+        public static void MouseDrageTo(IMouse mouse, int x, int y, int tx, int ty, ProcessingContext context)
+        {
+            MouseMouseTo(mouse, x, y, context);
+            context.Sleep(100);
+            mouse.PutMouseEvent(0, 0, 0, 0, 1);
+            context.Sleep(100);            
+            const int MAX = 20;
+            int dx = tx - x;
+            int dy = ty - y;
+            int signX = dx > 0 ? 1 : -1;
+            int signY = dy > 0 ? 1 : -1;
+            dx = Math.Abs(dx);
+            dy = Math.Abs(dy);
+            while (dx > MAX || dy > MAX)
+            {
+                int mx = dx > MAX ? MAX : dx;
+                dx -= mx;
+                int my = dy > MAX ? MAX : dy;
+                dy -= my;
+                mouse.PutMouseEvent(mx*signX, my*signY, 0, 0, 1);
+                context.Sleep(100);
+            }
+            context.Sleep(800);
+            mouse.PutMouseEvent(dx, dy, 0, 0, 0);            
+            context.Sleep(100);
+        }
+
         public static void MoveMouseAndClick(IMouse mouse, int x, int y, ProcessingContext context)
         {
             MouseMouseTo(mouse, x, y, context);

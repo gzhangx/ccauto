@@ -119,6 +119,10 @@ namespace ccVcontrol
             Utils.MouseClick(mouse, this);
         }
 
+        public void MouseDragTo(int fromx, int fromy, int tox, int toy)
+        {
+            Utils.MouseDrageTo(mouse,fromx, fromy, tox, toy, this);
+        }
         public virtual void MoveMouseAndClick(int x, int y)
         {
             Utils.MoveMouseAndClick(mouse, x, y, this);

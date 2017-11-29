@@ -44,7 +44,10 @@ namespace ccVcontrol
             var controller = context.vdcontroller;
 
             context.DebugLog("TODOREMOVETEMP");
-            new ResourceClicks(context).Processing();
+            var resourceClick = new ResourceClicks(context);
+            var baseType = resourceClick.PrimaryOrSecondary();
+            bool skipProcessing = TryForceMoveToPrimary(resourceClick, context);
+            resourceClick.Processing(baseType);
             context.DebugLog("ENDTODOREMOVETEMP");
 
             //while(controller.humanMode && controller.CurState != ProcessState.SwitchAccount)
@@ -53,7 +56,8 @@ namespace ccVcontrol
             //}
             var switchAccount = new SwitchAccount(context);
             context.GetToEntrance();
-            context.Sleep(2000);
+            context.DebugLog("In Entrance, sleep 100");
+            context.Sleep(1000);
             int acct = switchAccount.CheckAccount();
             if (acct <= 0)
             {
@@ -65,19 +69,25 @@ namespace ccVcontrol
             switchAccount.CurAccount = acct;
             GenerateAccountPics(context, switchAccount.CurAccount);            
             context.InfoLog($"===>Step Using account {switchAccount.CurAccount}");
-            context.vdcontroller.NotifyStartingAccount(switchAccount);            
-            if (controller.DoDonate() && controller.doDonate)
+            context.vdcontroller.NotifyStartingAccount(switchAccount);
+            if (!skipProcessing)
             {
-                context.InfoLog("===>Step Donate");
-                //cmds = Utils.GetAppInfo();                
-                ProcessDonate(context, context.GetToEntrance());
-                context.GetToEntrance();
+                if (controller.DoDonate() && controller.doDonate)
+                {
+                    context.InfoLog("===>Step Donate");
+                    //cmds = Utils.GetAppInfo();                
+                    ProcessDonate(context, context.GetToEntrance());
+                    context.GetToEntrance();
+                }
+                if (controller.DoBuilds() && !controller.switchAccountOnly)
+                {
+                    context.InfoLog("===>Step textmap");
+                    new ProcessorMapByText(context).ProcessCommand(acct);
+                }
             }
-            if (controller.DoBuilds() && !controller.switchAccountOnly)
-            {
-                context.InfoLog("===>Step textmap");
-                new ProcessorMapByText(context).ProcessCommand(acct);
-            }
+
+            DoProcessSecondary(resourceClick, context);
+
             switchAccount.CurAccount = controller.CheckSetCurAccount(acct);
             context.InfoLog("===>Step SwitchAccount");
             switchAccount.Process();
@@ -87,6 +97,34 @@ namespace ccVcontrol
             controller.DoneCurProcessing();
         }
 
+        private static void DoProcessSecondary(ResourceClicks resourceClick, ProcessingContext context)
+        {
+            var baseType = resourceClick.PrimaryOrSecondary();            
+            if (baseType == ResourceClicks.CurBaseType.PrimaryBase)
+            {
+                resourceClick.MoveToSecondary();
+                context.MouseMouseTo(0, 0);
+                context.InfoLog("Skip processing since we are in secondary");
+            }
+            context.InfoLog("sleeping 2s for things to settle down");
+            Thread.Sleep(2000);
+            resourceClick.Processing(ResourceClicks.CurBaseType.SecondaryBase);
+            TryForceMoveToPrimary(resourceClick, context);
+        }
+
+        private static bool TryForceMoveToPrimary(ResourceClicks resourceClick, ProcessingContext context)
+        {
+            var baseType = resourceClick.PrimaryOrSecondary();
+            bool skipProcessing = false;
+            if (baseType == ResourceClicks.CurBaseType.SecondaryBase)
+            {
+                resourceClick.MoveToPrimary();
+                context.MouseMouseTo(0, 0);
+                context.InfoLog("Skip processing since we are in secondary");
+                skipProcessing = true;
+            }
+            return skipProcessing;
+        }
         private static void GenerateAccountPics(ProcessingContext context, int who)
         {
             context.DebugLog("------------------Generate account pics");

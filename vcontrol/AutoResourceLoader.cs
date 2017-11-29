@@ -32,13 +32,15 @@ namespace ccVcontrol
 
         
 
-        public List<CommandInfo> Processing(bool doCenter = true)
+        public List<CommandInfo> Processing(Func<ImgChecksAndTags,bool> tagCheck = null,bool doCenter = true)
         {
             Utils.doScreenShoot(_imgName);
             var sb = new StringBuilder();
             sb.Append($"-input {_imgName} -top {topX} ");
             foreach (var clk in clicks)
             {
+                if (tagCheck != null)
+                    if (!tagCheck(clk)) continue;
                 sb.Append($"-name {clk.ImageName} -match {clk.ImageName} {clk.Threadshold} ");
             }
             var results = Utils.GetAppInfo(sb.ToString(), context);
@@ -51,7 +53,7 @@ namespace ccVcontrol
                     r.y = r.y + (r.imgInfo.center.y);
                 }
             });
-            return results;
+            return results.OrderBy(x => x.cmpRes).ToList();            
         }
         public List<ImgChecksAndTags> clicks = new List<ImgChecksAndTags>();
     }
