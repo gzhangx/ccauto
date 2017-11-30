@@ -146,6 +146,7 @@ namespace ccVcontrol
                             if (!trained && context.vdcontroller.doDonate)
                             {
                                 RetryAction(otherAct, () => CheckMatchAndAct("buildwizardbutton.png 120 ", 54, 46, 10));
+                                RetryAction(otherAct, () => CheckMatchAndAct("buildArchierButton.png 120 ", 54, 46, 2));
                                 trained = true;
                             }
                             break;

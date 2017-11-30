@@ -15,6 +15,18 @@ namespace ccVcontrol
         {
             context = ctx;
         }
+
+        protected void DonateArchier()
+        {
+            Utils.doScreenShoot(ProcessorMapByText.tempImgName);
+            var dw = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name dw  -match data\\check\\donate_archer.png 300", context);
+            var dwbtn = dw.FirstOrDefault(dwf => dwf.decision == "true");
+            if (dwbtn != null)
+            {
+                context.MoveMouseAndClick(50 + dwbtn.x, 50 + dwbtn.y);
+                for (int cli = 0; cli < 5; cli++) context.MouseClick();
+            }
+        }
         public void ProcessDonate( CommandInfo cmd)
         {
             if (cmd.cmpRes > 2)
@@ -65,6 +77,7 @@ namespace ccVcontrol
                                 break;
                             }
                         }
+                        DonateArchier();
                         context.DoStdClicks();
                     }
                 }
