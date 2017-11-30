@@ -6,6 +6,7 @@ namespace ccInfo
     {
         public int x;
         public int y;
+        public ccPoint() { }
         public ccPoint(int xx, int yy)
         {
             x = xx;

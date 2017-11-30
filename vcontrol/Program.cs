@@ -51,6 +51,7 @@ namespace ccVcontrol
             skipProcessing = TryForceMoveToPrimary(resourceClick, context);
             context.DebugLog("ENDTODOREMOVETEMP");
 
+
             //while(controller.humanMode && controller.CurState != ProcessState.SwitchAccount)
             //{
             //    controller.Sleep(100);
@@ -73,6 +74,13 @@ namespace ccVcontrol
             context.vdcontroller.NotifyStartingAccount(switchAccount);
             if (!skipProcessing)
             {
+
+                if (controller.DoDonate())
+                {
+                    var train = new ActionTrainUnits(context);
+                    train.ProcessCommand(context);
+                }
+
                 if (controller.DoDonate() && controller.doDonate)
                 {
                     context.InfoLog("===>Step Donate");

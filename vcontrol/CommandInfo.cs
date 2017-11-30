@@ -4,11 +4,9 @@ using System.Drawing;
 
 namespace ccVcontrol
 {
-    public class CommandInfo
+    public class CommandInfo : ccPoint
     {
-        public string command;
-        public int x;
-        public int y;
+        public string command;        
         public decimal cmpRes;
         public string Text;
         public string decision;

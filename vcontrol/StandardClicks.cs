@@ -11,6 +11,11 @@ namespace ccVcontrol
     public class StandardClicks
     {
         ProcessingContext context;
+        public static string GetTempDirFile(string fname)
+        {
+            return $"tstimgs\\{fname}";
+        }
+
         public const string tempImgName = "tstimgs\\tempFullScreenAct.png";
         public StandardClicks(ProcessingContext ctx)
         {

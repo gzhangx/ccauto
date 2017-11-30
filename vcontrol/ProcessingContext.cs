@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ccInfo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -126,6 +127,10 @@ namespace ccVcontrol
         public virtual void MoveMouseAndClick(int x, int y)
         {
             Utils.MoveMouseAndClick(mouse, x, y, this);
+        }
+        public void MoveMouseAndClick(ccPoint pt)
+        {
+            MoveMouseAndClick(pt.x, pt.y);
         }
 
         public void DoShift()

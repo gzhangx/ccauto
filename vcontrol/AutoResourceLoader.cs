@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ccVcontrol
@@ -14,13 +15,19 @@ namespace ccVcontrol
         protected string _imgName;
         protected IHaveLog context;
         protected int topX;
-        public AutoResourceLoader(IHaveLog ctx, string imgName, string dataDir, int top = 1) {
+        public AutoResourceLoader(IHaveLog ctx, string imgName, string dataDir, int top = 1) {            
+            var files = Directory.GetFiles(dataDir);
+            Init(ctx, imgName, files, top);
+        }
+        public AutoResourceLoader(IHaveLog ctx, string imgName, string[] files, int top = 1)
+        {
+            Init(ctx, imgName, files, top);
+        }
+        public void Init(IHaveLog ctx, string imgName, string[] files, int top = 1)
+        {
             _imgName = imgName;
             context = ctx;
-            topX = top;
-            //var tempImgName = StandardClicks.tempImgName;
-            //var dataDir = "data\\check\\action\\res\\";
-            var files = Directory.GetFiles(dataDir);
+            topX = top;            
             foreach (var f in files)
             {
                 if (f.EndsWith(".png"))
@@ -30,8 +37,32 @@ namespace ccVcontrol
             }
         }
 
-        
+        static List<CommandInfo> empty = new List<CommandInfo>();
+        public List<CommandInfo> ProcessingWithRetry(Func<List<CommandInfo>,bool> okfunc = null, int retryCount = 3,
+            Func<ImgChecksAndTags, bool> tagCheck = null, bool doCenter = true)
+        {
+            if (okfunc == null) okfunc = res => res.Count > 0 && res.Any(r=>r.decision == "true");
+            for (int i = 0; i < retryCount; i++)
+            {
+                var cmds = Processing(tagCheck, doCenter);
+                if (!cmds.Any() || !okfunc(cmds))
+                {
+                    Thread.Sleep(1000);
+                    continue;
+                }
+                return cmds;
+            }
+            empty.Clear();
+            return empty;
+        }
 
+        public CommandInfo ProcessingWithRetryTop1(Func<List<CommandInfo>, bool> okfunc = null, int retryCount = 3,
+            Func<ImgChecksAndTags, bool> tagCheck = null, bool doCenter = true)
+        {
+
+            var cmds = ProcessingWithRetry(okfunc, retryCount, tagCheck, doCenter);
+            return cmds.FirstOrDefault();
+        }
         public List<CommandInfo> Processing(Func<ImgChecksAndTags,bool> tagCheck = null,bool doCenter = true)
         {
             Utils.doScreenShoot(_imgName);
