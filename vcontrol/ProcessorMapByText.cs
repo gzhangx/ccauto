@@ -58,6 +58,7 @@ namespace ccVcontrol
         }
         public void ProcessCommand(int act)
         {
+            return;
             //Test();
             if (act <= 0)
             {

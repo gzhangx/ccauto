@@ -51,7 +51,7 @@ namespace ccVcontrol
             skipProcessing = TryForceMoveToPrimary(resourceClick, context);
             context.DebugLog("ENDTODOREMOVETEMP");
 
-
+            resourceClick.RearmAll();
             //while(controller.humanMode && controller.CurState != ProcessState.SwitchAccount)
             //{
             //    controller.Sleep(100);
