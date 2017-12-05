@@ -52,6 +52,8 @@ namespace ccVcontrol
             context.DebugLog("ENDTODOREMOVETEMP");
 
             resourceClick.RearmAll();
+
+            //new ActionUpgrade(context).Process();
             //while(controller.humanMode && controller.CurState != ProcessState.SwitchAccount)
             //{
             //    controller.Sleep(100);

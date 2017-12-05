@@ -55,7 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionStructureNameReco.cs" />
     <Compile Include="ActionTrainUnits.cs" />
+    <Compile Include="ActionUpgrade.cs" />
     <Compile Include="AutoResourceLoader.cs" />
     <Compile Include="BaseProcessor.cs" />
     <Compile Include="CommandInfo.cs" />
