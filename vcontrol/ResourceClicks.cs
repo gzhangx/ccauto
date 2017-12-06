@@ -50,8 +50,9 @@ namespace ccVcontrol
             context.MoveMouseAndClick(cmd);
 
             var cmds = ldr.ProcessingWithRetry();
-            cmd = cmds.FirstOrDefault(c => c.extraInfo.Contains("rearmall") && c.cmpRes < 30000);
-            if (cmd == null)
+            cmd = cmds.Where(c=>c.cmpRes < 30000).OrderBy(c => c.cmpRes).FirstOrDefault();
+            //cmd = cmds.FirstOrDefault(c => c.extraInfo.Contains("rearmall") && c.cmpRes < 30000);
+            if (cmd == null || !cmd.extraInfo.Contains("rearmall"))
             {
                 context.InfoLog("Warning, didn't find rearm all");
                 return;

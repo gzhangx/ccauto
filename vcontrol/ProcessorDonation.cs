@@ -48,7 +48,7 @@ namespace ccVcontrol
                 //-matchRect 227,102,140,600_200
                 const int donateRectx = 227;
                 const int donateRecty = 102;
-                var results = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name donate -matchRect {donateRectx},{donateRecty},140,600_200 -top 5  -match data\\check\\donatebutton.png 900", context);
+                var results = Utils.GetAppInfo($"-input {ProcessorMapByText.tempImgName} -name donate -matchRect {donateRectx},{donateRecty},140,600_200 -top 5  -match data\\check\\donatebutton.png 1900", context);
                 foreach (var donate in results)
                 {
                     //if (context.vdcontroller.humanMode) break;
