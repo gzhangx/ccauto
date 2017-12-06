@@ -26,9 +26,24 @@ namespace ccVcontrol
             {
                 if (itm.x > 200)
                 {
+                    if (itm.x < 210 && itm.y > 600)
+                    {
+                        context.InfoLog($"found too far skipp {itm.extraInfo} {itm.x}/{itm.y}");
+                        continue;
+                    }
                     context.InfoLog($"found {itm.extraInfo} {itm.x}/{itm.y}");
                     var cmdres = ActionStructureNameReco.GetNameAtPoint(context, itm);
                     var nameLevel = ActionStructureNameReco.GetStructureName(itm, cmdres, context);
+                    if (nameLevel == null)
+                    {
+                        cmdres = ActionStructureNameReco.GetNameAtPoint(context, itm);
+                        nameLevel = ActionStructureNameReco.GetStructureName(itm, cmdres, context);
+                        if (nameLevel == null)
+                        {
+                            context.InfoLog($"failed reco namelevel {itm.extraInfo} {itm.x}/{itm.y}");
+                            continue;
+                        }
+                    }
                     var goodNames = ActionStructureNameReco.GetGoodNames();
                     var numBuilders = NumBuilders(cmdres);
                     if (numBuilders == 0)
@@ -43,9 +58,10 @@ namespace ccVcontrol
                             context.DebugLog($"found match name {gname}");
                             //context.MoveMouseAndClick(itm);
                             //Thread.Sleep(1000);
-                            var upgGrood = canUpgrade(context, tempImgName, numBuilders);
+                            var upgGrood = canUpgrade(context, numBuilders);
                             if (upgGrood != null && upgGrood.extraInfo.Contains("Good"))
                             {
+                                context.MoveMouseAndClick(upgGrood);
                                 Upgraded();
                                 numBuilders--;
                             }
@@ -86,7 +102,7 @@ namespace ccVcontrol
             sb.Append($" -name g2 -match data\\check\\upgradeWithGoldButton.png 400 ");
             var btns = context.GetAppInfo(sb.ToString());
             foreach (var btn in btns) context.DebugLog("           check train button " + btn);
-            btns = btns.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
+            btns = btns.OrderBy(r => r.cmpRes).ToList();
             if (btns.FirstOrDefault() != null)
             {
                 var btn = btns.First();
@@ -98,8 +114,11 @@ namespace ccVcontrol
             return false;
         }
 
-        public static CommandInfo canUpgrade(ProcessingContext context, string imgName, int numBuilders)
+        public static CommandInfo canUpgrade(ProcessingContext context, int numBuilders)
         {
+            context.MouseMouseTo(0, 0);
+            string imgName = StandardClicks.GetTempDirFile("tempUpgradeBuildingUpg.png");
+            Utils.doScreenShoot(imgName);
             string[] resultTypes = new[] { "Good", "Bad" };
             string[] itemTypes = new[] { "Gold", "Eli" };
             var sb = new StringBuilder();
@@ -112,7 +131,7 @@ namespace ccVcontrol
                 {
                     foreach (var itm in itemTypes)
                     {
-                        sb.Append($"-name {rt} -matchRect {actx},{acty},650,105_200 -match data\\check\\upgrade{itm}{rt}.png 40 ");
+                        sb.Append($"-name {itm}_{rt} -matchRect {actx},{acty},650,105_200 -match data\\check\\upgrade{itm}{rt}.png 40 ");
                     }
                 }
             }
@@ -125,16 +144,7 @@ namespace ccVcontrol
 
             if (context != null)
                 foreach (var r in res) context.DebugLog("           DEBUGRM " + r);
-            res = res.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).ToList();
-
-            if (context != null)
-            {
-                var upgrade = res.FirstOrDefault(r => r.extraInfo == "Good" || r.extraInfo == "Bad");
-                if (upgrade != null)
-                    context.LogMatchAnalyst(sb.ToString(), upgrade.cmpRes);
-            }
-            var others = new List<CommandInfo>();
-            return res.FirstOrDefault(r => r.extraInfo == "Good" || r.extraInfo == "Bad");            
+            return res.Where(r => r.decision == "true").OrderBy(r => r.cmpRes).FirstOrDefault();
         }
     }
 }
