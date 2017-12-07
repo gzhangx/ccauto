@@ -33,6 +33,7 @@ namespace ccVcontrol
                     }
                     context.InfoLog($"found {itm.extraInfo} {itm.x}/{itm.y}");
                     var cmdres = ActionStructureNameReco.GetNameAtPoint(context, itm);
+                    Thread.Sleep(1000);
                     var nameLevel = ActionStructureNameReco.GetStructureName(itm, cmdres, context);
                     if (nameLevel == null)
                     {
@@ -95,6 +96,7 @@ namespace ccVcontrol
 
         private bool Upgraded()
         {
+            Thread.Sleep(2000);
             Utils.doScreenShoot(tempImgName);
             var sb = new StringBuilder();
             sb.Append($"-input {tempImgName} ");

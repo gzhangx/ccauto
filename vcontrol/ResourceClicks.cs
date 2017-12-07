@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ccVcontrol
@@ -46,11 +47,12 @@ namespace ccVcontrol
                 context.InfoLog("Warning, didn't find townhall");
                 return;
             }
-            context.InfoLog($"Found townhall {cmd.extraInfo} {cmd.cmpRes} {cmd.decision}");
+            context.InfoLog($"Found townhall clicking {cmd.extraInfo} {cmd.cmpRes} {cmd.decision}");
             context.MoveMouseAndClick(cmd);
-
+            Thread.Sleep(1000);
+            context.InfoLog($"done wait, try find rearmall");
             var cmds = ldr.ProcessingWithRetry();
-            cmd = cmds.Where(c=>c.cmpRes < 30000 && c.extraInfo.Contains("rearmall")).OrderBy(c => c.cmpRes).FirstOrDefault();
+            cmd = cmds.Where(c=>c.decision == "true" && c.extraInfo.Contains("rearmall")).OrderBy(c => c.cmpRes).FirstOrDefault();
             //cmd = cmds.FirstOrDefault(c => c.extraInfo.Contains("rearmall") && c.cmpRes < 30000);
             if (cmd == null)
             {
