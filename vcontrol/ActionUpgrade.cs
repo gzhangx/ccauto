@@ -26,7 +26,7 @@ namespace ccVcontrol
             {
                 if (itm.x > 200)
                 {
-                    if (itm.x < 210 && itm.y > 600)
+                    if (!StandardClicks.isRegionGood(itm))
                     {
                         context.InfoLog($"found too far skipp {itm.extraInfo} {itm.x}/{itm.y}");
                         continue;

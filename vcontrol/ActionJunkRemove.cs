@@ -29,7 +29,7 @@ namespace ccVcontrol
             var junks = junkFinder.Processing();
             foreach (var junk in junks)
             {
-                if (junk.x > 200 && junk.decision == "true")
+                if (StandardClicks.isRegionGood(junk) && junk.decision == "true")
                 {
                     context.DebugLog($"Found {junk.extraInfo} {junk.cmpRes}");
                     context.MoveMouseAndClick(junk);

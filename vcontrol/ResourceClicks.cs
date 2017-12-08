@@ -105,7 +105,7 @@ namespace ccVcontrol
                 if (clk.extraInfo.IndexOf("_drop") > 0) yoff = 10;
                 if (clk.extraInfo.Contains("primary_grave.png"))
                 {
-                    if (clk.x < 220 && clk.y > 650)
+                    if (!StandardClicks.isRegionGood(clk))
                     {
                         context.InfoLog($"Bad click for gravy {clk.extraInfo} {clk.x}/{clk.y}");
                         continue;

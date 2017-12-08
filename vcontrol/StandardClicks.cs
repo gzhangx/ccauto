@@ -21,6 +21,13 @@ namespace ccVcontrol
         {
             context = ctx;
         }
+
+        public static bool isRegionGood(ccPoint point)
+        {
+            if (point.x < 200) return false;
+            if (point.x < 210 && point.y > 595) return false;
+            return true;
+        }
         public List<CommandInfo> Processing()
         {
             Utils.doScreenShoot(tempImgName);
