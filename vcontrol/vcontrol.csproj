@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionJunkRemove.cs" />
     <Compile Include="ActionStructureNameReco.cs" />
     <Compile Include="ActionTrainUnits.cs" />
     <Compile Include="ActionUpgrade.cs" />

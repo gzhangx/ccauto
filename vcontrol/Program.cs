@@ -53,6 +53,7 @@ namespace ccVcontrol
 
             resourceClick.RearmAll();
 
+            new ActionJunkRemove(context).Process();
             new ActionUpgrade(context).Process();
             //while(controller.humanMode && controller.CurState != ProcessState.SwitchAccount)
             //{
