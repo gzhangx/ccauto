@@ -33,7 +33,7 @@ namespace ccVcontrol
                     }
                     context.InfoLog($"found {itm.extraInfo} {itm.x}/{itm.y}");
                     var cmdres = ActionStructureNameReco.GetNameAtPoint(context, itm);
-                    var numBuilders = NumBuilders(cmdres);
+                    var numBuilders = NumBuilders(context, cmdres);
                     if (numBuilders == 0)
                     {
                         context.InfoLog($"No builder");
@@ -74,7 +74,7 @@ namespace ccVcontrol
             }
         }
 
-        private int NumBuilders(List<CommandInfo> cmds)
+        public static int NumBuilders(ProcessingContext context, List<CommandInfo> cmds)
         {
             var cmd = cmds.FirstOrDefault(c => c.command == "RecoResult_INFO_Builders");
             try

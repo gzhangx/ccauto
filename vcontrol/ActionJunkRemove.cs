@@ -23,8 +23,20 @@ namespace ccVcontrol
             });
         }
 
+        int getNumBuilders()
+        {
+            Utils.doScreenShoot(tempImgName);
+            var cmdres = context.GetAppInfo();
+            return ActionUpgrade.NumBuilders(context, cmdres);
+        }
         public void Process()
         {
+            var numBuilders = getNumBuilders();
+            if (numBuilders == 0)
+            {
+                context.InfoLog($"No builder");
+                return;
+            }
             const int  SLEEPS = 5;
             var junks = junkFinder.Processing();
             foreach (var junk in junks)
