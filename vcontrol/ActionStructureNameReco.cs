@@ -66,8 +66,18 @@ namespace ccVcontrol
                 {
                     {
                         var fullTxt = bottom.Text;
+                        if (fullTxt == null)
+                        {
+                            context.InfoLog("BESTTAG====> Can't find");
+                            return null;
+                        }
                         context.InfoLog("BESTTAG====> " + bestTag + " " + best);
                         int levelInd = fullTxt.IndexOf("level") + 5;
+                        if (levelInd < 0)
+                        {
+                            context.InfoLog("BESTTAG====> Can't find level");
+                            return null;
+                        }
                         int endInd = fullTxt.IndexOf(")", levelInd);
                         string level = "";
                         if (levelInd > 0 && endInd > levelInd)

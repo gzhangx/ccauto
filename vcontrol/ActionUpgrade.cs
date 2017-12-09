@@ -33,6 +33,12 @@ namespace ccVcontrol
                     }
                     context.InfoLog($"found {itm.extraInfo} {itm.x}/{itm.y}");
                     var cmdres = ActionStructureNameReco.GetNameAtPoint(context, itm);
+                    var numBuilders = NumBuilders(cmdres);
+                    if (numBuilders == 0)
+                    {
+                        context.InfoLog($"No builder");
+                        return;
+                    }
                     Thread.Sleep(1000);
                     var nameLevel = ActionStructureNameReco.GetStructureName(itm, cmdres, context);
                     if (nameLevel == null)
@@ -46,12 +52,7 @@ namespace ccVcontrol
                         }
                     }
                     var goodNames = ActionStructureNameReco.GetGoodNames();
-                    var numBuilders = NumBuilders(cmdres);
-                    if (numBuilders == 0)
-                    {
-                        context.InfoLog($"No builder");
-                        return;
-                    }
+                    
                     foreach (var gname in goodNames)
                     {
                         if (gname.ToLower() == nameLevel.name.ToLower())
