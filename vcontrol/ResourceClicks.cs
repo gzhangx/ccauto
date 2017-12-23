@@ -31,15 +31,21 @@ namespace ccVcontrol
             context = ctx;
         }
 
-        public void RearmAll()
+        public string[] getCheckImgs()
         {
-            var ldr = new AutoResourceLoader(context, StandardClicks.GetTempDirFile("tmpRearmAll.png"),
-                new string[] {
-                    @"data\check\action\buildings\primary_townhall8.png",
-                    @"data\check\action\buildings\primary_townhall7.png",
+            var townhallImgs = Directory.GetFiles(@"data\check\action\buildings", "primary_townhall*.png");
+            var townHallImgList = townhallImgs.ToList();
+            townHallImgList.AddRange(new string[] {
                     @"data\check\rearmall.png",
                     @"data\check\action\buttons\ok_bigv1.png"
                 });
+            return townHallImgList.ToArray();
+        }
+        public void RearmAll()
+        {
+            
+            var ldr = new AutoResourceLoader(context, StandardClicks.GetTempDirFile("tmpRearmAll.png"),
+                getCheckImgs());
 
             var cmd = ldr.ProcessingWithRetryTop1();
             if (cmd == null)

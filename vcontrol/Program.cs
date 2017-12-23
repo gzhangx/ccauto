@@ -44,6 +44,9 @@ namespace ccVcontrol
             var controller = context.vdcontroller;
 
             context.DebugLog("TODOREMOVETEMP");
+            Thread.Sleep(5000);
+            context.MouseDragTo(1024/2, 768/2, 1024/4, 768/4); //Christmas hack
+
             var resourceClick = new ResourceClicks(context);
             var baseType = resourceClick.PrimaryOrSecondary();
             bool skipProcessing = TryForceMoveToPrimary(resourceClick, context);
