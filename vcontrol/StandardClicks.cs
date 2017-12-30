@@ -24,6 +24,7 @@ namespace ccVcontrol
 
         public static bool isRegionGood(ccPoint point)
         {
+            if (point.y < 75) return false;
             if (point.x < 200) return false;
             if (point.x < 240 && point.y > 590) return false;
             return true;
@@ -78,7 +79,7 @@ namespace ccVcontrol
         {
             new ImgChecksAndTags("ememyattacked.png", "PRMXYCLICK_STD_EnemyAttacked", new ccPoint(345, 440), 2000),
             new ImgChecksAndTags("ccNotResponding.png", "PRMXYCLICK_STD_ccNotResponding", new ccPoint(375, 101)),
-            new ImgChecksAndTags("loadVillage.png", "PRMXYCLICK_STD_LoadingVillage", new ccPoint(298, 44)),
+            new ImgChecksAndTags("loadVillage.png", "PRMXYCLICK_STD_LoadingVillage"),
             new ImgChecksAndTags("accountlist.png", "PRMXYCLICK_STD_AccountList", new ccPoint(101, 85)),
             new ImgChecksAndTags("confirmLoadAreYouSure.png", "PRMXYCLICK_STD_ConfirmLoadVillage", new ccPoint(402, 22)),
             new ImgChecksAndTags("confirmready.png", "PRMXYCLICK_STD_ConfirmLoadVillageReady", new ccPoint(310, 22)),
@@ -90,7 +91,7 @@ namespace ccVcontrol
             new ImgChecksAndTags("upgradeFailedClose.png", "PRMXYCLICK_STD_Close"),//, Point(22, 22)
             new ImgChecksAndTags("closematch.png", "PRMXYCLICK_STD_Close"),//, Point(22, 22)
             new ImgChecksAndTags("leftshrink.png", "PRMXYCLICK_STD_LeftShrink", null, 10),//Point(22, 64)
-            new ImgChecksAndTags("chacha_settings.png", "PRMXYCLICK_STD_CloseSettings", null, 20),//Point(22, 22)
+            new ImgChecksAndTags("chacha_settings.png", "PRMXYCLICK_STD_CloseSettings", null, 50),//Point(22, 22)
             new ImgChecksAndTags("anyoneThere.png", "PRMXYCLICK_STD_AnyoneThere", new ccPoint(63, 119), 5000),
             new ImgChecksAndTags("connectionError.png", "PRMXYCLICK_STD_ConnectionError", new ccPoint(53, 121), 400),
             new ImgChecksAndTags("connectionTryAgain.png","PRMXYCLICK_STD_ConnectionError", new ccPoint(46, 16), 400),
