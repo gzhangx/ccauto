@@ -160,7 +160,7 @@ namespace ccVcontrol
 
         public void MoveToPrimary()
         {            
-            context.MouseDragTo(726, 89, 601, 168);
+            context.MouseDragTo(726, 89, 401, 468);
             context.MouseMouseTo(0, 0);
             context.Sleep(2000);            
             for (int retry = 0; retry < 3; retry++)
@@ -192,7 +192,7 @@ namespace ccVcontrol
 
         public void MoveToSecondary()
         {
-            context.MouseDragTo(177, 682, 280, 552);
+            context.MouseDragTo(177, 682, 480, 552);
             context.MouseMouseTo(0, 0);
             context.Sleep(2000);
             for (int retry = 0; retry < 3; retry++)
