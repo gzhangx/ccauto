@@ -25,14 +25,14 @@ namespace ccVcontrol
         public ccPoint center;
         public decimal Threadshold;
         public int ImgSize { get; private set; }
-        public ImgChecksAndTags(string imgName, decimal threadshold = 200000)
+        public ImgChecksAndTags(string imgName, decimal threadHoldScala = (decimal)0.09)
         {
             ImageName = imgName;
 
             var img = new Bitmap(ImageName);
             center = new ccPoint(img.Width / 2, img.Height / 2);
             ImgSize = img.Width * img.Height;
-            Threadshold = ImgSize * (decimal)0.09;
+            Threadshold = ImgSize * threadHoldScala;
 
         }
         public override string ToString()

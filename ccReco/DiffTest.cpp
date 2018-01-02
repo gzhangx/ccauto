@@ -478,12 +478,18 @@ vector<ImageDiffVal> CheckImageMatch(Mat img, const char * fileName, double thre
 	}
 
 	
+	
 	//printf("done match, get good\n");
 	if (topX <= 1) {
 		vector<ImageDiffVal> res;
 		double minVal; double maxVal; Point minLoc; Point maxLoc;
 		Point matchLoc;
 		minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
+
+		//Mat debugSec = img(Rect(minLoc.x, minLoc.y, templ.cols, templ.rows));
+		//Mat diff;
+		//absdiff(templ, debugSec, diff);
+		//imwrite("d:\\temp\\test.png", diff);
 		//printf("find min at %i %i val %f\n", minLoc.x, minLoc.y, minVal);
 		res.push_back(ImageDiffVal(minLoc, minVal, minVal < threadshold));
 		return res;

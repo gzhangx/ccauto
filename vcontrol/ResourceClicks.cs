@@ -25,7 +25,7 @@ namespace ccVcontrol
         public ResourceClicks(ProcessingContext ctx)
         {
             if (ldr == null)
-                ldr = new ccVcontrol.AutoResourceLoader(ctx, StandardClicks.tempImgName, "data\\check\\action\\res\\", 2);
+                ldr = new ccVcontrol.AutoResourceLoader(ctx, StandardClicks.tempImgName, "data\\check\\action\\res\\", 2, 3000);
             if (baseMark == null)
                 baseMark = new ccVcontrol.AutoResourceLoader(ctx, StandardClicks.tempImgName, "data\\check\\marks\\", 1);
             context = ctx;

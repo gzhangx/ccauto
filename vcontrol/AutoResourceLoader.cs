@@ -15,15 +15,15 @@ namespace ccVcontrol
         protected string _imgName;
         protected IHaveLog context;
         protected int topX;
-        public AutoResourceLoader(IHaveLog ctx, string imgName, string dataDir, int top = 1) {            
+        public AutoResourceLoader(IHaveLog ctx, string imgName, string dataDir, int top = 1, decimal threadHoldScala = (decimal)0.09) {            
             var files = Directory.GetFiles(dataDir);
-            Init(ctx, imgName, files, top);
+            Init(ctx, imgName, files, top, threadHoldScala);
         }
-        public AutoResourceLoader(IHaveLog ctx, string imgName, string[] files, int top = 1)
+        public AutoResourceLoader(IHaveLog ctx, string imgName, string[] files, int top = 1, decimal threadHoldScala = (decimal)0.09)
         {
-            Init(ctx, imgName, files, top);
+            Init(ctx, imgName, files, top, threadHoldScala);
         }
-        public void Init(IHaveLog ctx, string imgName, string[] files, int top = 1)
+        public void Init(IHaveLog ctx, string imgName, string[] files, int top = 1, decimal threadHoldScala = (decimal)0.09)
         {
             _imgName = imgName;
             context = ctx;
@@ -32,7 +32,7 @@ namespace ccVcontrol
             {
                 if (f.EndsWith(".png"))
                 {
-                    clicks.Add(new ImgChecksAndTags(f));
+                    clicks.Add(new ImgChecksAndTags(f, threadHoldScala));
                 }
             }
         }
