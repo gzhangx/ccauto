@@ -47,7 +47,7 @@ namespace ccVcontrol
             var ldr = new AutoResourceLoader(context, StandardClicks.GetTempDirFile("tmpRearmAll.png"),
                 getCheckImgs());
 
-            var cmd = ldr.ProcessingWithRetryTop1();
+            var cmd = ldr.ProcessingWithRetryTop1(r=>r.extraInfo != null &&  r.extraInfo.Contains("townhall"));
             if (cmd == null)
             {
                 context.InfoLog("Warning, didn't find townhall");
@@ -68,17 +68,8 @@ namespace ccVcontrol
             context.InfoLog($"Found rearm all {cmd.extraInfo} {cmd.cmpRes} {cmd.decision}");
             context.MoveMouseAndClick(cmd);
 
-            cmds = ldr.ProcessingWithRetry(rs=>
-            {
-                if (rs.Count > 0)
-                {
-                    var okbtn = rs.FirstOrDefault(r => r.extraInfo.Contains("ok_bigv1"));
-                    context.InfoLog($"Found okbtn {okbtn.extraInfo} {okbtn.cmpRes} {okbtn.decision}");
-                    return okbtn != null;
-                }
-                return false;
-            });
-            cmd = cmds.FirstOrDefault(c => c.extraInfo.Contains("ok_bigv1"));
+            cmds = ldr.ProcessingWithRetry(r=> r.extraInfo.Contains("ok_bigv1"));                    
+            cmd = cmds.FirstOrDefault();
             if (cmd == null)
             {
                 context.InfoLog("Warning, didn't find ok button");

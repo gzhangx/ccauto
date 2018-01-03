@@ -38,25 +38,25 @@ namespace ccVcontrol
         }
 
         static List<CommandInfo> empty = new List<CommandInfo>();
-        public List<CommandInfo> ProcessingWithRetry(Func<List<CommandInfo>,bool> okfunc = null, int retryCount = 3,
+        public List<CommandInfo> ProcessingWithRetry(Func<CommandInfo,bool> okfunc = null, int retryCount = 3,
             Func<ImgChecksAndTags, bool> tagCheck = null, bool doCenter = true)
         {
-            if (okfunc == null) okfunc = res => res.Count > 0 && res.Any(r=>r.decision == "true");
+            if (okfunc == null) okfunc = res => res.decision == "true";
             for (int i = 0; i < retryCount; i++)
             {
                 var cmds = Processing(tagCheck, doCenter);
-                if (!cmds.Any() || !okfunc(cmds))
+                if (!cmds.Any() || !cmds.Any(r=>okfunc(r)))
                 {
                     Thread.Sleep(1000);
                     continue;
                 }
-                return cmds;
+                return cmds.Where(okfunc).ToList();
             }
             empty.Clear();
             return empty;
         }
 
-        public CommandInfo ProcessingWithRetryTop1(Func<List<CommandInfo>, bool> okfunc = null, int retryCount = 3,
+        public CommandInfo ProcessingWithRetryTop1(Func<CommandInfo, bool> okfunc = null, int retryCount = 3,
             Func<ImgChecksAndTags, bool> tagCheck = null, bool doCenter = true)
         {
 
