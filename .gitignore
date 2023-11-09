@@ -15,3 +15,15 @@ data/cctxt/Thumbs.db
 packages/
 vcontrol.VC.VC.opendb
 vcontrol.VC.db
+ccInfo/bin
+ccInfo/obj
+ccUi/bin
+ccUi/obj
+vcAppUi/bin
+vcAppUi/obj
+vcConsole/bin
+vcConsole/obj
+vcontrol/bin
+vcontrol/obj
+vcontrolTests/bin
+vcontrolTests/obj
