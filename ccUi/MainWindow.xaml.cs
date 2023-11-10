@@ -129,5 +129,15 @@ namespace ccUi
                 Console.WriteLine(exc);
             }
         }
+
+        private void Button_FindWin_Click(object sender, RoutedEventArgs e)
+        {
+
+            //using (var bmp = WindowUtil.CaptureScreenByTitle("BlueStacks App Player"))
+            // {
+            //    bmp.Save("test.bmp");
+            //}
+            OcrUtil.DoOcr("d:\\temp\\Screenshot 2023-11-09 223646.png");
+        }
     }
 }

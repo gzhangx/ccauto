@@ -22,6 +22,7 @@
                 <Button Click="Button_Click">Open</Button>
                 <Button Click="ButtonSave_Click">Save</Button>
                 <Button Click="ButtonTest_Click">Test</Button>
+                <Button Click="Button_FindWin_Click">FindWin</Button>
                 <TextBlock x:Name="info" Width="300"></TextBlock>
             </StackPanel>
         </Grid>
